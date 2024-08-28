@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyAZ82qh5pUnGvUuXMA9oUn1ywItHfExTMk</string>
+	<string>AIzaSyDtJGlceGABeaL8C7lcXtOjr-UUUP9m4Es</string>
 	<key>GCM_SENDER_ID</key>
-	<string>678649964403</string>
+	<string>342219345156</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>dev.vlab.vinance</string>
 	<key>PROJECT_ID</key>
-	<string>vinance-project</string>
+	<string>rexxtoria-427fe</string>
 	<key>STORAGE_BUCKET</key>
-	<string>vinance-project.appspot.com</string>
+	<string>rexxtoria-427fe.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:678649964403:ios:7a3e87a9b7f96751550706</string>
+	<string>1:342219345156:ios:9dda2482301831219a9451</string>
 </dict>
 </plist>

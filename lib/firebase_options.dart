@@ -44,31 +44,29 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBsyabUP_yV7PTbsWtV6b-eWVra9w_QDPg',
-    appId: '1:678649964403:web:94d6f4bcacf22ad2550706',
-    messagingSenderId: '678649964403',
-    projectId: 'vinance-project',
-    authDomain: 'vinance-project.firebaseapp.com',
-    storageBucket: 'vinance-project.appspot.com',
-    measurementId: 'G-X0Y03EL75D',
+    apiKey: 'AIzaSyCaGLvUfZY3XoYvju8iLK8MDD_p1HiQ-AA',
+    appId: '1:342219345156:web:19f8f460357184399a9451',
+    messagingSenderId: '342219345156',
+    projectId: 'rexxtoria-427fe',
+    authDomain: 'rexxtoria-427fe.firebaseapp.com',
+    storageBucket: 'rexxtoria-427fe.appspot.com',
+    measurementId: 'G-DWNVRM8L91',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDhPKBFeLIZB3Z3wCuxgIt_aFxueelkjzY',
-    appId: '1:678649964403:android:4ec80404ac9f76f2550706',
-    messagingSenderId: '678649964403',
-    projectId: 'vinance-project',
-    storageBucket: 'vinance-project.appspot.com',
+    apiKey: 'AIzaSyCP0FIcm5usBC4igz6178NxKpdz6yica3s',
+    appId: '1:342219345156:android:b68e2174e9dffb7c9a9451',
+    messagingSenderId: '342219345156',
+    projectId: 'rexxtoria-427fe',
+    storageBucket: 'rexxtoria-427fe.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAZ82qh5pUnGvUuXMA9oUn1ywItHfExTMk',
-    appId: '1:678649964403:ios:7a3e87a9b7f96751550706',
-    messagingSenderId: '678649964403',
-    projectId: 'vinance-project',
-    storageBucket: 'vinance-project.appspot.com',
-    androidClientId: '678649964403-tblup8b0a8a58gka57d93fvj2d00lufo.apps.googleusercontent.com',
-    iosClientId: '678649964403-e4rjlktj8be35ebmol8k013vrpdn8qtq.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDtJGlceGABeaL8C7lcXtOjr-UUUP9m4Es',
+    appId: '1:342219345156:ios:9dda2482301831219a9451',
+    messagingSenderId: '342219345156',
+    projectId: 'rexxtoria-427fe',
+    storageBucket: 'rexxtoria-427fe.appspot.com',
     iosBundleId: 'dev.vlab.vinance',
   );
 

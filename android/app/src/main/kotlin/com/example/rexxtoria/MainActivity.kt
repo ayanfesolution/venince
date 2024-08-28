@@ -1,4 +1,4 @@
-package com.example.rexxtoria
+package com.example.rexxtor
 
 import io.flutter.embedding.android.FlutterActivity
 
