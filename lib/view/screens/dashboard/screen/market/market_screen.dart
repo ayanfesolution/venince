@@ -49,8 +49,8 @@ class _MarketScreenState extends State<MarketScreen> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      pusherServiceController.initPusher("market-data");
-      pusherServiceController.initPusher("trade");
+      // pusherServiceController.initPusher("market-data");
+      // pusherServiceController.initPusher("trade");
       controller.initialMarketData();
       pusherServiceController.addListener(_onMarketDataUpdate);
     });

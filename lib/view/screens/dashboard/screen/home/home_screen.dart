@@ -45,8 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
     var controller = Get.put(HomeController(homeRepo: Get.find()));
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      pusherServiceController.initPusher("market-data");
-      pusherServiceController.initPusher("trade");
+      // pusherServiceController.initPusher("market-data");
+      // pusherServiceController.initPusher("trade");
       controller.initialData();
       scrollController.addListener(scrollListener);
       pusherServiceController.addListener(_onMarketDataUpdate);

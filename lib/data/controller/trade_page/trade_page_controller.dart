@@ -18,7 +18,7 @@ import '../../model/market/market_trade_deatils_model.dart';
 import '../../model/market/trade_history_response_model.dart';
 import '../../model/order/order_list_response_model.dart';
 import '../../repo/market_trade/market_trade_repo.dart';
-import '../pusher_controller/pusher_service_controller.dart';
+//import '../pusher_controller/pusher_service_controller.dart';
 
 class TradePageController extends GetxController with GetTickerProviderStateMixin {
   MarketTradeRepo marketTradeRepo;
@@ -97,9 +97,9 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
   }
 
   Future loadOthersData({String symbolID = '', bool isBgLoad = false, bool orderListLoad = true}) async {
-    pusherServiceController.initPusher("market-data");
-    pusherServiceController.initPusher("trade");
-    pusherServiceController.initPusher("order-placed-to-$symbolID");
+    // pusherServiceController.initPusher("market-data");
+    // pusherServiceController.initPusher("trade");
+    // pusherServiceController.initPusher("order-placed-to-$symbolID");
     await loadTradePageDetailsOrderBookData(symbolID: symbolID);
     await loadTradeHistoryListData(symbolID: symbolID);
     if (orderListLoad) {
@@ -158,71 +158,71 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
     }
   }
 
-  PusherServiceController pusherServiceController = Get.find();
+  //PusherServiceController pusherServiceController = Get.find();
   //Update market Data Based On  pusher event
-  void updateMarketDataBasedOnPusherEvent() async {
-    if (pusherServiceController.marketData.isNotEmpty) {
-      for (int i = 0; i < pusherServiceController.marketData.length; i++) {
-        String currentId = pusherServiceController.marketData[i].id ?? "-1";
-        MarketData newMarketData = pusherServiceController.marketData[i];
+  // void updateMarketDataBasedOnPusherEvent() async {
+  //   if (pusherServiceController.marketData.isNotEmpty) {
+  //     for (int i = 0; i < pusherServiceController.marketData.length; i++) {
+  //       String currentId = pusherServiceController.marketData[i].id ?? "-1";
+  //       MarketData newMarketData = pusherServiceController.marketData[i];
 
-        MarketSinglePairData? matchingElement = marketPairDataList.firstWhere((element) => element.marketData?.id == currentId, orElse: () => MarketSinglePairData());
-        if (matchingElement.id != null) {
-          // Update the price if a matching element is found
-          matchingElement.marketData?.price = newMarketData.price;
-          matchingElement.marketData?.marketCap = newMarketData.marketCap;
-          matchingElement.marketData?.percentChange1H = newMarketData.percentChange1H;
-          matchingElement.marketData?.htmlClasses?.percentChange1H = newMarketData.htmlClasses?.percentChange1H;
-        }
+  //       MarketSinglePairData? matchingElement = marketPairDataList.firstWhere((element) => element.marketData?.id == currentId, orElse: () => MarketSinglePairData());
+  //       if (matchingElement.id != null) {
+  //         // Update the price if a matching element is found
+  //         matchingElement.marketData?.price = newMarketData.price;
+  //         matchingElement.marketData?.marketCap = newMarketData.marketCap;
+  //         matchingElement.marketData?.percentChange1H = newMarketData.percentChange1H;
+  //         matchingElement.marketData?.htmlClasses?.percentChange1H = newMarketData.htmlClasses?.percentChange1H;
+  //       }
 
-        if (tradeDetailsMarketData?.id == currentId) {
-          if (newMarketData.id != null) {
-            tradeDetailsMarketData?.price = newMarketData.price;
-            marketPriceTextController.text = newMarketData.price ?? '0';
-            tradeDetailsMarketData?.marketCap = newMarketData.marketCap;
-            tradeDetailsMarketData?.percentChange1H = newMarketData.percentChange1H;
+  //       if (tradeDetailsMarketData?.id == currentId) {
+  //         if (newMarketData.id != null) {
+  //           tradeDetailsMarketData?.price = newMarketData.price;
+  //           marketPriceTextController.text = newMarketData.price ?? '0';
+  //           tradeDetailsMarketData?.marketCap = newMarketData.marketCap;
+  //           tradeDetailsMarketData?.percentChange1H = newMarketData.percentChange1H;
 
-            tradeDetailsMarketData?.htmlClasses?.percentChange1H = newMarketData.htmlClasses?.percentChange1H;
-            tradeDetailsMarketData?.percentChange24H = newMarketData.percentChange24H;
-            tradeDetailsMarketData?.htmlClasses?.percentChange24H = newMarketData.htmlClasses?.percentChange24H;
-          }
-        }
-      }
-      filteredMarketPairDataList = marketPairDataList;
-      pusherServiceController.marketData.clear();
-      update();
-      printx("From Pusher data event");
-      await loadTradePageDetailsOrderBookData(symbolID: tradeSymbol);
-      await loadTradeHistoryListData(symbolID: tradeSymbol);
-    }
-    if (pusherServiceController.currentEventName == "order-placed-to-$tradeSymbol") {
-      printx("Load OrderBook Data event");
-      try {
-        printx(pusherServiceController.sideOrderBook?.userId);
-        if (pusherServiceController.sideOrderBook?.userId != marketTradeRepo.apiClient.getUserID()) {
-          if (pusherServiceController.sideOrderBook?.id != null) {
-            if (pusherServiceController.sideOrderBook?.orderSide.toString() == "1") {
-              buySideOrderList.insert(0, pusherServiceController.sideOrderBook ?? SideOrderBook());
+  //           tradeDetailsMarketData?.htmlClasses?.percentChange1H = newMarketData.htmlClasses?.percentChange1H;
+  //           tradeDetailsMarketData?.percentChange24H = newMarketData.percentChange24H;
+  //           tradeDetailsMarketData?.htmlClasses?.percentChange24H = newMarketData.htmlClasses?.percentChange24H;
+  //         }
+  //       }
+  //     }
+  //     filteredMarketPairDataList = marketPairDataList;
+  //     pusherServiceController.marketData.clear();
+  //     update();
+  //     printx("From Pusher data event");
+  //     await loadTradePageDetailsOrderBookData(symbolID: tradeSymbol);
+  //     await loadTradeHistoryListData(symbolID: tradeSymbol);
+  //   }
+  //   if (pusherServiceController.currentEventName == "order-placed-to-$tradeSymbol") {
+  //     printx("Load OrderBook Data event");
+  //     try {
+  //       printx(pusherServiceController.sideOrderBook?.userId);
+  //       if (pusherServiceController.sideOrderBook?.userId != marketTradeRepo.apiClient.getUserID()) {
+  //         if (pusherServiceController.sideOrderBook?.id != null) {
+  //           if (pusherServiceController.sideOrderBook?.orderSide.toString() == "1") {
+  //             buySideOrderList.insert(0, pusherServiceController.sideOrderBook ?? SideOrderBook());
 
-              List<SideOrderBook> newBuySideOrder = buySideOrderList..sort((a, b) => double.parse(b.rate ?? '0').compareTo(double.parse(a.rate ?? '0')));
-              buySideOrderList = newBuySideOrder.toSet().toList();
-              update();
-            }
-            if (pusherServiceController.sideOrderBook?.orderSide.toString() == "2") {
-              sellSideOrder.insert(0, pusherServiceController.sideOrderBook ?? SideOrderBook());
-              List<SideOrderBook> newSellSideOrder = sellSideOrder..sort((a, b) => double.parse(b.rate ?? '0').compareTo(double.parse(a.rate ?? '0')));
-              sellSideOrder = newSellSideOrder.toSet().toList();
-              update();
-            }
-          }
-        } else {
-          await loadTradePageDetailsOrderBookData(symbolID: tradeSymbol);
-        }
-      } catch (e) {
-        printx(e.toString());
-      }
-    }
-  }
+  //             List<SideOrderBook> newBuySideOrder = buySideOrderList..sort((a, b) => double.parse(b.rate ?? '0').compareTo(double.parse(a.rate ?? '0')));
+  //             buySideOrderList = newBuySideOrder.toSet().toList();
+  //             update();
+  //           }
+  //           if (pusherServiceController.sideOrderBook?.orderSide.toString() == "2") {
+  //             sellSideOrder.insert(0, pusherServiceController.sideOrderBook ?? SideOrderBook());
+  //             List<SideOrderBook> newSellSideOrder = sellSideOrder..sort((a, b) => double.parse(b.rate ?? '0').compareTo(double.parse(a.rate ?? '0')));
+  //             sellSideOrder = newSellSideOrder.toSet().toList();
+  //             update();
+  //           }
+  //         }
+  //       } else {
+  //         await loadTradePageDetailsOrderBookData(symbolID: tradeSymbol);
+  //       }
+  //     } catch (e) {
+  //       printx(e.toString());
+  //     }
+  //   }
+  // }
 
   //ORDER BOOK
   bool tradeDetailsOrderBookLoading = false;

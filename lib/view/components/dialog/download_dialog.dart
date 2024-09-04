@@ -6,7 +6,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:downloadsfolder/downloadsfolder.dart';
@@ -93,25 +92,25 @@ class DownloadingDialogState extends State<DownloadingDialog> {
 
   _saveImage() async {
     var response = await Dio().get(widget.url, options: Options(responseType: ResponseType.bytes));
-    final result = await ImageGallerySaver.saveImage(Uint8List.fromList(response.data), quality: 60, name: widget.fileName);
+   // final result = await ImageGallerySaver.saveImage(Uint8List.fromList(response.data), quality: 60, name: widget.fileName);
 
-    try {
-      dynamic value = result['isSuccess'];
-      if (value.toString() == 'true') {
-        Get.back();
-        CustomSnackBar.success(successList: [(MyStrings.fileDownloadedSuccess)]);
-      } else {
-        Get.back();
-        dynamic errorMessage = result['errorMessage'];
-        CustomSnackBar.error(errorList: [errorMessage]);
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        printx(e.toString());
-      }
-      Get.back();
-      CustomSnackBar.error(errorList: [MyStrings.requestFail]);
-    }
+    // try {
+    //   dynamic value = result['isSuccess'];
+    //   if (value.toString() == 'true') {
+    //     Get.back();
+    //     CustomSnackBar.success(successList: [(MyStrings.fileDownloadedSuccess)]);
+    //   } else {
+    //     Get.back();
+    //     dynamic errorMessage = result['errorMessage'];
+    //     CustomSnackBar.error(errorList: [errorMessage]);
+    //   }
+    // } catch (e) {
+    //   if (kDebugMode) {
+    //     printx(e.toString());
+    //   }
+    //   Get.back();
+    //   CustomSnackBar.error(errorList: [MyStrings.requestFail]);
+    // }
   }
 
   @override

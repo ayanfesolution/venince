@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
+//import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:vinance/core/utils/url_container.dart';
 import 'package:vinance/data/services/api_service.dart';
@@ -14,40 +14,40 @@ class PusherServiceController extends GetxController {
   ApiClient apiClient;
   PusherServiceController({required this.apiClient});
 
-  PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
+  //PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
 
   String _apiKey = "";
   String _cluster = "";
 
-  void initPusher(String channelName) async {
-    printx("$channelName ============");
+  // void initPusher(String channelName) async {
+  //   printx("$channelName ============");
 
-    try {
-      _apiKey = apiClient.getPusherConfigData().pusherAppKey ?? '';
-      _cluster = apiClient.getPusherConfigData().pusherAppCluster ?? '';
-      await pusher.init(
-        apiKey: _apiKey,
-        cluster: _cluster,
-        onConnectionStateChange: (String a, String b) async {
-          update();
-        },
-        onError: onError,
-        onSubscriptionSucceeded: onSubscriptionSucceeded,
-        onEvent: onEvent,
-        onSubscriptionError: onSubscriptionError,
-        onDecryptionFailure: (_, a) {},
-        onMemberAdded: (_, a) {},
-        onMemberRemoved: (_, a) {},
-        onAuthorizer: onAuthorizer,
-      );
+  //   try {
+  //     _apiKey = apiClient.getPusherConfigData().pusherAppKey ?? '';
+  //     _cluster = apiClient.getPusherConfigData().pusherAppCluster ?? '';
+  //     await pusher.init(
+  //       apiKey: _apiKey,
+  //       cluster: _cluster,
+  //       onConnectionStateChange: (String a, String b) async {
+  //         update();
+  //       },
+  //       onError: onError,
+  //       onSubscriptionSucceeded: onSubscriptionSucceeded,
+  //       onEvent: onEvent,
+  //       onSubscriptionError: onSubscriptionError,
+  //       onDecryptionFailure: (_, a) {},
+  //       onMemberAdded: (_, a) {},
+  //       onMemberRemoved: (_, a) {},
+  //       onAuthorizer: onAuthorizer,
+  //     );
 
-      await pusher.subscribe(channelName: "private-$channelName");
+  //     await pusher.subscribe(channelName: "private-$channelName");
 
-      await pusher.connect();
-    } catch (e) {
-      printx("ERROR: $e");
-    }
-  }
+  //     await pusher.connect();
+  //   } catch (e) {
+  //     printx("ERROR: $e");
+  //   }
+  // }
 
   void onError(String message, int? code, dynamic e) {
     printx("onError: $message code: $code exception: $e");
@@ -60,39 +60,39 @@ class PusherServiceController extends GetxController {
   Future<void> subscribeToChannel(String channelName, {String? eventType, required bool istrigger}) async {
     printx('inside subcribe');
 
-    if (!istrigger) {
-      await pusher.subscribe(
-        channelName: channelName,
-      );
-    }
+    // if (!istrigger) {
+    //   await pusher.subscribe(
+    //     channelName: channelName,
+    //   );
+    // }
 
     printx('subscribed..... ');
   }
 
   void onSubscriptionSucceeded(String channelName, dynamic data) {
     printx("onSubscriptionSucceeded: $channelName data: $data");
-    final me = pusher.getChannel(channelName)?.me;
-    printx("Me: $me");
+  //  final me = pusher.getChannel(channelName)?.me;
+   // printx("Me: $me");
     printx('subscribed success');
   }
 
   String currentEventName = '';
   SideOrderBook? sideOrderBook;
-  void onEvent(PusherEvent event) {
-    printx("Event found ${event.channelName}");
-    printx("EvenWt name ${event.eventName}");
-    currentEventName = event.eventName;
+  // void onEvent(PusherEvent event) {
+  //   printx("Event found ${event.channelName}");
+  //   printx("EvenWt name ${event.eventName}");
+  //   currentEventName = event.eventName;
 
-    if (event.eventName == 'market-data') {
-      final eventData = json.decode(event.data) as Map<String, dynamic>;
-      setMarketDataFromPusherEvent(eventData);
-    }
-    if (event.eventName.contains("order-placed")) {
-      final eventData = json.decode(event.data) as Map<String, dynamic>;
-      setOrderBookData(eventData);
-    }
-    update();
-  }
+  //   if (event.eventName == 'market-data') {
+  //     final eventData = json.decode(event.data) as Map<String, dynamic>;
+  //     setMarketDataFromPusherEvent(eventData);
+  //   }
+  //   if (event.eventName.contains("order-placed")) {
+  //     final eventData = json.decode(event.data) as Map<String, dynamic>;
+  //     setOrderBookData(eventData);
+  //   }
+  //   update();
+  // }
 
   onAuthorizer(String channelName, String socketId, options) async {
     socketId = socketId;
