@@ -36,12 +36,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
     Get.put(ApiClient(sharedPreferences: Get.find()));
     dashboardController = Get.put(DashboardController(apiClient: Get.find()));
-    pusherServiceController = Get.put(PusherServiceController(apiClient: Get.find()));
+    pusherServiceController =
+        Get.put(PusherServiceController(apiClient: Get.find()));
     _dashBoardScaffoldKey = GlobalKey<ScaffoldState>();
 
     _widgets = <Widget>[
-      const HomeScreen(),
-      const MarketScreen(),
+      // const HomeScreen(),
+      // const MarketScreen(),
       const WalletScreen(),
       const ProfileAndSettingsScreen(),
     ];
@@ -60,7 +61,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               bottomNavigationBar: SingleChildScrollView(
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.symmetric(vertical: Dimensions.space10, horizontal: 0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: Dimensions.space10, horizontal: 0),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: MyColor.getScreenBgColor(),
@@ -77,32 +79,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      NavBarItem(
-                          label: MyStrings.home.tr,
-                          imagePath: MyIcons.naveHome,
-                          index: 0,
-                          isSelected: controller.selectedBottomNavIndex == 0,
-                          press: () {
-                            controller.changeSelectedIndex(0);
-                            MyUtils.vibrationOn();
-                          }),
-                      NavBarItem(
-                          label: MyStrings.market.tr,
-                          imagePath: MyIcons.navMarket,
-                          index: 1,
-                          isSelected: controller.selectedBottomNavIndex == 1,
-                          press: () {
-                            controller.changeSelectedIndex(1);
-                            MyUtils.vibrationOn();
-                          }),
-                      NavBarItem(
-                          label: MyStrings.market.tr,
-                          imagePath: MyIcons.tradeIconAction,
-                          index: 6,
-                          isSelected: controller.selectedBottomNavIndex == 6,
-                          press: () {
-                            Get.toNamed(RouteHelper.tradeBuySellScreen, arguments: ['', 'buy'], preventDuplicates: true);
-                          }),
+                      // NavBarItem(
+                      //     label: MyStrings.home.tr,
+                      //     imagePath: MyIcons.naveHome,
+                      //     index: 0,
+                      //     isSelected: controller.selectedBottomNavIndex == 0,
+                      //     press: () {
+                      //       controller.changeSelectedIndex(0);
+                      //       MyUtils.vibrationOn();
+                      //     }),
+                      // NavBarItem(
+                      //     label: MyStrings.market.tr,
+                      //     imagePath: MyIcons.navMarket,
+                      //     index: 1,
+                      //     isSelected: controller.selectedBottomNavIndex == 1,
+                      //     press: () {
+                      //       controller.changeSelectedIndex(1);
+                      //       MyUtils.vibrationOn();
+                      //     }),
+                      // NavBarItem(
+                      //     label: MyStrings.market.tr,
+                      //     imagePath: MyIcons.tradeIconAction,
+                      //     index: 6,
+                      //     isSelected: controller.selectedBottomNavIndex == 6,
+                      //     press: () {
+                      //       Get.toNamed(RouteHelper.tradeBuySellScreen,
+                      //           arguments: ['', 'buy'],
+                      //           preventDuplicates: true);
+                      //     }),
                       NavBarItem(
                           label: MyStrings.wallet.tr,
                           imagePath: MyIcons.navWallet,

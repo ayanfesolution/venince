@@ -28,7 +28,8 @@ class _WalletScreenState extends State<WalletScreen> {
   final ScrollController scrollController = ScrollController();
 
   void scrollListener() {
-    if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
       if (Get.find<WalletController>().hasNext()) {
         Get.find<WalletController>().loadAllWalletListByWalletType();
       }
@@ -41,7 +42,8 @@ class _WalletScreenState extends State<WalletScreen> {
     Get.put(ApiClient(sharedPreferences: Get.find()));
     Get.put(WalletRepository(apiClient: Get.find()));
     Get.put(GeneralSettingRepo(apiClient: Get.find()));
-    final controller = Get.put(WalletController(walletRepository: Get.find(), generalSettingRepo: Get.find()));
+    final controller = Get.put(WalletController(
+        walletRepository: Get.find(), generalSettingRepo: Get.find()));
     super.initState();
     controller.loadWalletTabs();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -63,7 +65,8 @@ class _WalletScreenState extends State<WalletScreen> {
               children: [
                 verticalSpace(Dimensions.space10),
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: Dimensions.space15),
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: Dimensions.space15),
                   padding: const EdgeInsets.all(Dimensions.space8),
                   decoration: BoxDecoration(
                     color: MyColor.getScreenBgSecondaryColor(),
@@ -72,7 +75,8 @@ class _WalletScreenState extends State<WalletScreen> {
                   child: TabBar(
                     physics: const NeverScrollableScrollPhysics(),
                     controller: controller.walletTabController,
-                    splashBorderRadius: BorderRadius.circular(Dimensions.cardRadius1),
+                    splashBorderRadius:
+                        BorderRadius.circular(Dimensions.cardRadius1),
                     dividerColor: Colors.transparent,
                     indicator: BoxDecoration(
                       color: MyColor.getPrimaryColor(),
@@ -81,14 +85,19 @@ class _WalletScreenState extends State<WalletScreen> {
                       ),
                     ),
                     labelColor: MyColor.colorWhite,
-                    labelStyle: regularLarge.copyWith(color: MyColor.colorWhite, fontSize: Dimensions.fontLarge),
+                    labelStyle: regularLarge.copyWith(
+                        color: MyColor.colorWhite,
+                        fontSize: Dimensions.fontLarge),
 
                     //Unselected
                     unselectedLabelColor: MyColor.getSecondaryTextColor(),
-                    unselectedLabelStyle: regularLarge.copyWith(fontSize: Dimensions.fontLarge),
+                    unselectedLabelStyle:
+                        regularLarge.copyWith(fontSize: Dimensions.fontLarge),
                     onTap: (value) {
                       // controller.currentTabIndex(value);
-                      controller.loadAllWalletListByWalletType(type: value == 0 ? 'spot' : 'funding', hotRefresh: true);
+                      controller.loadAllWalletListByWalletType(
+                          type: value == 0 ? 'spot' : 'funding',
+                          hotRefresh: true);
                     },
                     padding: EdgeInsets.zero,
 
@@ -106,7 +115,8 @@ class _WalletScreenState extends State<WalletScreen> {
                   child: RefreshIndicator(
                     color: MyColor.getPrimaryColor(),
                     onRefresh: () async {
-                      controller.loadAllWalletListByWalletType(hotRefresh: true);
+                      controller.loadAllWalletListByWalletType(
+                          hotRefresh: true);
                     },
                     child: SingleChildScrollView(
                         controller: scrollController,
@@ -122,35 +132,43 @@ class _WalletScreenState extends State<WalletScreen> {
                             ),
                             //Title
                             Container(
-                              margin: const EdgeInsetsDirectional.symmetric(horizontal: Dimensions.space15, vertical: Dimensions.space5),
+                              margin: const EdgeInsetsDirectional.symmetric(
+                                  horizontal: Dimensions.space15,
+                                  vertical: Dimensions.space5),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     MyStrings.wallets.tr,
-                                    style: semiBoldOverLarge.copyWith(color: MyColor.getPrimaryTextColor()),
+                                    style: semiBoldOverLarge.copyWith(
+                                        color: MyColor.getPrimaryTextColor()),
                                   ),
                                   Row(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.only(),
+                                        padding:
+                                            const EdgeInsetsDirectional.only(),
                                         child: Ink(
                                           decoration: ShapeDecoration(
-                                            color: MyColor.getAppBarBackgroundColor(),
+                                            color: MyColor
+                                                .getAppBarBackgroundColor(),
                                             shape: const CircleBorder(),
                                           ),
                                           child: FittedBox(
                                             child: IconButton(
                                               padding: EdgeInsets.zero,
                                               onPressed: () {
-                                                Get.toNamed(RouteHelper.walletHistoryScreen);
+                                                Get.toNamed(RouteHelper
+                                                    .walletHistoryScreen);
                                               },
                                               icon: MyLocalImageWidget(
                                                 imagePath: MyIcons.historyIcon,
-                                                imageOverlayColor: MyColor.getSecondaryTextColor(),
+                                                imageOverlayColor: MyColor
+                                                    .getSecondaryTextColor(),
                                                 width: Dimensions.space25,
                                               ),
                                             ),
@@ -162,6 +180,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                 ],
                               ),
                             ),
+
                             verticalSpace(Dimensions.space10),
 
                             //Coin List

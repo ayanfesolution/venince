@@ -24,7 +24,21 @@ class WalletScreenButtonRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: Dimensions.space15),
       child: Row(
         children: [
-          if (controller.walletTabController?.index == 0 ? controller.walletRepository.apiClient.getWalletTypes()?.spot?.configuration?.deposit?.status == '1' : controller.walletRepository.apiClient.getWalletTypes()?.funding?.configuration?.deposit?.status == '1') ...[
+          if (controller.walletTabController?.index == 0
+              ? controller.walletRepository.apiClient
+                      .getWalletTypes()
+                      ?.spot
+                      ?.configuration
+                      ?.deposit
+                      ?.status ==
+                  '1'
+              : controller.walletRepository.apiClient
+                      .getWalletTypes()
+                      ?.funding
+                      ?.configuration
+                      ?.deposit
+                      ?.status ==
+                  '1') ...[
             Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -33,12 +47,19 @@ class WalletScreenButtonRow extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(Dimensions.cardRadius2),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.space10, vertical: Dimensions.space10),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: Dimensions.space10,
+                      vertical: Dimensions.space10),
                 ),
                 onPressed: () {
                   Get.toNamed(
                     RouteHelper.depositScreen,
-                    arguments: [controller.walletTabController?.index == 0 ? 'spot' : 'funding', ''],
+                    arguments: [
+                      controller.walletTabController?.index == 0
+                          ? 'spot'
+                          : 'funding',
+                      ''
+                    ],
                   );
                 },
                 child: Row(
@@ -69,7 +90,21 @@ class WalletScreenButtonRow extends StatelessWidget {
             ),
             horizontalSpace(Dimensions.space10),
           ],
-          if (controller.walletTabController?.index == 0 ? controller.walletRepository.apiClient.getWalletTypes()?.spot?.configuration?.withdraw?.status == '1' : controller.walletRepository.apiClient.getWalletTypes()?.funding?.configuration?.withdraw?.status == '1') ...[
+          if (controller.walletTabController?.index == 0
+              ? controller.walletRepository.apiClient
+                      .getWalletTypes()
+                      ?.spot
+                      ?.configuration
+                      ?.withdraw
+                      ?.status ==
+                  '1'
+              : controller.walletRepository.apiClient
+                      .getWalletTypes()
+                      ?.funding
+                      ?.configuration
+                      ?.withdraw
+                      ?.status ==
+                  '1') ...[
             Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -78,12 +113,19 @@ class WalletScreenButtonRow extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(Dimensions.cardRadius2),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.space10, vertical: Dimensions.space10),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: Dimensions.space10,
+                      vertical: Dimensions.space10),
                 ),
                 onPressed: () {
                   Get.toNamed(
                     RouteHelper.withdrawScreen,
-                    arguments: [controller.walletTabController?.index == 0 ? 'spot' : 'funding', ''],
+                    arguments: [
+                      controller.walletTabController?.index == 0
+                          ? 'spot'
+                          : 'funding',
+                      ''
+                    ],
                   );
                 },
                 child: Row(
@@ -114,49 +156,82 @@ class WalletScreenButtonRow extends StatelessWidget {
             horizontalSpace(Dimensions.space10),
           ],
           if (controller.walletTabController?.index == 0
-              ? (controller.walletRepository.apiClient.getWalletTypes()?.spot?.configuration?.transferOtherUser?.status == '1' || controller.walletRepository.apiClient.getWalletTypes()?.spot?.configuration?.transferOtherWallet?.status == '1')
-              : (controller.walletRepository.apiClient.getWalletTypes()?.funding?.configuration?.transferOtherUser?.status == '1' || controller.walletRepository.apiClient.getWalletTypes()?.funding?.configuration?.transferOtherWallet?.status == '1')) ...[
-            Expanded(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  backgroundColor: MyColor.getScreenBgSecondaryColor(),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(Dimensions.cardRadius2),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.space10, vertical: Dimensions.space10),
-                ),
-                onPressed: () {
-                  Get.toNamed(
-                    RouteHelper.transferScreen,
-                    arguments: [controller.walletTabController?.index == 0 ? 'spot' : 'funding', ''],
-                  );
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    MyLocalImageWidget(
-                      imagePath: MyIcons.sendAction,
-                      imageOverlayColor: MyColor.getPrimaryTextColor(),
-                      width: Dimensions.space15,
-                    ),
-                    horizontalSpace(Dimensions.space5),
-                    Flexible(
-                      child: Text(
-                        MyStrings.transfer.tr,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: regularLarge.copyWith(
-                          color: MyColor.getPrimaryTextColor(),
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+              ? (controller.walletRepository.apiClient
+                          .getWalletTypes()
+                          ?.spot
+                          ?.configuration
+                          ?.transferOtherUser
+                          ?.status ==
+                      '1' ||
+                  controller.walletRepository.apiClient
+                          .getWalletTypes()
+                          ?.spot
+                          ?.configuration
+                          ?.transferOtherWallet
+                          ?.status ==
+                      '1')
+              : (controller.walletRepository.apiClient
+                          .getWalletTypes()
+                          ?.funding
+                          ?.configuration
+                          ?.transferOtherUser
+                          ?.status ==
+                      '1' ||
+                  controller.walletRepository.apiClient
+                          .getWalletTypes()
+                          ?.funding
+                          ?.configuration
+                          ?.transferOtherWallet
+                          ?.status ==
+                      '1')) ...[
+            // Expanded(
+            //   child: ElevatedButton(
+            //     style: ElevatedButton.styleFrom(
+            //       elevation: 0,
+            //       backgroundColor: MyColor.getScreenBgSecondaryColor(),
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(Dimensions.cardRadius2),
+            //       ),
+            //       padding: const EdgeInsets.symmetric(
+            //           horizontal: Dimensions.space10,
+            //           vertical: Dimensions.space10),
+            //     ),
+            //     onPressed: () {
+            //       Get.toNamed(
+            //         RouteHelper.transferScreen,
+            //         arguments: [
+            //           controller.walletTabController?.index == 0
+            //               ? 'spot'
+            //               : 'funding',
+            //           ''
+            //         ],
+            //       );
+            //     },
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       crossAxisAlignment: CrossAxisAlignment.center,
+            //       children: [
+            //         MyLocalImageWidget(
+            //           imagePath: MyIcons.sendAction,
+            //           imageOverlayColor: MyColor.getPrimaryTextColor(),
+            //           width: Dimensions.space15,
+            //         ),
+            //         horizontalSpace(Dimensions.space5),
+            //         Flexible(
+            //           child: Text(
+            //             MyStrings.transfer.tr,
+            //             maxLines: 1,
+            //             overflow: TextOverflow.ellipsis,
+            //             style: regularLarge.copyWith(
+            //               color: MyColor.getPrimaryTextColor(),
+            //               fontSize: 14,
+            //             ),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ],
         ],
       ),
