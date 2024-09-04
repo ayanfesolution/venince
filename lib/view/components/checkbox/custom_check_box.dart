@@ -38,13 +38,13 @@ class _CustomCheckBoxState extends State<CustomCheckBox> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.defaultRadius)),
             activeColor: MyColor.primaryColor500,
             checkColor: MyColor.getPrimaryTextColor(),
-            fillColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-              if (states.contains(MaterialState.disabled)) {
+            fillColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+              if (states.contains(WidgetState.disabled)) {
                 return MyColor.primaryColor500.withOpacity(.32);
               }
               return MyColor.primaryColor500.withOpacity(0.2);
             }),
-            side: MaterialStateBorderSide.resolveWith(
+            side: WidgetStateBorderSide.resolveWith(
               (states) => const BorderSide(
                 width: 1.0,
                 color: MyColor.primaryColor500,

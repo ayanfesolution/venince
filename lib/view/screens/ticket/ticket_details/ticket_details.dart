@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:vinance/core/helper/date_converter.dart';
@@ -16,7 +15,6 @@ import 'package:vinance/data/model/support/support_ticket_view_response_model.da
 import 'package:vinance/data/repo/support/support_repo.dart';
 import 'package:vinance/data/services/api_service.dart';
 import 'package:vinance/view/components/app-bar/app_main_appbar.dart';
-import 'package:vinance/view/components/app-bar/custom_appbar.dart';
 import 'package:vinance/view/components/buttons/circle_icon_button.dart';
 import 'package:vinance/view/components/buttons/custom_circle_animated_button.dart';
 import 'package:vinance/view/components/buttons/rounded_button.dart';

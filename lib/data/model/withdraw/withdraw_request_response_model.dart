@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:vinance/data/model/auth/login/login_response_model.dart';
 import 'package:vinance/data/model/kyc/kyc_form_model.dart';
 import 'package:vinance/data/model/user/user_model.dart';
-import 'package:vinance/data/model/withdraw/withdraw_preview_response_model.dart';
 
 class WithdrawRequestResponseModel {
   WithdrawRequestResponseModel({String? remark, String? status, Message? message, Data? data}) {

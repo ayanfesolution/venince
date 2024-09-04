@@ -16,7 +16,6 @@ import 'package:vinance/view/components/snack_bar/show_custom_snackbar.dart';
 
 import '../../../core/helper/shared_preference_helper.dart';
 import '../../../environment.dart';
-import '../../model/auth/sign_up_model/registration_response_model.dart';
 import '../../model/country_model/country_model.dart';
 import '../../model/global/response_model/response_model.dart';
 

@@ -3,12 +3,10 @@ import 'package:get/get.dart';
 
 import '../../../../../../core/utils/dimensions.dart';
 import '../../../../../../core/utils/my_color.dart';
-import '../../../../../../core/utils/my_icons.dart';
 import '../../../../../../core/utils/my_strings.dart';
 import '../../../../../../core/utils/style.dart';
 import '../../../../../../data/controller/market/market_controller.dart';
 import '../../../../../components/divider/custom_spacer.dart';
-import '../../../../../components/image/my_local_image_widget.dart';
 import 'market_sort_filter_button.dart';
 
 class MarketScreenSortByWidget extends StatelessWidget {

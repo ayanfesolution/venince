@@ -40,7 +40,7 @@ class _SupportTicketMethodsListState extends State<SupportTicketMethodsList> {
     return GetBuilder<SupportTicketMethodsController>(builder: (controller) {
       return Scaffold(
         backgroundColor: MyColor.getScreenBgColor(),
-        appBar: CustomAppBar(title: MyStrings.contactUs, bgColor: MyColor.primaryColor),
+        appBar: const CustomAppBar(title: MyStrings.contactUs, bgColor: MyColor.primaryColor),
         body: RefreshIndicator(
           color: MyColor.primaryColor,
           onRefresh: () async {

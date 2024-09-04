@@ -2,7 +2,6 @@ import 'package:vinance/data/model/language/language_model.dart';
 
 class MyStrings {
   static const String appName = "Rexxtoria";
-
   static const String withdrawInformation = "Withdraw Information";
   static const String withdrawDetails = "Withdraw Details";
   static const String withdrawLimit = "Withdraw Limit";
@@ -19,7 +18,7 @@ class MyStrings {
   static const String selectPaymentGateway = "Select Payment Gateway";
   static const String orderType = "Order Type";
   static const String selectAWallet = " Select a wallet";
-
+  
   static const String remark = "Remark";
   static const String any = "Any";
   static const String email = "Email";

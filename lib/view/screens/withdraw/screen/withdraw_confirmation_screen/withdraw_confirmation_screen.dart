@@ -3,14 +3,12 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:vinance/core/utils/util.dart';
 import 'package:vinance/data/model/kyc/kyc_form_model.dart';
-import 'package:vinance/data/model/withdraw/withdraw_preview_response_model.dart';
 import 'package:vinance/view/components/text/label_text_with_instructions.dart';
 import '../../../../../core/utils/dimensions.dart';
 import '../../../../../core/utils/my_color.dart';
 import '../../../../../core/utils/my_strings.dart';
 import '../../../../../core/utils/style.dart';
 import '../../../../../data/controller/withdraw/withdraw_confirm_controller.dart';
-import '../../../../../data/model/kyc/kyc_response_model.dart';
 import '../../../../../data/model/withdraw/withdraw_request_response_model.dart';
 import '../../../../../data/repo/account/profile_repo.dart';
 import '../../../../../data/services/api_service.dart';
@@ -22,7 +20,6 @@ import '../../../../components/custom_radio_button.dart';
 import '../../../../components/divider/custom_spacer.dart';
 import '../../../../components/text-form-field/custom_drop_down_text_field.dart';
 import '../../../../components/text-form-field/custom_text_field.dart';
-import '../../../../components/text/label_text.dart';
 import 'widget/choose_file_list_item.dart';
 
 class WithdrawConfirmationScreen extends StatefulWidget {

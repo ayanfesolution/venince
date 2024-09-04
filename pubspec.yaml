@@ -13,7 +13,7 @@ dependencies:
   awesome_dialog: ^3.1.0
   bottom_navy_bar: ^6.0.0
   cached_network_image: ^3.3.0
-  carousel_slider: ^4.2.1
+  carousel_slider: ^5.0.0
   country_picker: ^2.0.23
   cupertino_icons: ^1.0.6
   custom_refresh_indicator: ^3.0.0
@@ -58,7 +58,7 @@ dependencies:
   url_launcher: ^6.2.5
   vibration: ^1.8.4
   web3dart: ^2.7.3
-  web3modal_flutter: ^3.1.1
+  web3modal_flutter: ^3.3.3
   webview_flutter: ^4.7.0
   zoom_tap_animation: ^1.1.0
   open_file: ^3.3.2

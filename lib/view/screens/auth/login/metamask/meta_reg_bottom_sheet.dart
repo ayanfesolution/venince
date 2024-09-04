@@ -1,14 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:vinance/core/utils/dimensions.dart';
 import 'package:vinance/core/utils/my_color.dart';
 import 'package:vinance/core/utils/style.dart';
 
-import 'package:web3modal_flutter/widgets/buttons/simple_icon_button.dart';
-
-import '../../../../../core/route/route.dart';
 import '../../../../../core/utils/my_icons.dart';
 import '../../../../../core/utils/my_strings.dart';
 import '../../../../../data/controller/auth/auth/metamask/metamask_reg_controller.dart';
@@ -35,16 +30,19 @@ class ConnectToMetamaskRegistrationBottomSheet extends StatelessWidget {
               children: [
                 verticalSpace(Dimensions.space20),
                 Padding(
-                  padding: const EdgeInsetsDirectional.symmetric(horizontal: Dimensions.space20),
+                  padding: const EdgeInsetsDirectional.symmetric(
+                      horizontal: Dimensions.space20),
                   child: Center(
                       child: Text(
                     MyStrings.metaMask.tr.toUpperCase(),
-                    style: boldOverLarge.copyWith(color: MyColor.getPrimaryTextColor()),
+                    style: boldOverLarge.copyWith(
+                        color: MyColor.getPrimaryTextColor()),
                   )),
                 ),
                 verticalSpace(Dimensions.space20),
                 LoadingBorderIndicator(
-                  animate: metaRegController.walletErrorEvent == null,
+                  animate:
+                      metaRegController.w3mService.onSessionEventEvent == null,
                   borderRadius: 20,
                   strokeWidth: 3,
                   color: MyColor.pendingColor,
@@ -59,18 +57,23 @@ class ConnectToMetamaskRegistrationBottomSheet extends StatelessWidget {
                   ),
                 ),
                 verticalSpace(Dimensions.space30),
-                if (metaRegController.messageData != '' && metaRegController.walletAddressData != '') ...[
+                if (metaRegController.messageData != '' &&
+                    metaRegController.walletAddressData != '') ...[
                   Padding(
-                    padding: const EdgeInsetsDirectional.symmetric(horizontal: Dimensions.space20),
+                    padding: const EdgeInsetsDirectional.symmetric(
+                        horizontal: Dimensions.space20),
                     child: Center(
                         child: Text(
                       metaRegController.messageData.tr,
-                      style: regularLarge.copyWith(color: MyColor.getPrimaryTextColor()),
+                      style: regularLarge.copyWith(
+                          color: MyColor.getPrimaryTextColor()),
                     )),
                   ),
                   verticalSpace(Dimensions.space30),
                   Padding(
-                    padding: const EdgeInsetsDirectional.symmetric(horizontal: Dimensions.space20, vertical: Dimensions.space10),
+                    padding: const EdgeInsetsDirectional.symmetric(
+                        horizontal: Dimensions.space20,
+                        vertical: Dimensions.space10),
                     child: IntrinsicHeight(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -91,7 +94,8 @@ class ConnectToMetamaskRegistrationBottomSheet extends StatelessWidget {
                                 ),
                               ),
                               press: () {
-                                metaRegController.clearMetamaskOldData(disconnected: true);
+                                metaRegController.clearMetamaskOldData(
+                                    disconnected: true);
                               },
                             ),
                           ),
@@ -112,9 +116,14 @@ class ConnectToMetamaskRegistrationBottomSheet extends StatelessWidget {
                                 ),
                               ),
                               press: () async {
-                                var address = "${metaRegController.w3mService.session?.address?.toLowerCase()}";
+                                var address =
+                                    "${metaRegController.w3mService.session?.sessionService.name.toLowerCase()}";
                                 if (address.toString() != 'null') {
-                                  await metaRegController.getSignatureCodeFromMetamask(address: address, message: metaRegController.messageData);
+                                  await metaRegController
+                                      .getSignatureCodeFromMetamask(
+                                          address: address,
+                                          message:
+                                              metaRegController.messageData);
                                 }
                               },
                             ),
@@ -125,15 +134,19 @@ class ConnectToMetamaskRegistrationBottomSheet extends StatelessWidget {
                   ),
                   verticalSpace(Dimensions.space10),
                 ] else ...[
-                  if (metaRegController.isInitializing == false && metaRegController.walletErrorEvent != null) ...[
+                  if (metaRegController.isInitializing == false &&
+                      metaRegController.onStart != null) ...[
                     verticalSpace(Dimensions.space10),
                     Container(
-                      padding: const EdgeInsetsDirectional.symmetric(horizontal: Dimensions.space20, vertical: Dimensions.space10),
+                      padding: const EdgeInsetsDirectional.symmetric(
+                          horizontal: Dimensions.space20,
+                          vertical: Dimensions.space10),
                       child: Column(
                         children: [
                           Text(
                             "${MyStrings.donNotHave.tr} ${metaRegController.w3mWalletInfo.listing.name}?",
-                            style: regularLarge.copyWith(color: MyColor.getPrimaryTextColor()),
+                            style: regularLarge.copyWith(
+                                color: MyColor.getPrimaryTextColor()),
                           ),
                           verticalSpace(Dimensions.space30),
                           RoundedButton(
@@ -152,7 +165,8 @@ class ConnectToMetamaskRegistrationBottomSheet extends StatelessWidget {
                                   Text(
                                     MyStrings.download.tr,
                                     style: regularLarge.copyWith(
-                                      color: MyColor.getPrimaryButtonTextColor(),
+                                      color:
+                                          MyColor.getPrimaryButtonTextColor(),
                                     ),
                                   ),
                                 ],
@@ -168,7 +182,9 @@ class ConnectToMetamaskRegistrationBottomSheet extends StatelessWidget {
                   ] else ...[
                     verticalSpace(Dimensions.space30),
                     Padding(
-                      padding: const EdgeInsetsDirectional.symmetric(horizontal: Dimensions.space20, vertical: Dimensions.space10),
+                      padding: const EdgeInsetsDirectional.symmetric(
+                          horizontal: Dimensions.space20,
+                          vertical: Dimensions.space10),
                       child: IntrinsicHeight(
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -184,12 +200,14 @@ class ConnectToMetamaskRegistrationBottomSheet extends StatelessWidget {
                                   child: Text(
                                     MyStrings.cancel.tr,
                                     style: regularLarge.copyWith(
-                                      color: MyColor.getPrimaryButtonTextColor(),
+                                      color:
+                                          MyColor.getPrimaryButtonTextColor(),
                                     ),
                                   ),
                                 ),
                                 press: () {
-                                  metaRegController.clearMetamaskOldData(disconnected: true);
+                                  metaRegController.clearMetamaskOldData(
+                                      disconnected: true);
                                 },
                               ),
                             ),
@@ -205,7 +223,8 @@ class ConnectToMetamaskRegistrationBottomSheet extends StatelessWidget {
                                   child: Text(
                                     MyStrings.connectMetamask.tr,
                                     style: regularLarge.copyWith(
-                                      color: MyColor.getPrimaryButtonTextColor(),
+                                      color:
+                                          MyColor.getPrimaryButtonTextColor(),
                                     ),
                                   ),
                                 ),

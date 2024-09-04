@@ -4,7 +4,6 @@ import 'package:vinance/view/components/custom_loader/custom_loader.dart';
 
 import '../../../../../../../core/utils/dimensions.dart';
 import '../../../../../../../core/utils/my_color.dart';
-import '../../../../../../../core/utils/my_strings.dart';
 import '../../../../../../../core/utils/style.dart';
 import '../../../../../../../data/controller/wallet/single_coin_wallet_details_controller.dart';
 import '../../../../../../../data/repo/wallet/wallet_repository.dart';

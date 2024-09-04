@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:vinance/core/helper/date_converter.dart';
 import 'package:vinance/core/route/route.dart';
 import 'package:vinance/core/utils/my_strings.dart';
@@ -10,7 +9,6 @@ import 'package:vinance/data/model/withdraw/withdraw_request_response_model.dart
 import 'package:vinance/view/components/snack_bar/show_custom_snackbar.dart';
 import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
-import '../../model/kyc/kyc_response_model.dart';
 import '../../model/withdraw/withdraw_confirmation_response_model.dart';
 import '../../repo/account/profile_repo.dart';
 import '../../repo/withdraw/withdraw_repo.dart';

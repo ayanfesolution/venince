@@ -24,9 +24,7 @@ import 'package:vinance/view/screens/withdraw/screen/withdraw_details/withdraw_d
 import 'package:vinance/view/screens/withdraw/withdraw_screen.dart';
 import '../../view/screens/auth/forget_password/forget_password/forget_password.dart';
 import '../../view/screens/auth/kyc/kyc_screen.dart';
-import '../../view/screens/auth/login/login_screen.dart';
 import '../../view/screens/auth/profile_complete/profile_complete_screen.dart';
-import '../../view/screens/auth/registration/registration_screen.dart';
 import '../../view/screens/auth/sms_verification_page/sms_verification_screen.dart';
 import '../../view/screens/auth/two_factor_screen/two_factor_setup_screen.dart';
 import '../../view/screens/auth/two_factor_screen/two_factor_verification_screen.dart';

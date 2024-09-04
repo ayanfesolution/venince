@@ -6,11 +6,9 @@ import 'package:vinance/core/route/route.dart';
 import 'package:vinance/core/utils/dimensions.dart';
 import 'package:vinance/core/utils/my_color.dart';
 import 'package:vinance/core/utils/style.dart';
-import 'package:vinance/view/components/buttons/circle_icon_button.dart';
 import 'package:vinance/view/components/divider/custom_spacer.dart';
 import 'package:vinance/view/components/image/my_network_image_widget.dart';
 
-import '../../../../../../core/utils/my_icons.dart';
 import '../../../../../../core/utils/my_images.dart';
 import '../../../../../../data/controller/home/home_controller.dart';
 import '../../../../../components/image/my_local_image_widget.dart';

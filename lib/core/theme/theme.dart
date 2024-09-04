@@ -54,8 +54,8 @@ class AppTheme {
     cardColor: MyColor.colorBlack,
     appBarTheme: AppBarTheme(backgroundColor: MyColor.primaryColor950, elevation: 0, titleTextStyle: regularLarge.copyWith(color: MyColor.colorWhite), iconTheme: const IconThemeData(size: 20, color: MyColor.colorWhite)),
     checkboxTheme: CheckboxThemeData(
-      checkColor: MaterialStateProperty.all(MyColor.colorBlack),
-      fillColor: MaterialStateProperty.all(MyColor.primaryColor950),
+      checkColor: WidgetStateProperty.all(MyColor.colorBlack),
+      fillColor: WidgetStateProperty.all(MyColor.primaryColor950),
     ),
   );
 
@@ -100,9 +100,9 @@ class AppTheme {
     cardColor: MyColor.colorBlack,
     appBarTheme: AppBarTheme(backgroundColor: MyColor.colorWhite, elevation: 0, titleTextStyle: regularLarge.copyWith(color: MyColor.colorWhite), iconTheme: const IconThemeData(size: 20, color: MyColor.colorWhite)),
     checkboxTheme: CheckboxThemeData(
-      checkColor: MaterialStateProperty.all(MyColor.colorWhite),
-      fillColor: MaterialStateProperty.all(MyColor.colorWhite),
-      overlayColor: MaterialStateProperty.all(MyColor.colorGreen),
+      checkColor: WidgetStateProperty.all(MyColor.colorWhite),
+      fillColor: WidgetStateProperty.all(MyColor.colorWhite),
+      overlayColor: WidgetStateProperty.all(MyColor.colorGreen),
     ),
   );
 }

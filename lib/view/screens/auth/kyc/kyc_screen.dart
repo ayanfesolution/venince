@@ -7,7 +7,6 @@ import 'package:vinance/core/utils/my_strings.dart';
 import 'package:vinance/core/utils/util.dart';
 import 'package:vinance/data/controller/kyc_controller/kyc_controller.dart';
 import 'package:vinance/data/model/kyc/kyc_form_model.dart';
-import 'package:vinance/data/model/kyc/kyc_response_model.dart' as kyc;
 import 'package:vinance/data/repo/kyc/kyc_repo.dart';
 import 'package:vinance/data/services/api_service.dart';
 import 'package:vinance/view/components/buttons/rounded_button.dart';
@@ -23,7 +22,6 @@ import '../../../../core/utils/style.dart';
 import '../../../components/app-bar/app_main_appbar.dart';
 import '../../../components/divider/custom_spacer.dart';
 import '../../../components/text-form-field/custom_drop_down_text_field.dart';
-import '../../../components/text/label_text.dart';
 import 'widget/widget/choose_file_list_item.dart';
 
 class KycScreen extends StatefulWidget {

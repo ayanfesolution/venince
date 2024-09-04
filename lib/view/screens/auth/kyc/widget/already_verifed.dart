@@ -7,12 +7,10 @@ import 'package:vinance/core/utils/my_icons.dart';
 import 'package:vinance/core/utils/my_strings.dart';
 import 'package:vinance/core/utils/style.dart';
 import 'package:vinance/view/components/buttons/rounded_button.dart';
-import 'package:vinance/view/components/divider/custom_spacer.dart';
 
 import '../../../../../core/utils/url_container.dart';
 import '../../../../../data/controller/kyc_controller/kyc_controller.dart';
 import '../../../../components/card/app_body_card.dart';
-import '../../../../components/column_widget/card_column.dart';
 import '../../../../components/dialog/download_dialog.dart';
 import '../../../../components/divider/custom_divider.dart';
 import '../../../../components/image/custom_svg_picture.dart';

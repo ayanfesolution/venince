@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:vinance/core/utils/util.dart';
 import 'package:vinance/data/controller/common/theme_controller.dart';
 import 'package:vinance/data/services/api_service.dart';
-import 'package:vinance/view/components/divider/custom_spacer.dart';
 
 import '../../../core/route/route.dart';
 import '../../../core/utils/dimensions.dart';
@@ -12,7 +11,6 @@ import '../../../core/utils/my_icons.dart';
 import '../../../core/utils/my_strings.dart';
 import '../../../data/controller/dashbaord/dashboard_controller.dart';
 import '../../../data/controller/pusher_controller/pusher_service_controller.dart';
-import '../../components/image/my_local_image_widget.dart';
 import '../../components/will_pop_widget.dart';
 import 'screen/wallet/wallet_screen.dart';
 import 'screen/home/home_screen.dart';

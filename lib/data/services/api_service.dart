@@ -10,10 +10,8 @@ import 'package:vinance/core/utils/my_strings.dart';
 import 'package:vinance/data/model/authorization/authorization_response_model.dart';
 import 'package:vinance/data/model/general_setting/general_setting_response_model.dart';
 import 'package:vinance/data/model/global/response_model/response_model.dart';
-import 'package:vinance/data/model/user/user_model.dart';
 
 import '../../core/helper/string_format_helper.dart';
-import '../model/authorization/unverified_response_model.dart';
 
 class ApiClient extends GetxService {
   SharedPreferences sharedPreferences;

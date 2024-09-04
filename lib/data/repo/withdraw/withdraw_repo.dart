@@ -3,13 +3,11 @@ import 'package:vinance/core/helper/string_format_helper.dart';
 import 'package:vinance/core/utils/method.dart' as request;
 import 'package:http/http.dart' as http;
 import 'package:vinance/data/model/kyc/kyc_form_model.dart';
-import 'package:vinance/data/model/withdraw/withdraw_preview_response_model.dart';
 
 import '../../../data/repo/kyc/kyc_repo.dart';
 import '../../../core/utils/my_strings.dart';
 import '../../../core/utils/url_container.dart';
 import '../../../view/components/snack_bar/show_custom_snackbar.dart';
-import '../../model/kyc/kyc_response_model.dart';
 import '../../model/withdraw/withdraw_confirmation_response_model.dart';
 import '../../services/api_service.dart';
 import '../../model/global/response_model/response_model.dart';

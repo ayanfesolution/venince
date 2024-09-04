@@ -5,7 +5,7 @@ import 'package:vinance/core/utils/style.dart';
 
 class TicketRow extends StatelessWidget {
   const TicketRow({
-    Key? key,
+    super.key,
     required this.header,
     required this.value,
     this.isStatus = false,
@@ -15,7 +15,7 @@ class TicketRow extends StatelessWidget {
     this.color = MyColor.colorGrey,
     this.borderColor = MyColor.borderColor,
     this.textColor,
-  }) : super(key: key);
+  });
 
   final String header;
   final String value;

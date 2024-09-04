@@ -1,15 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:vinance/core/utils/dimensions.dart';
 import 'package:vinance/core/utils/my_color.dart';
 import 'package:vinance/core/utils/style.dart';
 import 'package:vinance/data/controller/auth/auth/metamask/metamask_login_controller.dart';
-import 'package:web3modal_flutter/services/w3m_service/i_w3m_service.dart';
-import 'package:web3modal_flutter/widgets/avatars/loading_border.dart';
-import 'package:web3modal_flutter/widgets/buttons/simple_icon_button.dart';
-import 'package:web3modal_flutter/widgets/lists/list_items/download_wallet_item.dart';
 
 import '../../../../../core/utils/my_icons.dart';
 import '../../../../../core/utils/my_strings.dart';
@@ -23,7 +17,8 @@ class ConnectMetamaskLoginBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<MetaMaskAuthLoginController>(builder: (metaLoginController) {
+    return GetBuilder<MetaMaskAuthLoginController>(
+        builder: (metaLoginController) {
       return PopScope(
         canPop: true,
         onPopInvoked: (didPop) {
@@ -36,16 +31,19 @@ class ConnectMetamaskLoginBottomSheet extends StatelessWidget {
               children: [
                 verticalSpace(Dimensions.space20),
                 Padding(
-                  padding: const EdgeInsetsDirectional.symmetric(horizontal: Dimensions.space20),
+                  padding: const EdgeInsetsDirectional.symmetric(
+                      horizontal: Dimensions.space20),
                   child: Center(
                       child: Text(
                     MyStrings.metaMask.tr.toUpperCase(),
-                    style: boldOverLarge.copyWith(color: MyColor.getPrimaryTextColor()),
+                    style: boldOverLarge.copyWith(
+                        color: MyColor.getPrimaryTextColor()),
                   )),
                 ),
                 verticalSpace(Dimensions.space20),
                 LoadingBorderIndicator(
-                  animate: metaLoginController.walletErrorEvent == null,
+                  animate: metaLoginController.w3mService.onSessionEventEvent ==
+                      null,
                   borderRadius: 20,
                   strokeWidth: 3,
                   color: MyColor.pendingColor,
@@ -60,18 +58,23 @@ class ConnectMetamaskLoginBottomSheet extends StatelessWidget {
                   ),
                 ),
                 verticalSpace(Dimensions.space30),
-                if (metaLoginController.messageData != '' && metaLoginController.walletAddressData != '') ...[
+                if (metaLoginController.messageData != '' &&
+                    metaLoginController.walletAddressData != '') ...[
                   Padding(
-                    padding: const EdgeInsetsDirectional.symmetric(horizontal: Dimensions.space20),
+                    padding: const EdgeInsetsDirectional.symmetric(
+                        horizontal: Dimensions.space20),
                     child: Center(
                         child: Text(
                       metaLoginController.messageData.tr,
-                      style: regularLarge.copyWith(color: MyColor.getPrimaryTextColor()),
+                      style: regularLarge.copyWith(
+                          color: MyColor.getPrimaryTextColor()),
                     )),
                   ),
                   verticalSpace(Dimensions.space30),
                   Padding(
-                    padding: const EdgeInsetsDirectional.symmetric(horizontal: Dimensions.space20, vertical: Dimensions.space10),
+                    padding: const EdgeInsetsDirectional.symmetric(
+                        horizontal: Dimensions.space20,
+                        vertical: Dimensions.space10),
                     child: IntrinsicHeight(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -92,7 +95,8 @@ class ConnectMetamaskLoginBottomSheet extends StatelessWidget {
                                 ),
                               ),
                               press: () {
-                                metaLoginController.clearMetamaskOldData(disconnected: true);
+                                metaLoginController.clearMetamaskOldData(
+                                    disconnected: true);
                               },
                             ),
                           ),
@@ -113,9 +117,14 @@ class ConnectMetamaskLoginBottomSheet extends StatelessWidget {
                                 ),
                               ),
                               press: () async {
-                                var address = "${metaLoginController.w3mService.session?.address?.toLowerCase()}";
+                                var address =
+                                    "${metaLoginController.w3mService.session?.sessionService.name.toLowerCase()}";
                                 if (address.toString() != 'null') {
-                                  await metaLoginController.getSignatureCodeFromMetamask(address: address, message: metaLoginController.messageData);
+                                  await metaLoginController
+                                      .getSignatureCodeFromMetamask(
+                                          address: address,
+                                          message:
+                                              metaLoginController.messageData);
                                 }
                               },
                             ),
@@ -126,15 +135,20 @@ class ConnectMetamaskLoginBottomSheet extends StatelessWidget {
                   ),
                   verticalSpace(Dimensions.space10),
                 ] else ...[
-                  if (metaLoginController.isInitializing == false && metaLoginController.walletErrorEvent != null) ...[
+                  if (metaLoginController.isInitializing == false &&
+                      metaLoginController.w3mService.onSessionEventEvent !=
+                          null) ...[
                     verticalSpace(Dimensions.space10),
                     Container(
-                      padding: const EdgeInsetsDirectional.symmetric(horizontal: Dimensions.space20, vertical: Dimensions.space10),
+                      padding: const EdgeInsetsDirectional.symmetric(
+                          horizontal: Dimensions.space20,
+                          vertical: Dimensions.space10),
                       child: Column(
                         children: [
                           Text(
                             "${MyStrings.donNotHave.tr} ${metaLoginController.w3mWalletInfo.listing.name}?",
-                            style: regularLarge.copyWith(color: MyColor.getPrimaryTextColor()),
+                            style: regularLarge.copyWith(
+                                color: MyColor.getPrimaryTextColor()),
                           ),
                           verticalSpace(Dimensions.space30),
                           RoundedButton(
@@ -153,7 +167,8 @@ class ConnectMetamaskLoginBottomSheet extends StatelessWidget {
                                   Text(
                                     MyStrings.download.tr,
                                     style: regularLarge.copyWith(
-                                      color: MyColor.getPrimaryButtonTextColor(),
+                                      color:
+                                          MyColor.getPrimaryButtonTextColor(),
                                     ),
                                   ),
                                 ],
@@ -169,7 +184,9 @@ class ConnectMetamaskLoginBottomSheet extends StatelessWidget {
                   ] else ...[
                     verticalSpace(Dimensions.space30),
                     Padding(
-                      padding: const EdgeInsetsDirectional.symmetric(horizontal: Dimensions.space20, vertical: Dimensions.space10),
+                      padding: const EdgeInsetsDirectional.symmetric(
+                          horizontal: Dimensions.space20,
+                          vertical: Dimensions.space10),
                       child: IntrinsicHeight(
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -185,12 +202,14 @@ class ConnectMetamaskLoginBottomSheet extends StatelessWidget {
                                   child: Text(
                                     MyStrings.cancel.tr,
                                     style: regularLarge.copyWith(
-                                      color: MyColor.getPrimaryButtonTextColor(),
+                                      color:
+                                          MyColor.getPrimaryButtonTextColor(),
                                     ),
                                   ),
                                 ),
                                 press: () {
-                                  metaLoginController.clearMetamaskOldData(disconnected: true);
+                                  metaLoginController.clearMetamaskOldData(
+                                      disconnected: true);
                                 },
                               ),
                             ),
@@ -206,14 +225,16 @@ class ConnectMetamaskLoginBottomSheet extends StatelessWidget {
                                   child: Text(
                                     MyStrings.connectMetamask.tr,
                                     style: regularLarge.copyWith(
-                                      color: MyColor.getPrimaryButtonTextColor(),
+                                      color:
+                                          MyColor.getPrimaryButtonTextColor(),
                                     ),
                                   ),
                                 ),
                                 press: () async {
                                   // metaLoginController.w3mService.openModal(context);
 
-                                  metaLoginController.signInWithMetamask(context);
+                                  metaLoginController
+                                      .signInWithMetamask(context);
                                 },
                               ),
                             ),

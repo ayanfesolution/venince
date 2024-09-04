@@ -123,7 +123,7 @@ class _ProfileAndSettingsScreenState extends State<ProfileAndSettingsScreen> {
                             username: profileAndSettingsController
                                 .profileController.userName,
                             subtitle:
-                                "${profileAndSettingsController.profileController.mobileNo}",
+                                profileAndSettingsController.profileController.mobileNo,
                             rating: 'hide',
                             imgWidget: Container(
                               decoration: BoxDecoration(

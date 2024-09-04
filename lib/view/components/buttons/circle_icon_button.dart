@@ -7,13 +7,13 @@ class CircleIconButton extends StatefulWidget {
   final Color backgroundColor;
 
   const CircleIconButton({
-    Key? key,
+    super.key,
     required this.child,
     required this.onTap,
     this.height = 40,
     this.width = 40,
     required this.backgroundColor,
-  }) : super(key: key);
+  });
 
   @override
   State<CircleIconButton> createState() => _CircleIconButtonState();

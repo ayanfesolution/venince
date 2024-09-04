@@ -4,7 +4,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:get/get_core/get_core.dart';
 import 'package:vinance/core/utils/my_strings.dart';
 import 'package:vinance/data/controller/support/support_controller.dart';
 import 'package:vinance/data/model/support/new_ticket_store_model.dart';

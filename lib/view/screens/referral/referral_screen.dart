@@ -11,7 +11,6 @@ import '../../../core/utils/my_color.dart';
 import '../../../core/utils/my_strings.dart';
 import '../../../core/utils/style.dart';
 import '../../../data/controller/referral/referral_controller.dart';
-import '../../../data/model/referral/referral_model.dart';
 import '../../../data/services/api_service.dart';
 import '../../components/app-bar/app_main_appbar.dart';
 import '../../components/custom_loader/custom_loader.dart';

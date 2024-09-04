@@ -1,10 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vinance/core/helper/shared_preference_helper.dart';
-import 'package:web3modal_flutter/services/explorer_service/models/api_response.dart';
-import 'package:web3modal_flutter/services/w3m_service/i_w3m_service.dart';
+import 'package:web3modal_flutter/models/listing.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 import '../../../../../core/helper/string_format_helper.dart';
@@ -18,7 +18,8 @@ import '../../../../repo/auth/login_repo.dart';
 import '../../../social_auth/get_message_for_metamsk_model.dart';
 import 'utils/crypto/eip155.dart';
 
-class MetaMaskAuthLoginController extends GetxController with WidgetsBindingObserver {
+class MetaMaskAuthLoginController extends GetxController
+    with WidgetsBindingObserver {
   LoginRepo loginRepo;
   MetaMaskAuthLoginController({required this.loginRepo});
 
@@ -26,7 +27,7 @@ class MetaMaskAuthLoginController extends GetxController with WidgetsBindingObse
   late W3MService w3mService;
   late W3MWalletInfo w3mWalletInfo;
   late W3MChainInfo w3mChainInfo;
-  WalletErrorEvent? walletErrorEvent;
+//  WalletErrorEvent? walletErrorEvent;
 
   void initialize() async {
     WidgetsBinding.instance.addObserver(this);
@@ -60,7 +61,9 @@ class MetaMaskAuthLoginController extends GetxController with WidgetsBindingObse
               appStore: "https://apps.apple.com/us/app/metamask/id1438144202",
               playStore: "https://play.google.com/store/apps/details?id=io.metamask",
               rdns: "io.metamask",
-              injected: [Injected(namespace: "eip155", injectedId: "isMetaMask")]),
+              injected: [
+                Injected(namespace: "eip155", injectedId: "isMetaMask")
+              ]),
           installed: true,
           recent: true);
 
@@ -80,9 +83,9 @@ class MetaMaskAuthLoginController extends GetxController with WidgetsBindingObse
 
       w3mService.onSessionEventEvent.subscribe(_onSessionEvent);
       w3mService.onSessionUpdateEvent.subscribe(_onSessionUpdate);
-      w3mService.onSessionConnectEvent.subscribe(_onSessionConnect);
-      w3mService.onSessionDeleteEvent.subscribe(_onSessionDelete);
-      w3mService.onWalletConnectionError.subscribe(_onWalletConnectedError);
+      w3mService.onModalConnect.subscribe(_onSessionConnect);
+      w3mService.onSessionExpireEvent.subscribe(_onSessioExpire);
+    //  w3mService.onModalError.subscribe(_onWalletConnectedError);
       isInitializing = false;
 
       update();
@@ -101,9 +104,13 @@ class MetaMaskAuthLoginController extends GetxController with WidgetsBindingObse
     debugPrint('[$runtimeType] _onSessionUpdate $args');
   }
 
+  void _onSessioExpire(SessionExpire? args) {
+    debugPrint('[$runtimeType] _onSessionUpdate $args');
+  }
+
   bool _messageSent = false; // Flag to track if the message has been sent
 
-  void _onSessionConnect(SessionConnect? args) async {
+  void _onSessionConnect(ModalConnect? args) async {
     debugPrint('[$runtimeType] _onSessionConnect $args');
 
     if (!_messageSent && args?.session.acknowledged == true) {
@@ -119,12 +126,12 @@ class MetaMaskAuthLoginController extends GetxController with WidgetsBindingObse
     debugPrint('[$runtimeType] _onSessionDelete $args');
   }
 
-  void _onWalletConnectedError(WalletErrorEvent? args) {
-    walletErrorEvent = args;
+  // void _onWalletConnectedError(WalletErrorEvent? args) {
+  //   walletErrorEvent = args;
 
-    print("Error1000");
-    debugPrint('[$runtimeType] _onWalletConnectedError $args');
-  }
+  //   print("Error1000");
+  //   debugPrint('[$runtimeType] _onWalletConnectedError $args');
+  // }
 
   bool isLoading = false;
 
@@ -217,7 +224,7 @@ class MetaMaskAuthLoginController extends GetxController with WidgetsBindingObse
 
   clearMetamaskOldData({bool disconnected = true}) {
     //reset connection and established new connection
-    walletErrorEvent = null;
+   // walletErrorEvent = null;
     _messageSent = false;
     walletAddressData = '';
     messageData = '';
@@ -227,7 +234,8 @@ class MetaMaskAuthLoginController extends GetxController with WidgetsBindingObse
     }
   }
 
-  MetamaskGetMessageResponseModel messageResponseModelData = MetamaskGetMessageResponseModel();
+  MetamaskGetMessageResponseModel messageResponseModelData =
+      MetamaskGetMessageResponseModel();
   String walletAddressData = '';
   String messageData = '';
   String signatureCodeData = '';
@@ -237,16 +245,22 @@ class MetaMaskAuthLoginController extends GetxController with WidgetsBindingObse
 
     update();
     try {
-      ResponseModel model = await loginRepo.getMetaMaskLoginMessage(walletAddress);
+      ResponseModel model =
+          await loginRepo.getMetaMaskLoginMessage(walletAddress);
 
       if (model.statusCode == 200) {
-        MetamaskGetMessageResponseModel messageResponseModel = MetamaskGetMessageResponseModel.fromJson(jsonDecode(model.responseJson));
-        if (messageResponseModel.status.toString().toLowerCase() == MyStrings.success.toLowerCase()) {
+        MetamaskGetMessageResponseModel messageResponseModel =
+            MetamaskGetMessageResponseModel.fromJson(
+                jsonDecode(model.responseJson));
+        if (messageResponseModel.status.toString().toLowerCase() ==
+            MyStrings.success.toLowerCase()) {
           messageResponseModelData = messageResponseModel;
           messageData = messageResponseModel.data?.message ?? '';
           update();
         } else {
-          CustomSnackBar.error(errorList: messageResponseModel.message?.error ?? [MyStrings.loginFailedTryAgain]);
+          CustomSnackBar.error(
+              errorList: messageResponseModel.message?.error ??
+                  [MyStrings.loginFailedTryAgain]);
         }
       } else {
         CustomSnackBar.error(errorList: [model.message]);
@@ -263,11 +277,17 @@ class MetaMaskAuthLoginController extends GetxController with WidgetsBindingObse
 
   bool remember = true;
 
-  Future getSignatureCodeFromMetamask({required String address, required String message}) async {
+  Future getSignatureCodeFromMetamask(
+      {required String address, required String message}) async {
     //Verify Message
     printx("Signature");
 
-    String signatureCode = await personalSignFortSignatureVerification(address: walletAddressData, w3mService: w3mService, topic: w3mService.session?.topic ?? '', chainId: 'eip155:1', message: message);
+    String signatureCode = await personalSignFortSignatureVerification(
+        address: walletAddressData,
+        w3mService: w3mService,
+        topic: w3mService.session?.topic ?? '',
+        chainId: 'eip155:1',
+        message: message);
 
     printx("Signature Code");
     printx("$signatureCode ");
@@ -276,19 +296,24 @@ class MetaMaskAuthLoginController extends GetxController with WidgetsBindingObse
     verifyMetaMakSignatureCode(messageResponseModelData, signatureCode);
   }
 
-  Future verifyMetaMakSignatureCode(MetamaskGetMessageResponseModel metamaskGetMessageResponseModel, String signature) async {
+  Future verifyMetaMakSignatureCode(
+      MetamaskGetMessageResponseModel metamaskGetMessageResponseModel,
+      String signature) async {
     isMetaMaskSubmitLoading = true;
     update();
     try {
-      ResponseModel responseModel = await loginRepo.verifyMetaMaskLoginSignature(
+      ResponseModel responseModel =
+          await loginRepo.verifyMetaMaskLoginSignature(
         walletAddress: metamaskGetMessageResponseModel.data?.wallet ?? '',
         message: metamaskGetMessageResponseModel.data?.message ?? '',
         signature: signature,
         nonce: metamaskGetMessageResponseModel.data?.nonce ?? '',
       );
       if (responseModel.statusCode == 200) {
-        LoginResponseModel loginModel = LoginResponseModel.fromJson(jsonDecode(responseModel.responseJson));
-        if (loginModel.status.toString().toLowerCase() == MyStrings.success.toLowerCase()) {
+        LoginResponseModel loginModel =
+            LoginResponseModel.fromJson(jsonDecode(responseModel.responseJson));
+        if (loginModel.status.toString().toLowerCase() ==
+            MyStrings.success.toLowerCase()) {
           remember = true;
           update();
           checkAndGotoNextStep(loginModel);
@@ -298,7 +323,9 @@ class MetaMaskAuthLoginController extends GetxController with WidgetsBindingObse
         } else {
           isMetaMaskSubmitLoading = false;
           update();
-          CustomSnackBar.error(errorList: loginModel.message?.error ?? [MyStrings.loginFailedTryAgain.tr]);
+          CustomSnackBar.error(
+              errorList: loginModel.message?.error ??
+                  [MyStrings.loginFailedTryAgain.tr]);
         }
       } else {
         isMetaMaskSubmitLoading = false;
@@ -317,39 +344,65 @@ class MetaMaskAuthLoginController extends GetxController with WidgetsBindingObse
   }
 
   void checkAndGotoNextStep(LoginResponseModel responseModel) async {
-    bool needEmailVerification = responseModel.data?.user?.ev == "1" ? false : true;
-    bool needSmsVerification = responseModel.data?.user?.sv == '1' ? false : true;
+    bool needEmailVerification =
+        responseModel.data?.user?.ev == "1" ? false : true;
+    bool needSmsVerification =
+        responseModel.data?.user?.sv == '1' ? false : true;
     bool isTwoFactorEnable = responseModel.data?.user?.tv == '1' ? false : true;
 
-    await loginRepo.apiClient.sharedPreferences.setBool(SharedPreferenceHelper.rememberMeKey, true); // always will be true
+    await loginRepo.apiClient.sharedPreferences.setBool(
+        SharedPreferenceHelper.rememberMeKey, true); // always will be true
 
-    await loginRepo.apiClient.sharedPreferences.setString(SharedPreferenceHelper.userIdKey, responseModel.data?.user?.id.toString() ?? '-1');
-    await loginRepo.apiClient.sharedPreferences.setString(SharedPreferenceHelper.accessTokenKey, responseModel.data?.accessToken ?? '');
-    await loginRepo.apiClient.sharedPreferences.setString(SharedPreferenceHelper.accessTokenType, responseModel.data?.tokenType ?? '');
-    await loginRepo.apiClient.sharedPreferences.setString(SharedPreferenceHelper.userEmailKey, responseModel.data?.user?.email ?? '');
-    await loginRepo.apiClient.sharedPreferences.setString(SharedPreferenceHelper.userPhoneNumberKey, responseModel.data?.user?.mobile ?? '');
-    await loginRepo.apiClient.sharedPreferences.setString(SharedPreferenceHelper.userNameKey, responseModel.data?.user?.username ?? '');
+    await loginRepo.apiClient.sharedPreferences.setString(
+        SharedPreferenceHelper.userIdKey,
+        responseModel.data?.user?.id.toString() ?? '-1');
+    await loginRepo.apiClient.sharedPreferences.setString(
+        SharedPreferenceHelper.accessTokenKey,
+        responseModel.data?.accessToken ?? '');
+    await loginRepo.apiClient.sharedPreferences.setString(
+        SharedPreferenceHelper.accessTokenType,
+        responseModel.data?.tokenType ?? '');
+    await loginRepo.apiClient.sharedPreferences.setString(
+        SharedPreferenceHelper.userEmailKey,
+        responseModel.data?.user?.email ?? '');
+    await loginRepo.apiClient.sharedPreferences.setString(
+        SharedPreferenceHelper.userPhoneNumberKey,
+        responseModel.data?.user?.mobile ?? '');
+    await loginRepo.apiClient.sharedPreferences.setString(
+        SharedPreferenceHelper.userNameKey,
+        responseModel.data?.user?.username ?? '');
 
-    bool isProfileCompleteEnable = responseModel.data?.user?.profileComplete == '0' ? true : false;
+    bool isProfileCompleteEnable =
+        responseModel.data?.user?.profileComplete == '0' ? true : false;
 
-    if (needSmsVerification == false && needEmailVerification == false && isTwoFactorEnable == false) {
+    if (needSmsVerification == false &&
+        needEmailVerification == false &&
+        isTwoFactorEnable == false) {
       if (isProfileCompleteEnable) {
         Get.offAndToNamed(RouteHelper.profileCompleteScreen);
       } else {
-        await loginRepo.apiClient.sharedPreferences.setBool(SharedPreferenceHelper.firstTimeOnAppKey, false);
+        await loginRepo.apiClient.sharedPreferences
+            .setBool(SharedPreferenceHelper.firstTimeOnAppKey, false);
 
         Get.offAndToNamed(RouteHelper.dashboardScreen);
       }
-    } else if (needSmsVerification == true && needEmailVerification == true && isTwoFactorEnable == true) {
-      Get.offAndToNamed(RouteHelper.emailVerificationScreen, arguments: [true, isProfileCompleteEnable, isTwoFactorEnable]);
+    } else if (needSmsVerification == true &&
+        needEmailVerification == true &&
+        isTwoFactorEnable == true) {
+      Get.offAndToNamed(RouteHelper.emailVerificationScreen,
+          arguments: [true, isProfileCompleteEnable, isTwoFactorEnable]);
     } else if (needSmsVerification == true && needEmailVerification == true) {
-      Get.offAndToNamed(RouteHelper.emailVerificationScreen, arguments: [true, isProfileCompleteEnable, isTwoFactorEnable]);
+      Get.offAndToNamed(RouteHelper.emailVerificationScreen,
+          arguments: [true, isProfileCompleteEnable, isTwoFactorEnable]);
     } else if (needSmsVerification) {
-      Get.offAndToNamed(RouteHelper.smsVerificationScreen, arguments: [isProfileCompleteEnable, isTwoFactorEnable]);
+      Get.offAndToNamed(RouteHelper.smsVerificationScreen,
+          arguments: [isProfileCompleteEnable, isTwoFactorEnable]);
     } else if (needEmailVerification) {
-      Get.offAndToNamed(RouteHelper.emailVerificationScreen, arguments: [false, isProfileCompleteEnable, isTwoFactorEnable]);
+      Get.offAndToNamed(RouteHelper.emailVerificationScreen,
+          arguments: [false, isProfileCompleteEnable, isTwoFactorEnable]);
     } else if (isTwoFactorEnable) {
-      Get.offAndToNamed(RouteHelper.twoFactorScreen, arguments: isProfileCompleteEnable);
+      Get.offAndToNamed(RouteHelper.twoFactorScreen,
+          arguments: isProfileCompleteEnable);
     }
   }
 
@@ -357,19 +410,22 @@ class MetaMaskAuthLoginController extends GetxController with WidgetsBindingObse
 
   Future<void> launchMetaMaskUrl() async {
     String appStoreUrl = "https://apps.apple.com/us/app/metamask/id1438144202";
-    String playStoreUrl = "https://play.google.com/store/apps/details?id=io.metamask";
+    String playStoreUrl =
+        "https://play.google.com/store/apps/details?id=io.metamask";
 
     if (Platform.isIOS) {
       // Check if the current platform is iOS
       if (await canLaunchUrl(Uri.parse(appStoreUrl))) {
-        await launchUrl(Uri.parse(appStoreUrl), mode: LaunchMode.externalApplication);
+        await launchUrl(Uri.parse(appStoreUrl),
+            mode: LaunchMode.externalApplication);
       } else {
         throw 'Could not launch MetaMask store URL';
       }
     } else if (Platform.isAndroid) {
       // Check if the current platform is Android
       if (await canLaunchUrl(Uri.parse(playStoreUrl))) {
-        await launchUrl(Uri.parse(playStoreUrl), mode: LaunchMode.externalApplication);
+        await launchUrl(Uri.parse(playStoreUrl),
+            mode: LaunchMode.externalApplication);
       } else {
         throw 'Could not launch MetaMask store URL';
       }
