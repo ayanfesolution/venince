@@ -110,11 +110,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       NavBarItem(
                           label: MyStrings.wallet.tr,
                           imagePath: MyIcons.navWallet,
-                          index: 2,
-                          isSelected: controller.selectedBottomNavIndex == 2,
+                          index: 0,
+                          isSelected: controller.selectedBottomNavIndex == 0,
                           press: () {
                             if (controller.checkUserIsLoggedInOrNot()) {
-                              controller.changeSelectedIndex(2);
+                              controller.changeSelectedIndex(0);
                             } else {
                               Get.toNamed(RouteHelper.authenticationScreen);
                             }
@@ -123,10 +123,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       NavBarItem(
                           label: MyStrings.portfolio.tr,
                           imagePath: MyIcons.navProfile,
-                          index: 3,
-                          isSelected: controller.selectedBottomNavIndex == 3,
+                          index: 1,
+                          isSelected: controller.selectedBottomNavIndex == 1,
                           press: () {
-                            controller.changeSelectedIndex(3);
+                            controller.changeSelectedIndex(1);
                             MyUtils.vibrationOn();
                           }),
                     ],

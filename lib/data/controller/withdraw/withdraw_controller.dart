@@ -13,7 +13,8 @@ import '../../model/withdraw/withdraw_method_response_model.dart';
 import '../../model/withdraw/withdraw_request_response_model.dart';
 import '../../repo/withdraw/withdraw_repo.dart';
 
-class WithdrawController extends GetxController with GetTickerProviderStateMixin {
+class WithdrawController extends GetxController
+    with GetTickerProviderStateMixin {
   WithdrawRepo withdrawRepo;
   WithdrawController({required this.withdrawRepo});
 
@@ -22,7 +23,8 @@ class WithdrawController extends GetxController with GetTickerProviderStateMixin
 
   List<WithdrawMethod> withdrawMethodList = [];
   List<WithdrawMethod> filteredWithdrawMethodList = [];
-  WithdrawMethod? selectedWithdrawMethod = WithdrawMethod(name: MyStrings.selectOne, id: -1);
+  WithdrawMethod? selectedWithdrawMethod =
+      WithdrawMethod(name: MyStrings.selectOne, id: -1);
   List<WithdrawCurrency> withdrawCurrencyList = [];
   List<WithdrawCurrency> filteredWithdrawCurrencyList = [];
   WithdrawCurrency? selectedWithdrawCurrency;
@@ -53,13 +55,16 @@ class WithdrawController extends GetxController with GetTickerProviderStateMixin
   double mainAmount = 0;
   setWithdrawMethod(WithdrawMethod? method) {
     selectedWithdrawMethod = method;
-    withdrawLimit = '${MyStrings.depositLimit.tr}: ${StringConverter.formatNumber(method?.minLimit ?? '-1')} - ${StringConverter.formatNumber(method?.maxLimit?.toString() ?? '-1')} ${method?.currency}';
-    charge = '${MyStrings.charge.tr}: ${StringConverter.formatNumber(method?.fixedCharge?.toString() ?? '0')} + ${StringConverter.formatNumber(method?.percentCharge?.toString() ?? '0')} %';
+    withdrawLimit =
+        '${MyStrings.depositLimit.tr}: ${StringConverter.formatNumber(method?.minLimit ?? '-1')} - ${StringConverter.formatNumber(method?.maxLimit?.toString() ?? '-1')} ${method?.currency}';
+    charge =
+        '${MyStrings.charge.tr}: ${StringConverter.formatNumber(method?.fixedCharge?.toString() ?? '0')} + ${StringConverter.formatNumber(method?.percentCharge?.toString() ?? '0')} %';
     currency = selectedWithdrawMethod?.currency ?? '';
     String amt = amountController.text.toString();
     mainAmount = amt.isEmpty ? 0 : double.tryParse(amt) ?? 0;
 
-    withdrawLimit = '${StringConverter.formatNumber(method?.minLimit?.toString() ?? '-1')} - ${StringConverter.formatNumber(method?.maxLimit?.toString() ?? '-1')} $currency';
+    withdrawLimit =
+        '${StringConverter.formatNumber(method?.minLimit?.toString() ?? '-1')} - ${StringConverter.formatNumber(method?.maxLimit?.toString() ?? '-1')} $currency';
     changeInfoWidgetValue(mainAmount);
     update();
   }
@@ -67,16 +72,19 @@ class WithdrawController extends GetxController with GetTickerProviderStateMixin
   void changeInfoWidgetValue(double amount) {
     currency = selectedWithdrawMethod?.currency ?? '';
     mainAmount = amount;
-    double percent = double.tryParse(selectedWithdrawMethod?.percentCharge ?? '0') ?? 0;
+    double percent =
+        double.tryParse(selectedWithdrawMethod?.percentCharge ?? '0') ?? 0;
     double percentCharge = (amount * percent) / 100;
-    double temCharge = double.tryParse(selectedWithdrawMethod?.fixedCharge ?? '0') ?? 0;
+    double temCharge =
+        double.tryParse(selectedWithdrawMethod?.fixedCharge ?? '0') ?? 0;
     double totalCharge = percentCharge + temCharge;
     double payable = amount - totalCharge;
     payableText = '$payable $currency';
     charge = '${StringConverter.formatNumber('$totalCharge')} $currency';
 
     rate = double.tryParse(selectedWithdrawMethod?.rate ?? '0') ?? 0;
-    conversionRate = '1 $currency = $rate ${selectedWithdrawMethod?.currency ?? ''}';
+    conversionRate =
+        '1 $currency = $rate ${selectedWithdrawMethod?.currency ?? ''}';
     inLocal = StringConverter.formatNumber('${payable * rate}');
 
     update();
@@ -92,7 +100,8 @@ class WithdrawController extends GetxController with GetTickerProviderStateMixin
     update();
   }
 
-  Future<void> loadWithdrawMethod({String selectedCurrencyFromParamsID = ''}) async {
+  Future<void> loadWithdrawMethod(
+      {String selectedCurrencyFromParamsID = ''}) async {
     withdrawMethodList.clear();
     withdrawMethodList.add(selectedWithdrawMethod!);
     currency = selectedWithdrawMethod?.currency ?? '';
@@ -102,7 +111,9 @@ class WithdrawController extends GetxController with GetTickerProviderStateMixin
       ResponseModel responseModel = await withdrawRepo.getAllWithdrawMethod();
 
       if (responseModel.statusCode == 200) {
-        WithdrawMethodResponseModel model = WithdrawMethodResponseModel.fromJson(jsonDecode(responseModel.responseJson));
+        WithdrawMethodResponseModel model =
+            WithdrawMethodResponseModel.fromJson(
+                jsonDecode(responseModel.responseJson));
 
         if (model.status == 'success') {
           List<WithdrawMethod>? tempMethodList = model.data?.withdrawMethod;
@@ -116,7 +127,10 @@ class WithdrawController extends GetxController with GetTickerProviderStateMixin
               if (selectedCurrencyFromParamsID == '') {
                 selectWithdrawCurrency(tempCurrencyList.first);
               } else {
-                selectWithdrawCurrency(tempCurrencyList.where((element) => element.id == selectedCurrencyFromParamsID).first);
+                selectWithdrawCurrency(tempCurrencyList
+                    .where(
+                        (element) => element.id == selectedCurrencyFromParamsID)
+                    .first);
               }
             }
             withdrawCurrencyList.addAll(tempCurrencyList);
@@ -127,8 +141,10 @@ class WithdrawController extends GetxController with GetTickerProviderStateMixin
           if (tempSpotWalletList != null && tempSpotWalletList.isNotEmpty) {
             spotWithdrawWalletList.addAll(tempSpotWalletList);
           }
-          List<WithdrawWallet>? tempFundingWalletList = model.data?.fundingWallets;
-          if (tempFundingWalletList != null && tempFundingWalletList.isNotEmpty) {
+          List<WithdrawWallet>? tempFundingWalletList =
+              model.data?.fundingWallets;
+          if (tempFundingWalletList != null &&
+              tempFundingWalletList.isNotEmpty) {
             fundingWithdrawWalletList.addAll(tempFundingWalletList);
           }
         } else {
@@ -149,17 +165,28 @@ class WithdrawController extends GetxController with GetTickerProviderStateMixin
     if (searchText.isEmpty) {
       filteredWithdrawCurrencyList = withdrawCurrencyList;
     } else {
-      filteredWithdrawCurrencyList = withdrawCurrencyList.where((item) => item.symbol?.toLowerCase().contains(searchText.toLowerCase()) == true || item.name?.toLowerCase().contains(searchText.toLowerCase()) == true).toList();
+      filteredWithdrawCurrencyList = withdrawCurrencyList
+          .where((item) =>
+              item.symbol?.toLowerCase().contains(searchText.toLowerCase()) ==
+                  true ||
+              item.name?.toLowerCase().contains(searchText.toLowerCase()) ==
+                  true)
+          .toList();
     }
 
     update();
   }
 
-  void filterWithdrawMethodBasedOnSelectedCurrency(WithdrawCurrency? withdrawCurrency) {
+  void filterWithdrawMethodBasedOnSelectedCurrency(
+      WithdrawCurrency? withdrawCurrency) {
     if (withdrawCurrency == null) {
       filteredWithdrawMethodList = [];
     } else {
-      filteredWithdrawMethodList = withdrawMethodList.where((item) => item.currency?.toLowerCase() == withdrawCurrency.symbol.toString().toLowerCase()).toList();
+      filteredWithdrawMethodList = withdrawMethodList
+          .where((item) =>
+              item.currency?.toLowerCase() ==
+              withdrawCurrency.symbol.toString().toLowerCase())
+          .toList();
     }
 
     update();
@@ -172,16 +199,21 @@ class WithdrawController extends GetxController with GetTickerProviderStateMixin
     String id = selectedWithdrawMethod?.id.toString() ?? '-1';
 
     if (amount.isEmpty) {
-      CustomSnackBar.error(errorList: ['${MyStrings.please} ${MyStrings.enterAmount.toLowerCase()}']);
+      CustomSnackBar.error(errorList: [
+        '${MyStrings.please} ${MyStrings.enterAmount.toLowerCase()}'
+      ]);
       return;
     }
 
     if (id == '-1') {
-      CustomSnackBar.error(errorList: ['${MyStrings.please} ${MyStrings.selectPaymentMethod.toLowerCase()}']);
+      CustomSnackBar.error(errorList: [
+        '${MyStrings.please} ${MyStrings.selectPaymentMethod.toLowerCase()}'
+      ]);
       return;
     }
 
-    if (authorizationList.length > 1 && selectedAuthorizationMode?.toLowerCase() == MyStrings.selectOne) {
+    if (authorizationList.length > 1 &&
+        selectedAuthorizationMode?.toLowerCase() == MyStrings.selectOne) {
       CustomSnackBar.error(errorList: [MyStrings.selectAuthModeMsg]);
       return;
     }
@@ -215,12 +247,20 @@ class WithdrawController extends GetxController with GetTickerProviderStateMixin
       );
 
       if (response.statusCode == 200) {
-        WithdrawRequestResponseModel model = WithdrawRequestResponseModel.fromJson(jsonDecode(response.responseJson));
+        WithdrawRequestResponseModel model =
+            WithdrawRequestResponseModel.fromJson(
+                jsonDecode(response.responseJson));
         if (model.status == MyStrings.success) {
           amountController.text = '';
-          Get.offAndToNamed(RouteHelper.withdrawConfirmScreenScreen, arguments: [model, selectedWithdrawMethod?.name, selectedWithdrawMethod?.description]);
+          Get.offAndToNamed(RouteHelper.withdrawConfirmScreenScreen,
+              arguments: [
+                model,
+                selectedWithdrawMethod?.name,
+                selectedWithdrawMethod?.description
+              ]);
         } else {
-          CustomSnackBar.error(errorList: model.message?.error ?? [MyStrings.requestFail]);
+          CustomSnackBar.error(
+              errorList: model.message?.error ?? [MyStrings.requestFail]);
         }
       } else {
         CustomSnackBar.error(errorList: [response.message]);
@@ -237,7 +277,9 @@ class WithdrawController extends GetxController with GetTickerProviderStateMixin
   }
 
   bool isShowRate() {
-    if (rate > 1 && currency.toLowerCase() != selectedWithdrawMethod?.currency?.toLowerCase()) {
+    if (rate > 1 &&
+        currency.toLowerCase() !=
+            selectedWithdrawMethod?.currency?.toLowerCase()) {
       return true;
     } else {
       return false;
@@ -248,13 +290,25 @@ class WithdrawController extends GetxController with GetTickerProviderStateMixin
     if (selectedWithdrawMethod?.id.toString() != '-1') {
       if (selectedWithdrawCurrency != null) {
         if (walletType == 'spot') {
-          String balance = spotWithdrawWalletList.where((element) => element.currencyId == (selectedWithdrawCurrency?.id ?? -1).toString()).first.balance ?? '0';
+          String balance = spotWithdrawWalletList
+                  .where((element) =>
+                      element.currencyId ==
+                      (selectedWithdrawCurrency?.id ?? -1).toString())
+                  .first
+                  .balance ??
+              '0';
 
           amountController.text = balance;
           double amount = double.tryParse(balance.toString()) ?? 0;
           changeInfoWidgetValue(amount);
         } else {
-          String balance = fundingWithdrawWalletList.where((element) => element.currencyId == (selectedWithdrawCurrency?.id ?? -1).toString()).first.balance ?? '0';
+          String balance = fundingWithdrawWalletList
+                  .where((element) =>
+                      element.currencyId ==
+                      (selectedWithdrawCurrency?.id ?? -1).toString())
+                  .first
+                  .balance ??
+              '0';
           amountController.text = balance;
           double amount = double.tryParse(balance.toString()) ?? 0;
           changeInfoWidgetValue(amount);
@@ -269,11 +323,23 @@ class WithdrawController extends GetxController with GetTickerProviderStateMixin
   String getCurrentWalletAmount({required String walletType}) {
     if (selectedWithdrawCurrency != null) {
       if (walletType == 'spot') {
-        String balance = spotWithdrawWalletList.where((element) => element.currencyId == (selectedWithdrawCurrency?.id ?? -1).toString()).first.balance ?? '0';
+        String balance = spotWithdrawWalletList
+                .where((element) =>
+                    element.currencyId ==
+                    (selectedWithdrawCurrency?.id ?? -1).toString())
+                .first
+                .balance ??
+            '0';
 
         return balance;
       } else {
-        String balance = fundingWithdrawWalletList.where((element) => element.currencyId == (selectedWithdrawCurrency?.id ?? -1).toString()).first.balance ?? '0';
+        String balance = fundingWithdrawWalletList
+                .where((element) =>
+                    element.currencyId ==
+                    (selectedWithdrawCurrency?.id ?? -1).toString())
+                ?.first
+                .balance ??
+            '0';
 
         return balance;
       }
@@ -294,7 +360,8 @@ class WithdrawController extends GetxController with GetTickerProviderStateMixin
   int currentTabIndex = 0;
 
   loadWithdrawTabsData() {
-    withdrawTabController = TabController(initialIndex: currentTabIndex, length: 2, vsync: this);
+    withdrawTabController =
+        TabController(initialIndex: currentTabIndex, length: 2, vsync: this);
   }
 
   changeTabIndex(int value) {
@@ -318,6 +385,8 @@ class WithdrawController extends GetxController with GetTickerProviderStateMixin
   }
 
   bool checkUserIsLoggedInOrNot() {
-    return withdrawRepo.apiClient.sharedPreferences.getBool(SharedPreferenceHelper.rememberMeKey) ?? false;
+    return withdrawRepo.apiClient.sharedPreferences
+            .getBool(SharedPreferenceHelper.rememberMeKey) ??
+        false;
   }
 }
