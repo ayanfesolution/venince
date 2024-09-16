@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:vinance/core/utils/dimensions.dart';
 import 'package:vinance/core/utils/my_color.dart';
 import 'package:vinance/core/utils/style.dart';
+import 'package:vinance/view/components/text/label_text.dart';
 import 'package:vinance/view/components/text/label_text_with_instructions.dart';
 
 class CustomTextField extends StatefulWidget {

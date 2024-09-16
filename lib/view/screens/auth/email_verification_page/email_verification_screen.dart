@@ -22,7 +22,8 @@ class EmailVerificationScreen extends StatefulWidget {
   const EmailVerificationScreen({super.key});
 
   @override
-  State<EmailVerificationScreen> createState() => _EmailVerificationScreenState();
+  State<EmailVerificationScreen> createState() =>
+      _EmailVerificationScreenState();
 }
 
 class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
@@ -57,7 +58,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               fromAuth: true,
               isProfileCompleted: false,
               bgColor: MyColor.transparentColor,
-              titleStyle: boldOverLarge.copyWith(fontSize: Dimensions.fontOverLarge, color: MyColor.getPrimaryTextColor()),
+              titleStyle: boldOverLarge.copyWith(
+                  fontSize: Dimensions.fontOverLarge,
+                  color: MyColor.getPrimaryTextColor()),
               leadingWidgetOnTap: () {
                 controller.repo.apiClient.clearOldAuthData();
                 Get.offAllNamed(RouteHelper.authenticationScreen);
@@ -67,7 +70,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               ],
             ),
             body: controller.isLoading
-                ? Center(child: CircularProgressIndicator(color: MyColor.getPrimaryColor()))
+                ? Center(
+                    child: CircularProgressIndicator(
+                        color: MyColor.getPrimaryColor()))
                 : SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     padding: Dimensions.screenPaddingHV,
@@ -79,10 +84,18 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                           const SizedBox(height: Dimensions.space30),
                           HeaderText(
                             text: MyStrings.emailVerification.tr,
-                            textStyle: semiBoldOverLarge.copyWith(color: MyColor.getPrimaryTextColor()),
+                            textStyle: semiBoldOverLarge.copyWith(
+                                color: MyColor.getPrimaryTextColor()),
                           ),
                           const SizedBox(height: Dimensions.space15),
-                          Padding(padding: const EdgeInsets.symmetric(horizontal: 25), child: DefaultText(text: MyStrings.viaEmailVerify.tr, textAlign: TextAlign.center, textStyle: regularLarge.copyWith(color: MyColor.getSecondaryTextColor()))),
+                          Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
+                              child: DefaultText(
+                                  text: MyStrings.viaEmailVerify.tr,
+                                  textAlign: TextAlign.center,
+                                  textStyle: regularLarge.copyWith(
+                                      color: MyColor.getSecondaryTextColor()))),
                           const SizedBox(height: Dimensions.space25),
                           OTPFieldWidget(
                             onChanged: (value) {
@@ -93,7 +106,10 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                           RoundedButton(
                             isLoading: controller.submitLoading,
                             text: MyStrings.submitOTP.tr,
-                            isDisabled: controller.currentText.trim().length == 6 ? false : true,
+                            isDisabled:
+                                controller.currentText.trim().length == 6
+                                    ? false
+                                    : true,
                             press: () {
                               controller.verifyEmail(controller.currentText);
                             },
@@ -102,15 +118,27 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(MyStrings.didNotReceiveCode.tr, style: regularDefault.copyWith(color: MyColor.getLabelTextColor())),
+                              Text(MyStrings.didNotReceiveCode.tr,
+                                  style: regularDefault.copyWith(
+                                      color: MyColor.getLabelTextColor())),
                               const SizedBox(width: Dimensions.space10),
                               controller.resendLoading
-                                  ? Container(margin: const EdgeInsets.only(left: 5, top: 5), height: 20, width: 20, child: CircularProgressIndicator(color: MyColor.getPrimaryColor()))
+                                  ? Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 5, top: 5),
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                          color: MyColor.getPrimaryColor()))
                                   : GestureDetector(
                                       onTap: () {
                                         controller.sendCodeAgain();
                                       },
-                                      child: Text(MyStrings.resendCode.tr, style: regularDefault.copyWith(color: MyColor.getPrimaryColor(), decoration: TextDecoration.underline)),
+                                      child: Text(MyStrings.resendCode.tr,
+                                          style: regularDefault.copyWith(
+                                              color: MyColor.getPrimaryColor(),
+                                              decoration:
+                                                  TextDecoration.underline)),
                                     )
                             ],
                           )

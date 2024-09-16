@@ -56,18 +56,18 @@ class _TradePageScreenState extends State<TradePageScreen> {
       controller.initialData(symbolID: widget.tradeCoinSymbol);
 
       scrollController.addListener(scrollListener);
-     // pusherServiceController.addListener(_onMarketDataUpdate);
+      pusherServiceController.addListener(_onMarketDataUpdate);
     });
   }
 
-  // void _onMarketDataUpdate() {
-  //   Get.find<TradePageController>().updateMarketDataBasedOnPusherEvent();
-  // }
+  void _onMarketDataUpdate() {
+    Get.find<TradePageController>().updateMarketDataBasedOnPusherEvent();
+  }
 
   @override
   void dispose() {
     // Don't forget to remove the listener when the widget is disposed
-   // pusherServiceController.removeListener(_onMarketDataUpdate);
+    pusherServiceController.removeListener(_onMarketDataUpdate);
     super.dispose();
   }
 

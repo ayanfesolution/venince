@@ -1,11 +1,12 @@
 class MyImages {
   //LOGO
-  static const String appLogoDark = "assets/images/logo/logo_dark.png";
-  static const String appLogoLight = "assets/images/logo/logo_light.png";
+  static const String appLogoDark = "assets/images/logo/logo_dark.jpeg";
+  static const String appLogoLight = "assets/images/logo/logo_light.jpeg";
 
   //BACKGROUND
 
-  static const String backgroundImage = "assets/images/background/background.png";
+  static const String backgroundImage =
+      "assets/images/background/background.png";
   //Avatar
   static const String noProfileImage = "assets/images/profile.png";
   //Global

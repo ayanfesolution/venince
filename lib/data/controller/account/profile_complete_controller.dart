@@ -97,11 +97,16 @@ class ProfileCompleteController extends GetxController {
 
       final responseModel = await profileRepo.completeProfile(model);
 
-      if (responseModel.status?.toLowerCase() == MyStrings.success.toLowerCase()) {
-        CustomSnackBar.success(successList: responseModel.message?.success ?? [MyStrings.success.tr]);
+      if (responseModel.status?.toLowerCase() ==
+          MyStrings.success.toLowerCase()) {
+        CustomSnackBar.success(
+            successList:
+                responseModel.message?.success ?? [MyStrings.success.tr]);
         checkAndGotoNextStep(responseModel.data?.user);
       } else {
-        CustomSnackBar.error(errorList: responseModel.message?.error ?? [MyStrings.somethingWentWrong.tr]);
+        CustomSnackBar.error(
+            errorList: responseModel.message?.error ??
+                [MyStrings.somethingWentWrong.tr]);
       }
     } catch (e) {
       printx(e.toString());
@@ -124,11 +129,16 @@ class ProfileCompleteController extends GetxController {
     await preferences.setBool(SharedPreferenceHelper.firstTimeOnAppKey, false);
 
     await preferences.setBool(SharedPreferenceHelper.rememberMeKey, true);
-    await profileRepo.apiClient.sharedPreferences.setBool(SharedPreferenceHelper.firstTimeOnAppKey, false);
-    await preferences.setString(SharedPreferenceHelper.userIdKey, user?.id.toString() ?? '-1');
-    await preferences.setString(SharedPreferenceHelper.userEmailKey, user?.email ?? '');
-    await preferences.setString(SharedPreferenceHelper.userNameKey, user?.username ?? '');
-    await preferences.setString(SharedPreferenceHelper.userPhoneNumberKey, user?.mobile ?? '');
+    await profileRepo.apiClient.sharedPreferences
+        .setBool(SharedPreferenceHelper.firstTimeOnAppKey, false);
+    await preferences.setString(
+        SharedPreferenceHelper.userIdKey, user?.id.toString() ?? '-1');
+    await preferences.setString(
+        SharedPreferenceHelper.userEmailKey, user?.email ?? '');
+    await preferences.setString(
+        SharedPreferenceHelper.userNameKey, user?.username ?? '');
+    await preferences.setString(
+        SharedPreferenceHelper.userPhoneNumberKey, user?.mobile ?? '');
     await profileRepo.sendUserToken();
 
     if (needEmailVerification) {
@@ -165,7 +175,9 @@ class ProfileCompleteController extends GetxController {
     update();
     try {
       profileResponseModel = await profileRepo.loadProfileInfo();
-      if (profileResponseModel.data != null && profileResponseModel.status?.toLowerCase() == MyStrings.success.toLowerCase()) {
+      if (profileResponseModel.data != null &&
+          profileResponseModel.status?.toLowerCase() ==
+              MyStrings.success.toLowerCase()) {
         emailData = profileResponseModel.data?.user?.email ?? '';
         countryData = profileResponseModel.data?.user?.country ?? '';
         countryCodeData = profileResponseModel.data?.user?.countryCode ?? '';
@@ -197,7 +209,8 @@ class ProfileCompleteController extends GetxController {
     ResponseModel mainResponse = await profileRepo.getCountryList();
 
     if (mainResponse.statusCode == 200) {
-      CountryModel model = CountryModel.fromJson(jsonDecode(mainResponse.responseJson));
+      CountryModel model =
+          CountryModel.fromJson(jsonDecode(mainResponse.responseJson));
       List<Countries>? tempList = model.data?.countries;
 
       if (tempList != null && tempList.isNotEmpty) {
@@ -205,12 +218,17 @@ class ProfileCompleteController extends GetxController {
         filteredCountries.addAll(tempList);
       }
       var selectDefCountry = tempList!.firstWhere(
-        (country) => country.countryCode!.toLowerCase() == Environment.defaultCountryCode.toLowerCase(),
+        (country) =>
+            country.countryCode!.toLowerCase() ==
+            Environment.defaultCountryCode.toLowerCase(),
         orElse: () => Countries(),
       );
       if (selectDefCountry.dialCode != null) {
         selectCountryData(selectDefCountry);
-        setCountryNameAndCode(selectDefCountry.country.toString(), selectDefCountry.countryCode.toString(), selectDefCountry.dialCode.toString());
+        setCountryNameAndCode(
+            selectDefCountry.country.toString(),
+            selectDefCountry.countryCode.toString(),
+            selectDefCountry.dialCode.toString());
       }
       countryLoading = false;
       update();

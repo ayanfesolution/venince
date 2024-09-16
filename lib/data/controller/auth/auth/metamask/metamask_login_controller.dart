@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vinance/core/helper/shared_preference_helper.dart';
 import 'package:web3modal_flutter/models/listing.dart';
+import 'package:web3modal_flutter/services/explorer_service/models/api_response.dart';
+import 'package:web3modal_flutter/services/w3m_service/i_w3m_service.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 import '../../../../../core/helper/string_format_helper.dart';
@@ -27,7 +29,7 @@ class MetaMaskAuthLoginController extends GetxController
   late W3MService w3mService;
   late W3MWalletInfo w3mWalletInfo;
   late W3MChainInfo w3mChainInfo;
-//  WalletErrorEvent? walletErrorEvent;
+  //WalletErrorEvent? walletErrorEvent;
 
   void initialize() async {
     WidgetsBinding.instance.addObserver(this);
@@ -83,9 +85,9 @@ class MetaMaskAuthLoginController extends GetxController
 
       w3mService.onSessionEventEvent.subscribe(_onSessionEvent);
       w3mService.onSessionUpdateEvent.subscribe(_onSessionUpdate);
-      w3mService.onModalConnect.subscribe(_onSessionConnect);
-      w3mService.onSessionExpireEvent.subscribe(_onSessioExpire);
-    //  w3mService.onModalError.subscribe(_onWalletConnectedError);
+      //w3mService.onModalConnect.subscribe(_onSessionConnect);
+      // w3mService.onSessionDeleteEvent.subscribe(_onSessionDelete);
+      // w3mService.onWalletConnectionError.subscribe(_onWalletConnectedError);
       isInitializing = false;
 
       update();
@@ -104,13 +106,9 @@ class MetaMaskAuthLoginController extends GetxController
     debugPrint('[$runtimeType] _onSessionUpdate $args');
   }
 
-  void _onSessioExpire(SessionExpire? args) {
-    debugPrint('[$runtimeType] _onSessionUpdate $args');
-  }
-
   bool _messageSent = false; // Flag to track if the message has been sent
 
-  void _onSessionConnect(ModalConnect? args) async {
+  void _onSessionConnect(SessionConnect? args) async {
     debugPrint('[$runtimeType] _onSessionConnect $args');
 
     if (!_messageSent && args?.session.acknowledged == true) {
@@ -126,12 +124,12 @@ class MetaMaskAuthLoginController extends GetxController
     debugPrint('[$runtimeType] _onSessionDelete $args');
   }
 
-  // void _onWalletConnectedError(WalletErrorEvent? args) {
-  //   walletErrorEvent = args;
+  void _onWalletConnectedError() {
+    // walletErrorEvent = args;
 
-  //   print("Error1000");
-  //   debugPrint('[$runtimeType] _onWalletConnectedError $args');
-  // }
+    // print("Error1000");
+    // debugPrint('[$runtimeType] _onWalletConnectedError $args');
+  }
 
   bool isLoading = false;
 
@@ -224,7 +222,7 @@ class MetaMaskAuthLoginController extends GetxController
 
   clearMetamaskOldData({bool disconnected = true}) {
     //reset connection and established new connection
-   // walletErrorEvent = null;
+    // walletErrorEvent = null;
     _messageSent = false;
     walletAddressData = '';
     messageData = '';

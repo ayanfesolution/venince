@@ -1,9 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:vinance/core/utils/dimensions.dart';
 import 'package:vinance/core/utils/my_color.dart';
 import 'package:vinance/core/utils/style.dart';
 
+import 'package:web3modal_flutter/widgets/buttons/simple_icon_button.dart';
+
+import '../../../../../core/route/route.dart';
 import '../../../../../core/utils/my_icons.dart';
 import '../../../../../core/utils/my_strings.dart';
 import '../../../../../data/controller/auth/auth/metamask/metamask_reg_controller.dart';
@@ -41,8 +46,7 @@ class ConnectToMetamaskRegistrationBottomSheet extends StatelessWidget {
                 ),
                 verticalSpace(Dimensions.space20),
                 LoadingBorderIndicator(
-                  animate:
-                      metaRegController.w3mService.onSessionEventEvent == null,
+                  animate: metaRegController.isLoading,
                   borderRadius: 20,
                   strokeWidth: 3,
                   color: MyColor.pendingColor,
@@ -117,7 +121,7 @@ class ConnectToMetamaskRegistrationBottomSheet extends StatelessWidget {
                               ),
                               press: () async {
                                 var address =
-                                    "${metaRegController.w3mService.session?.sessionService.name.toLowerCase()}";
+                                    "${metaRegController.w3mService.session?.sessionService.name}";
                                 if (address.toString() != 'null') {
                                   await metaRegController
                                       .getSignatureCodeFromMetamask(
@@ -134,8 +138,7 @@ class ConnectToMetamaskRegistrationBottomSheet extends StatelessWidget {
                   ),
                   verticalSpace(Dimensions.space10),
                 ] else ...[
-                  if (metaRegController.isInitializing == false &&
-                      metaRegController.onStart != null) ...[
+                  if (metaRegController.isInitializing == false) ...[
                     verticalSpace(Dimensions.space10),
                     Container(
                       padding: const EdgeInsetsDirectional.symmetric(

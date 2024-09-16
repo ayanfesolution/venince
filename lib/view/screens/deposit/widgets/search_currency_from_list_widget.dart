@@ -5,6 +5,7 @@ import 'package:vinance/view/components/image/my_network_image_widget.dart';
 
 import '../../../../core/utils/dimensions.dart';
 import '../../../../core/utils/my_color.dart';
+import '../../../../core/utils/my_strings.dart';
 import '../../../../data/controller/deposit/deposit_controller.dart';
 import '../../../components/divider/custom_spacer.dart';
 import 'deposit_search_box_appbar_dart.dart';

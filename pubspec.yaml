@@ -63,6 +63,7 @@ dependencies:
   zoom_tap_animation: ^1.1.0
   open_file: ^3.3.2
 
+
 dev_dependencies:
   flutter_lints: ^3.0.1
   flutter_test:

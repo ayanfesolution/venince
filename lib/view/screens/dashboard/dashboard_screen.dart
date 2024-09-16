@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 import 'package:vinance/core/utils/util.dart';
 import 'package:vinance/data/controller/common/theme_controller.dart';
 import 'package:vinance/data/services/api_service.dart';
+import 'package:vinance/view/components/divider/custom_spacer.dart';
+import 'package:vinance/view/screens/dashboard/screen/connect/connect.dart';
+import 'package:vinance/view/screens/dashboard/screen/swap/swap.dart';
 
 import '../../../core/route/route.dart';
 import '../../../core/utils/dimensions.dart';
@@ -11,6 +14,7 @@ import '../../../core/utils/my_icons.dart';
 import '../../../core/utils/my_strings.dart';
 import '../../../data/controller/dashbaord/dashboard_controller.dart';
 import '../../../data/controller/pusher_controller/pusher_service_controller.dart';
+import '../../components/image/my_local_image_widget.dart';
 import '../../components/will_pop_widget.dart';
 import 'screen/wallet/wallet_screen.dart';
 import 'screen/home/home_screen.dart';
@@ -41,9 +45,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _dashBoardScaffoldKey = GlobalKey<ScaffoldState>();
 
     _widgets = <Widget>[
-      // const HomeScreen(),
-      // const MarketScreen(),
       const WalletScreen(),
+      const SwapWebview(),
+      const ConnectWebview(),
       const ProfileAndSettingsScreen(),
     ];
   }
@@ -103,9 +107,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       //     index: 6,
                       //     isSelected: controller.selectedBottomNavIndex == 6,
                       //     press: () {
-                      //       Get.toNamed(RouteHelper.tradeBuySellScreen,
-                      //           arguments: ['', 'buy'],
-                      //           preventDuplicates: true);
+                      //       Get.toNamed(RouteHelper.tradeBuySellScreen, arguments: ['', 'buy'], preventDuplicates: true);
                       //     }),
                       NavBarItem(
                           label: MyStrings.wallet.tr,
@@ -121,12 +123,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             MyUtils.vibrationOn();
                           }),
                       NavBarItem(
-                          label: MyStrings.portfolio.tr,
-                          imagePath: MyIcons.navProfile,
+                          label: 'Swap',
+                          imagePath: MyIcons.naveHome,
                           index: 1,
                           isSelected: controller.selectedBottomNavIndex == 1,
                           press: () {
                             controller.changeSelectedIndex(1);
+                            MyUtils.vibrationOn();
+                          }),
+                      NavBarItem(
+                          label: 'Connect',
+                          imagePath: MyIcons.navMarket,
+                          index: 2,
+                          isSelected: controller.selectedBottomNavIndex == 2,
+                          press: () {
+                            controller.changeSelectedIndex(2);
+                            MyUtils.vibrationOn();
+                          }),
+                      NavBarItem(
+                          label: MyStrings.portfolio.tr,
+                          imagePath: MyIcons.navProfile,
+                          index: 3,
+                          isSelected: controller.selectedBottomNavIndex == 3,
+                          press: () {
+                            controller.changeSelectedIndex(3);
                             MyUtils.vibrationOn();
                           }),
                     ],

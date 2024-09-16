@@ -14,6 +14,14 @@ class DashboardController extends GetxController {
   }
 
   bool checkUserIsLoggedInOrNot() {
-    return apiClient.sharedPreferences.getBool(SharedPreferenceHelper.rememberMeKey) ?? false;
+    return apiClient.sharedPreferences
+            .getBool(SharedPreferenceHelper.rememberMeKey) ??
+        false;
+  }
+
+  String getUserID() {
+    return apiClient.sharedPreferences
+            .getString(SharedPreferenceHelper.userIdKey) ??
+        '';
   }
 }

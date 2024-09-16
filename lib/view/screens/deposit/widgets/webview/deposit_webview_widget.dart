@@ -39,12 +39,15 @@ class _DepositWebviewWidgetState extends State<DepositWebviewWidget> {
         isProfileCompleted: true,
         title: MyStrings.deposit.tr,
         bgColor: MyColor.transparentColor,
-        titleStyle: regularLarge.copyWith(fontSize: Dimensions.fontLarge, color: MyColor.getPrimaryTextColor()),
+        titleStyle: regularLarge.copyWith(
+            fontSize: Dimensions.fontLarge,
+            color: MyColor.getPrimaryTextColor()),
         actions: [
           horizontalSpace(Dimensions.space10),
         ],
       ),
-      body: DepositAppWebViewWidget(url: widget.redirectUrl),
+      body: DepositAppWebViewWidget(
+          url: (widget.redirectUrl).replaceAll(r'\/', '/')),
     );
   }
 

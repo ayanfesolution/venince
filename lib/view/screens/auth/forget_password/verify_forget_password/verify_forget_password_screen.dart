@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:vinance/core/helper/string_format_helper.dart';
 import 'package:vinance/core/utils/dimensions.dart';
 import 'package:vinance/core/utils/my_color.dart';

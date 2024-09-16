@@ -266,13 +266,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           checkColor: MyColor.getPrimaryTextColor(),
                           focusColor: MyColor.primaryColor500,
                           value: controller.agreeTC,
-                          fillColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
-                            if (states.contains(WidgetState.disabled)) {
+                          fillColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+                            if (states.contains(MaterialState.disabled)) {
                               return MyColor.primaryColor500.withOpacity(.32);
                             }
                             return MyColor.primaryColor500.withOpacity(0.2);
                           }),
-                          side: WidgetStateBorderSide.resolveWith(
+                          side: MaterialStateBorderSide.resolveWith(
                             (states) => BorderSide(
                               width: 1.0,
                               color: controller.agreeTC ? MyColor.primaryColor500 : MyColor.primaryColor500,

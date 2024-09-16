@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+//import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:downloadsfolder/downloadsfolder.dart';
@@ -20,7 +21,12 @@ class DownloadingDialog extends StatefulWidget {
   final String fileName;
   final bool isPdf;
   final bool isImage;
-  const DownloadingDialog({super.key, required this.isImage, required this.url, this.isPdf = true, required this.fileName});
+  const DownloadingDialog(
+      {super.key,
+      required this.isImage,
+      required this.url,
+      this.isPdf = true,
+      required this.fileName});
 
   @override
   DownloadingDialogState createState() => DownloadingDialogState();
@@ -34,7 +40,8 @@ class DownloadingDialogState extends State<DownloadingDialog> {
 
   Future<void> _downloadFile() async {
     // Permission granted, proceed with file download
-    _response = await http.Client().send(http.Request('GET', Uri.parse(widget.url)));
+    _response =
+        await http.Client().send(http.Request('GET', Uri.parse(widget.url)));
     _total = _response.contentLength ?? 0;
     // Extract file extension from the URL
     String fileExtension = widget.url.split('.').last;
@@ -51,11 +58,13 @@ class DownloadingDialogState extends State<DownloadingDialog> {
       } else {
         directory = (await getDownloadsDirectory())!;
       }
-      final file = File('${directory.path}/${MyStrings.appName}_${DateTime.now()}.$fileExtension');
+      final file = File(
+          '${directory.path}/${MyStrings.appName}_${DateTime.now()}.$fileExtension');
 
       File savedFile = await file.writeAsBytes(_bytes, flush: false);
 
-      bool? success = await copyFileIntoDownloadFolder(file.path, "${MyStrings.appName}_${DateTime.now()}.$fileExtension");
+      bool? success = await copyFileIntoDownloadFolder(
+          file.path, "${MyStrings.appName}_${DateTime.now()}.$fileExtension");
       if (success == true) {
         printx('File copied successfully.');
         deleteFile(savedFile.path);
@@ -91,26 +100,27 @@ class DownloadingDialogState extends State<DownloadingDialog> {
   }
 
   _saveImage() async {
-    var response = await Dio().get(widget.url, options: Options(responseType: ResponseType.bytes));
-   // final result = await ImageGallerySaver.saveImage(Uint8List.fromList(response.data), quality: 60, name: widget.fileName);
+    var response = await Dio()
+        .get(widget.url, options: Options(responseType: ResponseType.bytes));
+    // final result = await ImageGallerySaver.saveImage(Uint8List.fromList(response.data), quality: 60, name: widget.fileName);
 
-    // try {
-    //   dynamic value = result['isSuccess'];
-    //   if (value.toString() == 'true') {
-    //     Get.back();
-    //     CustomSnackBar.success(successList: [(MyStrings.fileDownloadedSuccess)]);
-    //   } else {
-    //     Get.back();
-    //     dynamic errorMessage = result['errorMessage'];
-    //     CustomSnackBar.error(errorList: [errorMessage]);
-    //   }
-    // } catch (e) {
-    //   if (kDebugMode) {
-    //     printx(e.toString());
-    //   }
-    //   Get.back();
-    //   CustomSnackBar.error(errorList: [MyStrings.requestFail]);
-    // }
+    try {
+      // dynamic value = result['isSuccess'];
+      // if (value.toString() == 'true') {
+      //   Get.back();
+      //   CustomSnackBar.success(successList: [(MyStrings.fileDownloadedSuccess)]);
+      // } else {
+      //   Get.back();
+      //   dynamic errorMessage = result['errorMessage'];
+      //   CustomSnackBar.error(errorList: [errorMessage]);
+      // }
+    } catch (e) {
+      if (kDebugMode) {
+        printx(e.toString());
+      }
+      Get.back();
+      CustomSnackBar.error(errorList: [MyStrings.requestFail]);
+    }
   }
 
   @override
@@ -168,7 +178,9 @@ class DownloadingDialogState extends State<DownloadingDialog> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Text('${MyStrings.downloading.tr} ${_received ~/ 1024}/${_total ~/ 1024} ${'KB'.tr}', style: regularDefault),
+                  Text(
+                      '${MyStrings.downloading.tr} ${_received ~/ 1024}/${_total ~/ 1024} ${'KB'.tr}',
+                      style: regularDefault),
                 ],
               ))
         ],

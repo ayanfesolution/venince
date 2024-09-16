@@ -7,6 +7,7 @@ import 'package:vinance/view/screens/dashboard/screen/home/section/news/home_app
 import 'package:vinance/view/screens/dashboard/screen/home/widgets/home_screen_action_menu_list.dart';
 import 'package:vinance/view/screens/dashboard/screen/home/section/market_overview_list/home_screen_market_coin_list.dart';
 
+import '../../../../../core/helper/string_format_helper.dart';
 import '../../../../../core/utils/dimensions.dart';
 import '../../../../../data/controller/pusher_controller/pusher_service_controller.dart';
 import '../../../../../data/repo/home/home_repo.dart';
@@ -45,8 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
     var controller = Get.put(HomeController(homeRepo: Get.find()));
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      // pusherServiceController.initPusher("market-data");
-      // pusherServiceController.initPusher("trade");
+      pusherServiceController.initPusher("market-data");
+      pusherServiceController.initPusher("trade");
       controller.initialData();
       scrollController.addListener(scrollListener);
       pusherServiceController.addListener(_onMarketDataUpdate);

@@ -27,8 +27,7 @@ import 'widgets/buy_sell_order_book_widget.dart';
 class TradeBuySellScreen extends StatefulWidget {
   final String tradeCoinSymbol;
   final String typeBuyOrSell;
-  const TradeBuySellScreen(
-      {super.key, required this.tradeCoinSymbol, required this.typeBuyOrSell});
+  const TradeBuySellScreen({super.key, required this.tradeCoinSymbol, required this.typeBuyOrSell});
 
   @override
   State<TradeBuySellScreen> createState() => _TradeBuySellScreenState();
@@ -39,8 +38,7 @@ class _TradeBuySellScreenState extends State<TradeBuySellScreen> {
   final ScrollController scrollController = ScrollController();
 
   void scrollListener() {
-    if (scrollController.position.pixels ==
-        scrollController.position.maxScrollExtent) {
+    if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
       if (Get.find<TradePageController>().hasNext()) {
         Get.find<TradePageController>().loadOrderListDataList();
       }
@@ -52,8 +50,7 @@ class _TradeBuySellScreenState extends State<TradeBuySellScreen> {
     super.initState();
     Get.put(ApiClient(sharedPreferences: Get.find()));
     Get.put(MarketTradeRepo(apiClient: Get.find()));
-    final controller =
-        Get.put(TradePageController(marketTradeRepo: Get.find()));
+    final controller = Get.put(TradePageController(marketTradeRepo: Get.find()));
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       controller.initialData(symbolID: widget.tradeCoinSymbol);
@@ -63,17 +60,17 @@ class _TradeBuySellScreenState extends State<TradeBuySellScreen> {
       } else {
         Get.find<TradePageController>().changeBuyOrSellTabIndex(0);
       }
-      //    pusherServiceController.addListener(_onMarketDataUpdate);
+      pusherServiceController.addListener(_onMarketDataUpdate);
     });
   }
 
-  // void _onMarketDataUpdate() {
-  //   Get.find<TradePageController>().updateMarketDataBasedOnPusherEvent();
-  // }
+  void _onMarketDataUpdate() {
+    Get.find<TradePageController>().updateMarketDataBasedOnPusherEvent();
+  }
 
   @override
   void dispose() {
-    //  pusherServiceController.removeListener(_onMarketDataUpdate);
+    pusherServiceController.removeListener(_onMarketDataUpdate);
     super.dispose();
   }
 
@@ -89,38 +86,26 @@ class _TradeBuySellScreenState extends State<TradeBuySellScreen> {
             isTitleCenter: true,
             isProfileCompleted: true,
             title: MyStrings.profile.tr,
-            titleWidget: controller.tradeDetailsLoading ||
-                    controller.marketTradeDetailsModelDATA.status == null
+            titleWidget: controller.tradeDetailsLoading || controller.marketTradeDetailsModelDATA.status == null
                 ? const SizedBox()
                 : FittedBox(
                     child: GestureDetector(
                       onTap: () {
-                        Get.bottomSheet(
-                            ChangeTradeCurrencySymbolWidget(
-                                controller: Get.find()),
-                            elevation: 0,
-                            isScrollControlled: true,
-                            ignoreSafeArea: false,
-                            backgroundColor: Colors.transparent,
-                            barrierColor: Colors.transparent);
+                        Get.bottomSheet(ChangeTradeCurrencySymbolWidget(controller: Get.find()), elevation: 0, isScrollControlled: true, ignoreSafeArea: false, backgroundColor: Colors.transparent, barrierColor: Colors.transparent);
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           MyNetworkImageWidget(
-                            imageUrl:
-                                "${controller.tradeDetailsMarketPair?.coin?.imageUrl}",
+                            imageUrl: "${controller.tradeDetailsMarketPair?.coin?.imageUrl}",
                             height: Dimensions.space20,
                             width: Dimensions.space20,
                           ),
                           horizontalSpace(Dimensions.space5),
                           Text(
-                            controller.tradeDetailsLoading
-                                ? ""
-                                : " ${controller.tradeDetailsMarketPair?.coin?.symbol ?? ''}/${controller.tradeDetailsMarketPair?.market?.currency?.symbol ?? ''}",
-                            style: regularDefault.copyWith(
-                                color: MyColor.getPrimaryTextColor()),
+                            controller.tradeDetailsLoading ? "" : " ${controller.tradeDetailsMarketPair?.coin?.symbol ?? ''}/${controller.tradeDetailsMarketPair?.market?.currency?.symbol ?? ''}",
+                            style: regularDefault.copyWith(color: MyColor.getPrimaryTextColor()),
                           ),
                           Icon(
                             Icons.keyboard_arrow_down_rounded,
@@ -132,13 +117,10 @@ class _TradeBuySellScreenState extends State<TradeBuySellScreen> {
                     ),
                   ),
             bgColor: MyColor.getScreenBgColor(),
-            titleStyle: boldOverLarge.copyWith(
-                fontSize: Dimensions.fontOverLarge,
-                color: MyColor.getPrimaryTextColor()),
+            titleStyle: boldOverLarge.copyWith(fontSize: Dimensions.fontOverLarge, color: MyColor.getPrimaryTextColor()),
             actions: [
               Padding(
-                padding:
-                    const EdgeInsetsDirectional.only(start: Dimensions.space15),
+                padding: const EdgeInsetsDirectional.only(start: Dimensions.space15),
                 child: Ink(
                   decoration: ShapeDecoration(
                     color: MyColor.getAppBarBackgroundColor(),
@@ -148,8 +130,7 @@ class _TradeBuySellScreenState extends State<TradeBuySellScreen> {
                     child: IconButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {
-                        Get.toNamed(RouteHelper.tradeViewDetailsScreen,
-                            arguments: controller.tradeSymbol);
+                        Get.toNamed(RouteHelper.tradeViewDetailsScreen, arguments: controller.tradeSymbol);
                       },
                       icon: MyLocalImageWidget(
                         imagePath: MyIcons.tradeMarketGrowthIconAction,
@@ -171,215 +152,137 @@ class _TradeBuySellScreenState extends State<TradeBuySellScreen> {
                     controller.initialDataRefresh();
                   }, // Your refresh logic
 
-                  child: CustomScrollView(
-                      controller: scrollController,
-                      physics: const ClampingScrollPhysics(),
-                      slivers: [
-                        SliverToBoxAdapter(
-                          child: Column(
-                            children: [
-                              Container(
-                                margin: const EdgeInsetsDirectional.symmetric(
-                                    horizontal: Dimensions.space15,
-                                    vertical: Dimensions.space15),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    //Left
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                  child: CustomScrollView(controller: scrollController, physics: const ClampingScrollPhysics(), slivers: [
+                    SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsetsDirectional.symmetric(horizontal: Dimensions.space15, vertical: Dimensions.space15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                //Left
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        StringConverter.formatNumber(controller.tradeDetailsMarketData?.price ?? '0.0', precision: controller.marketTradeRepo.apiClient.getDecimalAfterNumber()),
+                                        style: boldOverLarge.copyWith(color: MyColor.getPrimaryTextColor(), fontSize: Dimensions.fontOverLarge),
+                                      ),
+                                      verticalSpace(Dimensions.space5),
+                                      //Rank
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            StringConverter.formatNumber(
-                                                controller
-                                                        .tradeDetailsMarketData
-                                                        ?.price ??
-                                                    '0.0',
-                                                precision: controller
-                                                    .marketTradeRepo.apiClient
-                                                    .getDecimalAfterNumber()),
-                                            style: boldOverLarge.copyWith(
-                                                color: MyColor
-                                                    .getPrimaryTextColor(),
-                                                fontSize:
-                                                    Dimensions.fontOverLarge),
+                                          MyLocalImageWidget(
+                                            imagePath: (controller.tradeDetailsMarketData?.htmlClasses?.percentChange1H?.toLowerCase() == 'up') ? MyIcons.arrowUp : MyIcons.arrowDown,
+                                            height: Dimensions.space15,
+                                            width: Dimensions.space15,
+                                            imageOverlayColor: (controller.tradeDetailsMarketData?.htmlClasses?.percentChange1H?.toLowerCase() == 'up') ? MyColor.colorGreen : MyColor.colorRed,
                                           ),
-                                          verticalSpace(Dimensions.space5),
-                                          //Rank
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              MyLocalImageWidget(
-                                                imagePath: (controller
-                                                            .tradeDetailsMarketData
-                                                            ?.htmlClasses
-                                                            ?.percentChange1H
-                                                            ?.toLowerCase() ==
-                                                        'up')
-                                                    ? MyIcons.arrowUp
-                                                    : MyIcons.arrowDown,
-                                                height: Dimensions.space15,
-                                                width: Dimensions.space15,
-                                                imageOverlayColor: (controller
-                                                            .tradeDetailsMarketData
-                                                            ?.htmlClasses
-                                                            ?.percentChange1H
-                                                            ?.toLowerCase() ==
-                                                        'up')
-                                                    ? MyColor.colorGreen
-                                                    : MyColor.colorRed,
-                                              ),
-                                              horizontalSpace(
-                                                  Dimensions.space5),
-                                              Text(
-                                                "${controller.tradeDetailsMarketData?.htmlClasses?.percentChange1H?.toLowerCase() == 'up' ? "+" : "-"}${StringConverter.formatNumber(controller.tradeDetailsMarketData?.percentChange1H ?? '0', precision: 2)}%",
-                                                style: regularMediumLarge.copyWith(
-                                                    color: (controller
-                                                                .tradeDetailsMarketData
-                                                                ?.htmlClasses
-                                                                ?.percentChange1H
-                                                                ?.toLowerCase() ==
-                                                            'up')
-                                                        ? MyColor.colorGreen
-                                                        : MyColor.colorRed),
-                                              ),
-                                            ],
+                                          horizontalSpace(Dimensions.space5),
+                                          Text(
+                                            "${controller.tradeDetailsMarketData?.htmlClasses?.percentChange1H?.toLowerCase() == 'up' ? "+" : "-"}${StringConverter.formatNumber(controller.tradeDetailsMarketData?.percentChange1H ?? '0', precision: 2)}%",
+                                            style: regularMediumLarge.copyWith(color: (controller.tradeDetailsMarketData?.htmlClasses?.percentChange1H?.toLowerCase() == 'up') ? MyColor.colorGreen : MyColor.colorRed),
                                           ),
                                         ],
-                                      ),
-                                    ),
-                                    //Right
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          MyStrings.marketCap.tr,
-                                          style: regularDefault.copyWith(
-                                              color: MyColor
-                                                  .getSecondaryTextColor()),
-                                        ),
-                                        Text(
-                                          MyUtils.formatNumberAbbreviated(
-                                              "${controller.tradeDetailsMarketData?.marketCap.toString() == "null" ? '0.0' : controller.tradeDetailsMarketData?.marketCap.toString()}"),
-                                          style: regularDefault.copyWith(
-                                              color: MyColor
-                                                  .getPrimaryTextColor()),
-                                        ),
-                                        verticalSpace(Dimensions.space10),
-                                        Text(
-                                          MyStrings.changes24HSort.tr,
-                                          style: regularDefault.copyWith(
-                                              color: MyColor
-                                                  .getSecondaryTextColor()),
-                                        ),
-                                        Text(
-                                          "${controller.tradeDetailsMarketData?.htmlClasses?.percentChange24H?.toLowerCase() == 'up' ? "+" : "-"}${StringConverter.formatNumber(controller.tradeDetailsMarketData?.percentChange24H ?? '0', precision: 2)}%",
-                                          style: regularDefault.copyWith(
-                                              color: (controller
-                                                          .tradeDetailsMarketData
-                                                          ?.htmlClasses
-                                                          ?.percentChange24H
-                                                          ?.toLowerCase() ==
-                                                      'up')
-                                                  ? MyColor.colorGreen
-                                                  : MyColor.colorRed),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // Order Book And Form Row
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  BuySellOrderBookWidget(
-                                      controller: controller,
-                                      tradeCoinSymbol: widget.tradeCoinSymbol),
-                                  BuySellFormWidget(
-                                      controller: controller,
-                                      tradeCoinSymbol: widget.tradeCoinSymbol),
-                                ],
-                              ),
-
-                              verticalSpace(Dimensions.space25),
-                            ],
-                          ),
-                        ),
-                        SliverStickyHeader(
-                          header: Theme(
-                            data: ThemeData(),
-                            child: Column(
-                              children: [
-                                Container(
-                                  color: MyColor.getScreenBgColor(),
-                                  child: TabBar(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    controller:
-                                        controller.tabTradePageController,
-                                    splashBorderRadius: BorderRadius.circular(
-                                        Dimensions.cardRadius1),
-                                    dividerColor: MyColor.getBorderColor(),
-                                    indicator: null,
-                                    indicatorColor: MyColor.getPrimaryColor(),
-
-                                    indicatorSize: TabBarIndicatorSize.label,
-                                    labelColor: MyColor.getPrimaryTextColor(),
-                                    labelStyle: semiBoldDefault.copyWith(
-                                        fontSize: Dimensions.fontLarge),
-                                    tabAlignment: TabAlignment.start,
-
-                                    //Unselected
-                                    unselectedLabelColor:
-                                        MyColor.getSecondaryTextColor(),
-                                    unselectedLabelStyle:
-                                        semiBoldDefault.copyWith(
-                                            fontSize: Dimensions.fontLarge),
-                                    onTap: (value) =>
-                                        controller.changeTabTradeIndex(value),
-                                    padding: EdgeInsets.zero,
-                                    isScrollable: true,
-                                    tabs: [
-                                      Tab(
-                                        text: MyStrings.myOrder.tr,
-                                      ),
-                                      Tab(
-                                        text: MyStrings.tradeHistory.tr,
                                       ),
                                     ],
                                   ),
                                 ),
+                                //Right
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      MyStrings.marketCap.tr,
+                                      style: regularDefault.copyWith(color: MyColor.getSecondaryTextColor()),
+                                    ),
+                                    Text(
+                                      MyUtils.formatNumberAbbreviated("${controller.tradeDetailsMarketData?.marketCap.toString() == "null" ? '0.0' : controller.tradeDetailsMarketData?.marketCap.toString()}"),
+                                      style: regularDefault.copyWith(color: MyColor.getPrimaryTextColor()),
+                                    ),
+                                    verticalSpace(Dimensions.space10),
+                                    Text(
+                                      MyStrings.changes24HSort.tr,
+                                      style: regularDefault.copyWith(color: MyColor.getSecondaryTextColor()),
+                                    ),
+                                    Text(
+                                      "${controller.tradeDetailsMarketData?.htmlClasses?.percentChange24H?.toLowerCase() == 'up' ? "+" : "-"}${StringConverter.formatNumber(controller.tradeDetailsMarketData?.percentChange24H ?? '0', precision: 2)}%",
+                                      style: regularDefault.copyWith(color: (controller.tradeDetailsMarketData?.htmlClasses?.percentChange24H?.toLowerCase() == 'up') ? MyColor.colorGreen : MyColor.colorRed),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
-                          sliver: SliverToBoxAdapter(
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(
-                                  minHeight:
-                                      MediaQuery.of(context).size.height *
-                                          (6 / 11)),
-                              child: [
-                                MyOrderListWidget(
-                                    controller: controller,
-                                    scrollController: scrollController,
-                                    tradeCoinSymbol: widget.tradeCoinSymbol),
-                                TradeHistoryListWidget(controller: controller),
-                              ].elementAt(controller.currentTradePageIndex),
-                            ),
+                          // Order Book And Form Row
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              BuySellOrderBookWidget(controller: controller, tradeCoinSymbol: widget.tradeCoinSymbol),
+                              BuySellFormWidget(controller: controller, tradeCoinSymbol: widget.tradeCoinSymbol),
+                            ],
                           ),
+
+                          verticalSpace(Dimensions.space25),
+                        ],
+                      ),
+                    ),
+                    SliverStickyHeader(
+                      header: Theme(
+                        data: ThemeData(),
+                        child: Column(
+                          children: [
+                            Container(
+                              color: MyColor.getScreenBgColor(),
+                              child: TabBar(
+                                physics: const NeverScrollableScrollPhysics(),
+                                controller: controller.tabTradePageController,
+                                splashBorderRadius: BorderRadius.circular(Dimensions.cardRadius1),
+                                dividerColor: MyColor.getBorderColor(),
+                                indicator: null,
+                                indicatorColor: MyColor.getPrimaryColor(),
+
+                                indicatorSize: TabBarIndicatorSize.label,
+                                labelColor: MyColor.getPrimaryTextColor(),
+                                labelStyle: semiBoldDefault.copyWith(fontSize: Dimensions.fontLarge),
+                                tabAlignment: TabAlignment.start,
+
+                                //Unselected
+                                unselectedLabelColor: MyColor.getSecondaryTextColor(),
+                                unselectedLabelStyle: semiBoldDefault.copyWith(fontSize: Dimensions.fontLarge),
+                                onTap: (value) => controller.changeTabTradeIndex(value),
+                                padding: EdgeInsets.zero,
+                                isScrollable: true,
+                                tabs: [
+                                  Tab(
+                                    text: MyStrings.myOrder.tr,
+                                  ),
+                                  Tab(
+                                    text: MyStrings.tradeHistory.tr,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ]),
+                      ),
+                      sliver: SliverToBoxAdapter(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height * (6 / 11)),
+                          child: [
+                            MyOrderListWidget(controller: controller, scrollController: scrollController, tradeCoinSymbol: widget.tradeCoinSymbol),
+                            TradeHistoryListWidget(controller: controller),
+                          ].elementAt(controller.currentTradePageIndex),
+                        ),
+                      ),
+                    ),
+                  ]),
                 ),
         ),
       );
@@ -399,8 +302,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => _tabBar.preferredSize.height;
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return _tabBar;
   }
 
@@ -426,8 +328,7 @@ class _SliverAppBarContainerDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => expandedHeight;
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       color: MyColor.getPrimaryColor(), // Adjust the color as needed
       child: child,
@@ -436,7 +337,6 @@ class _SliverAppBarContainerDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return expandedHeight != oldDelegate.maxExtent ||
-        child != oldDelegate.minExtent;
+    return expandedHeight != oldDelegate.maxExtent || child != oldDelegate.minExtent;
   }
 }

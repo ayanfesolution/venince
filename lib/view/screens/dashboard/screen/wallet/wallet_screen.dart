@@ -57,7 +57,7 @@ class _WalletScreenState extends State<WalletScreen> {
   Widget build(BuildContext context) {
     return GetBuilder<WalletController>(builder: (controller) {
       return DefaultTabController(
-        length: 2,
+        length: 1,
         child: Scaffold(
           backgroundColor: MyColor.getScreenBgColor(),
           body: SafeArea(
@@ -105,9 +105,9 @@ class _WalletScreenState extends State<WalletScreen> {
                       Tab(
                         text: MyStrings.spotWallets.tr,
                       ),
-                      Tab(
-                        text: MyStrings.fundingWallets.tr,
-                      ),
+                      // Tab(
+                      //   text: MyStrings.fundingWallets.tr,
+                      // ),
                     ],
                   ),
                 ),
@@ -180,7 +180,6 @@ class _WalletScreenState extends State<WalletScreen> {
                                 ],
                               ),
                             ),
-
                             verticalSpace(Dimensions.space10),
 
                             //Coin List

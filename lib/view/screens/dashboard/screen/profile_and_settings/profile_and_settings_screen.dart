@@ -123,7 +123,7 @@ class _ProfileAndSettingsScreenState extends State<ProfileAndSettingsScreen> {
                             username: profileAndSettingsController
                                 .profileController.userName,
                             subtitle:
-                                profileAndSettingsController.profileController.mobileNo,
+                                "${profileAndSettingsController.profileController.mobileNo}",
                             rating: 'hide',
                             imgWidget: Container(
                               decoration: BoxDecoration(
@@ -138,14 +138,14 @@ class _ProfileAndSettingsScreenState extends State<ProfileAndSettingsScreen> {
                                     ? const MyLocalImageWidget(
                                         imagePath: MyImages.noProfileImage,
                                         boxFit: BoxFit.cover,
-                                        height: Dimensions.space50,
-                                        width: Dimensions.space50,
+                                        height: Dimensions.space50 + 60,
+                                        width: Dimensions.space50 + 60,
                                       )
                                     : MyNetworkImageWidget(
                                         imageUrl: profileController.imageUrl,
                                         boxFit: BoxFit.cover,
-                                        height: Dimensions.space50,
-                                        width: Dimensions.space50,
+                                        height: Dimensions.space50 + 60,
+                                        width: Dimensions.space50 + 60,
                                       ),
                               ),
                             ),
@@ -189,7 +189,7 @@ class _ProfileAndSettingsScreenState extends State<ProfileAndSettingsScreen> {
                               label: MyStrings.wallet,
                               onPressed: () {
                                 Get.find<DashboardController>()
-                                    .changeSelectedIndex(2);
+                                    .changeSelectedIndex(0);
                               },
                             ),
                             CustomDivider(
@@ -357,26 +357,26 @@ class _ProfileAndSettingsScreenState extends State<ProfileAndSettingsScreen> {
                             space: Dimensions.space15,
                             color: MyColor.getBorderColor(),
                           ),
-                          MenuRowWidget(
-                            image: MyIcons.menuPolicy,
-                            imageSize: 28,
-                            label: MyStrings.policies,
-                            onPressed: () {
-                              Get.toNamed(RouteHelper.privacyScreen);
-                            },
-                          ),
-                          CustomDivider(
-                            space: Dimensions.space15,
-                            color: MyColor.getBorderColor(),
-                          ),
-                          MenuRowWidget(
-                            image: MyIcons.faqIcon,
-                            imageSize: 28,
-                            label: MyStrings.faqs,
-                            onPressed: () {
-                              Get.toNamed(RouteHelper.faqScreenScreen);
-                            },
-                          ),
+                          // MenuRowWidget(
+                          //   image: MyIcons.menuPolicy,
+                          //   imageSize: 28,
+                          //   label: MyStrings.policies,
+                          //   onPressed: () {
+                          //     Get.toNamed(RouteHelper.privacyScreen);
+                          //   },
+                          // ),
+                          // CustomDivider(
+                          //   space: Dimensions.space15,
+                          //   color: MyColor.getBorderColor(),
+                          // ),
+                          // MenuRowWidget(
+                          //   image: MyIcons.faqIcon,
+                          //   imageSize: 28,
+                          //   label: MyStrings.faqs,
+                          //   onPressed: () {
+                          //     Get.toNamed(RouteHelper.faqScreenScreen);
+                          //   },
+                          // ),
                           verticalSpace(Dimensions.space10),
                         ],
                       ),

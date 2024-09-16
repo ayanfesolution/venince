@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vinance/view/components/image/my_network_image_widget.dart';
 
 import '../../../../../../core/helper/shared_preference_helper.dart';
 import '../../../../../../core/route/route.dart';

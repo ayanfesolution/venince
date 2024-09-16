@@ -18,13 +18,15 @@ class WalletController extends GetxController with GetTickerProviderStateMixin {
   WalletRepository walletRepository;
   GeneralSettingRepo generalSettingRepo;
 
-  WalletController({required this.walletRepository, required this.generalSettingRepo});
+  WalletController(
+      {required this.walletRepository, required this.generalSettingRepo});
 
   bool showBalance = false;
 
   changeShowBalanceState() async {
     showBalance = !showBalance;
-    await walletRepository.apiClient.sharedPreferences.setBool(SharedPreferenceHelper.showBalanceKey, showBalance);
+    await walletRepository.apiClient.sharedPreferences
+        .setBool(SharedPreferenceHelper.showBalanceKey, showBalance);
     update();
   }
 
@@ -32,7 +34,8 @@ class WalletController extends GetxController with GetTickerProviderStateMixin {
   int currentTabIndex = 0;
 
   loadWalletTabs() {
-    walletTabController = TabController(initialIndex: currentTabIndex, length: 2, vsync: this);
+    walletTabController =
+        TabController(initialIndex: currentTabIndex, length: 1, vsync: this);
     showBalance = walletRepository.apiClient.sharedPreferences.getBool(
           SharedPreferenceHelper.showBalanceKey,
         ) ??
@@ -50,7 +53,8 @@ class WalletController extends GetxController with GetTickerProviderStateMixin {
     await updateGeneralSettingsData();
   }
 
-  loadAllWalletListByWalletType({String type = 'spot', bool hotRefresh = false}) async {
+  loadAllWalletListByWalletType(
+      {String type = 'spot', bool hotRefresh = false}) async {
     if (hotRefresh) {
       walletDataList.clear();
       page = 0;
@@ -65,15 +69,18 @@ class WalletController extends GetxController with GetTickerProviderStateMixin {
 
     update();
     try {
-      ResponseModel responseData = await walletRepository.getAllWalletTypeBasedOnWalletType(page, type: type);
+      ResponseModel responseData = await walletRepository
+          .getAllWalletTypeBasedOnWalletType(page, type: type);
       if (responseData.statusCode == 200) {
-        final walletListModel = walletListModelFromJson(responseData.responseJson);
+        final walletListModel =
+            walletListModelFromJson(responseData.responseJson);
 
         walletListModelData = walletListModel;
 
         if (walletListModel.status?.toLowerCase() == MyStrings.success) {
           nextPageUrl = walletListModel.data?.wallets?.nextPageUrl;
-          List<WalletData> tempWalletList = walletListModel.data?.wallets?.data ?? [];
+          List<WalletData> tempWalletList =
+              walletListModel.data?.wallets?.data ?? [];
           // walletDataList.clear();
           if (tempWalletList.isNotEmpty) {
             walletDataList.addAll(tempWalletList);
@@ -95,7 +102,11 @@ class WalletController extends GetxController with GetTickerProviderStateMixin {
   }
 
   bool hasNext() {
-    return nextPageUrl != null && nextPageUrl!.isNotEmpty && nextPageUrl != 'null' ? true : false;
+    return nextPageUrl != null &&
+            nextPageUrl!.isNotEmpty &&
+            nextPageUrl != 'null'
+        ? true
+        : false;
   }
 
   updateGeneralSettingsData() async {
@@ -104,7 +115,8 @@ class WalletController extends GetxController with GetTickerProviderStateMixin {
     ResponseModel response = await generalSettingRepo.getGeneralSetting();
 
     if (response.statusCode == 200) {
-      GeneralSettingResponseModel model = GeneralSettingResponseModel.fromJson(jsonDecode(response.responseJson));
+      GeneralSettingResponseModel model = GeneralSettingResponseModel.fromJson(
+          jsonDecode(response.responseJson));
       if (model.status?.toLowerCase() == MyStrings.success.toLowerCase()) {
         generalSettingRepo.apiClient.storeGeneralSetting(model);
         update();
@@ -119,6 +131,8 @@ class WalletController extends GetxController with GetTickerProviderStateMixin {
   }
 
   bool checkUserIsLoggedInOrNot() {
-    return walletRepository.apiClient.sharedPreferences.getBool(SharedPreferenceHelper.rememberMeKey) ?? false;
+    return walletRepository.apiClient.sharedPreferences
+            .getBool(SharedPreferenceHelper.rememberMeKey) ??
+        false;
   }
 }

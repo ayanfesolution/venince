@@ -6,9 +6,11 @@ import 'package:vinance/core/route/route.dart';
 import 'package:vinance/core/utils/dimensions.dart';
 import 'package:vinance/core/utils/my_color.dart';
 import 'package:vinance/core/utils/style.dart';
+import 'package:vinance/view/components/buttons/circle_icon_button.dart';
 import 'package:vinance/view/components/divider/custom_spacer.dart';
 import 'package:vinance/view/components/image/my_network_image_widget.dart';
 
+import '../../../../../../core/utils/my_icons.dart';
 import '../../../../../../core/utils/my_images.dart';
 import '../../../../../../data/controller/home/home_controller.dart';
 import '../../../../../components/image/my_local_image_widget.dart';
@@ -48,14 +50,12 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
         statusBarColor: MyColor.getSystemStatusBarColor(),
         statusBarIconBrightness: MyColor.getSystemStatusBarBrightness(),
         systemNavigationBarColor: MyColor.getSystemNavigationBarColor(),
-        systemNavigationBarIconBrightness:
-            MyColor.getSystemNavigationBarBrightness(),
+        systemNavigationBarIconBrightness: MyColor.getSystemNavigationBarBrightness(),
       ),
       child: Container(
         height: appBarSize ?? 60.0,
         color: bgColor,
-        padding: const EdgeInsets.symmetric(
-            horizontal: Dimensions.space20, vertical: Dimensions.space5),
+        padding: const EdgeInsets.symmetric(horizontal: Dimensions.space20, vertical: Dimensions.space5),
         child: SafeArea(
           child: Row(
             children: [
@@ -64,11 +64,8 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    if (controller.checkUserIsLoggedInOrNot() == true &&
-                        controller.dashboardResponseModel.data?.user !=
-                            null) ...[
-                      if (controller.profileImageUrl == '' ||
-                          controller.profileImageUrl == 'null') ...[
+                    if (controller.checkUserIsLoggedInOrNot() == true && controller.dashboardResponseModel.data?.user != null) ...[
+                      if (controller.profileImageUrl == '' || controller.profileImageUrl == 'null') ...[
                         const MyLocalImageWidget(
                           imagePath: MyImages.noProfileImage,
                           boxFit: BoxFit.cover,
@@ -114,10 +111,8 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
                       Align(
                         alignment: AlignmentDirectional.centerStart,
                         child: MyLocalImageWidget(
-                          imagePath: MyColor.checkIsDarkTheme()
-                              ? MyImages.appLogoDark
-                              : MyImages.appLogoLight,
-                          width: 35,
+                          imagePath: MyColor.checkIsDarkTheme() ? MyImages.appLogoDark : MyImages.appLogoLight,
+                          width: MediaQuery.of(context).size.width / 2.8,
                         ),
                       ),
                     ],

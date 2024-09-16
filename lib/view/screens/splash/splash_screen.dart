@@ -23,7 +23,8 @@ class _SplashScreenState extends State<SplashScreen> {
     Get.put(ApiClient(sharedPreferences: Get.find()));
     Get.put(GeneralSettingRepo(apiClient: Get.find()));
     Get.put(LocalizationController(sharedPreferences: Get.find()));
-    final controller = Get.put(SplashController(repo: Get.find(), localizationController: Get.find()));
+    final controller = Get.put(
+        SplashController(repo: Get.find(), localizationController: Get.find()));
 
     super.initState();
 
@@ -48,13 +49,15 @@ class _SplashScreenState extends State<SplashScreen> {
           body: Stack(
             children: [
               Positioned.fill(
-                  child: Image.asset(
-                MyImages.backgroundImage,
-                fit: BoxFit.cover,
-              )),
+                child: Image.asset(
+                  MyImages.backgroundImage,
+                  fit: BoxFit.cover,
+                ),
+              ),
               Align(
                 alignment: Alignment.center,
-                child: Image.asset(MyImages.appLogoDark, width: size.width / 2.5),
+                child:
+                    Image.asset(MyImages.appLogoDark, width: size.width / 2.5),
               ),
             ],
           ),

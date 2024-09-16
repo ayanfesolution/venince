@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vinance/data/controller/pusher_controller/pusher_service_controller.dart';
 
 import '../../../core/helper/shared_preference_helper.dart';
 import '../../../core/helper/string_format_helper.dart';
@@ -20,7 +21,8 @@ import '../../model/order/order_list_response_model.dart';
 import '../../repo/market_trade/market_trade_repo.dart';
 //import '../pusher_controller/pusher_service_controller.dart';
 
-class TradePageController extends GetxController with GetTickerProviderStateMixin {
+class TradePageController extends GetxController
+    with GetTickerProviderStateMixin {
   MarketTradeRepo marketTradeRepo;
 
   TradePageController({required this.marketTradeRepo});
@@ -39,10 +41,13 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
   }
 
   loadTradePageTabsData() {
-    tabController = TabController(initialIndex: currentIndex, length: 2, vsync: this);
-    tabTradePageController = TabController(initialIndex: currentTradePageIndex, length: 2, vsync: this);
+    tabController =
+        TabController(initialIndex: currentIndex, length: 2, vsync: this);
+    tabTradePageController = TabController(
+        initialIndex: currentTradePageIndex, length: 2, vsync: this);
 
-    buyOrSellTabController = TabController(initialIndex: currentBuyOrSellTabIndex, length: 2, vsync: this);
+    buyOrSellTabController = TabController(
+        initialIndex: currentBuyOrSellTabIndex, length: 2, vsync: this);
   }
 
   changeBuyOrSellTabIndex(int value) {
@@ -50,8 +55,14 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
     buyOrSellTabController?.animateTo(value);
 
     if (selectedOrderType == 0) {
-      marketPriceTextController.text = double.parse(tradeDetailsMarketData?.price ?? '0').toPrecision(2).toString();
-      myMarketPriceTextController.text = double.parse(tradeDetailsMarketData?.price ?? '0').toPrecision(2).toString();
+      marketPriceTextController.text =
+          double.parse(tradeDetailsMarketData?.price ?? '0')
+              .toPrecision(2)
+              .toString();
+      myMarketPriceTextController.text =
+          double.parse(tradeDetailsMarketData?.price ?? '0')
+              .toPrecision(2)
+              .toString();
     }
     update();
   }
@@ -71,46 +82,64 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
   //Controller
   TextEditingController marketPriceTextController = TextEditingController();
   TextEditingController myMarketPriceTextController = TextEditingController();
-  TextEditingController myBuyPriceAmountTextController = TextEditingController();
-  TextEditingController mySellPriceAmountTextController = TextEditingController();
-  TextEditingController myTotalPriceAmountTextController = TextEditingController();
+  TextEditingController myBuyPriceAmountTextController =
+      TextEditingController();
+  TextEditingController mySellPriceAmountTextController =
+      TextEditingController();
+  TextEditingController myTotalPriceAmountTextController =
+      TextEditingController();
   String totalFee = "";
 
-  Future initialData({String symbolID = '', bool isBgLoad = false, bool orderListLoad = true}) async {
+  Future initialData(
+      {String symbolID = '',
+      bool isBgLoad = false,
+      bool orderListLoad = true}) async {
     openOrderHistoryLoading = orderListLoad;
     update();
     await loadTradePageDetailsData(symbolID: symbolID).whenComplete(() async {
       if (tradeSymbol != '') {
         printx(tradeSymbol);
 
-        loadOthersData(symbolID: tradeSymbol, isBgLoad: false, orderListLoad: orderListLoad);
+        loadOthersData(
+            symbolID: tradeSymbol,
+            isBgLoad: false,
+            orderListLoad: orderListLoad);
       } else {
-        loadOthersData(symbolID: symbolID, isBgLoad: isBgLoad, orderListLoad: orderListLoad);
+        loadOthersData(
+            symbolID: symbolID,
+            isBgLoad: isBgLoad,
+            orderListLoad: orderListLoad);
       }
     });
   }
 
   Future initialDataRefresh({bool isBgLoad = false}) async {
-    await loadTradePageDetailsData(symbolID: tradeSymbol).whenComplete(() async {
+    await loadTradePageDetailsData(symbolID: tradeSymbol)
+        .whenComplete(() async {
       loadOthersData(symbolID: tradeSymbol, isBgLoad: isBgLoad);
     });
   }
 
-  Future loadOthersData({String symbolID = '', bool isBgLoad = false, bool orderListLoad = true}) async {
+  Future loadOthersData(
+      {String symbolID = '',
+      bool isBgLoad = false,
+      bool orderListLoad = true}) async {
     // pusherServiceController.initPusher("market-data");
     // pusherServiceController.initPusher("trade");
     // pusherServiceController.initPusher("order-placed-to-$symbolID");
     await loadTradePageDetailsOrderBookData(symbolID: symbolID);
     await loadTradeHistoryListData(symbolID: symbolID);
     if (orderListLoad) {
-      await loadOrderListDataList(symbolID: symbolID, hotRefresh: true, isBgLoad: isBgLoad);
+      await loadOrderListDataList(
+          symbolID: symbolID, hotRefresh: true, isBgLoad: isBgLoad);
     }
     await loadMarketPairDataList(marketID: '');
   }
 
   // Details
   bool tradeDetailsLoading = true;
-  MarketTradeDetailsModel marketTradeDetailsModelDATA = MarketTradeDetailsModel();
+  MarketTradeDetailsModel marketTradeDetailsModelDATA =
+      MarketTradeDetailsModel();
   Pair? tradeDetailsMarketPair;
   String tradeSymbol = '';
   MarketData? tradeDetailsMarketData;
@@ -122,24 +151,35 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
     }
     update();
     try {
-      ResponseModel responseData = await marketTradeRepo.getMarketTradeDataBasedOnSymbolID(
+      ResponseModel responseData =
+          await marketTradeRepo.getMarketTradeDataBasedOnSymbolID(
         marketSymbolID: symbolID == '' ? tradeSymbol : symbolID,
       );
       if (responseData.statusCode == 200) {
-        final marketTradeDetailsModel = marketTradeDetailsModelFromJson(responseData.responseJson);
+        final marketTradeDetailsModel =
+            marketTradeDetailsModelFromJson(responseData.responseJson);
 
-        if (marketTradeDetailsModel.status?.toLowerCase() == MyStrings.success) {
+        if (marketTradeDetailsModel.status?.toLowerCase() ==
+            MyStrings.success) {
           marketTradeDetailsModelDATA = marketTradeDetailsModel;
 
           if (marketTradeDetailsModel.data?.pair?.marketData != null) {
             tradeDetailsMarketPair = marketTradeDetailsModel.data?.pair;
             tradeSymbol = marketTradeDetailsModel.data?.pair?.symbol ?? '';
-            tradeDetailsMarketData = marketTradeDetailsModel.data?.pair?.marketData;
+            tradeDetailsMarketData =
+                marketTradeDetailsModel.data?.pair?.marketData;
             coinWallet = marketTradeDetailsModel.data?.coinWallet;
-            marketCurrencyWallet = marketTradeDetailsModel.data?.marketCurrencyWallet;
+            marketCurrencyWallet =
+                marketTradeDetailsModel.data?.marketCurrencyWallet;
             if (marketCurrencyWallet != null) {
-              marketPriceTextController.text = double.parse(tradeDetailsMarketData?.price ?? '0').toPrecision(2).toString();
-              myMarketPriceTextController.text = double.parse(tradeDetailsMarketData?.price ?? '0').toPrecision(2).toString();
+              marketPriceTextController.text =
+                  double.parse(tradeDetailsMarketData?.price ?? '0')
+                      .toPrecision(2)
+                      .toString();
+              myMarketPriceTextController.text =
+                  double.parse(tradeDetailsMarketData?.price ?? '0')
+                      .toPrecision(2)
+                      .toString();
             }
 
             update();
@@ -158,71 +198,89 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
     }
   }
 
-  //PusherServiceController pusherServiceController = Get.find();
+  PusherServiceController pusherServiceController = Get.find();
   //Update market Data Based On  pusher event
-  // void updateMarketDataBasedOnPusherEvent() async {
-  //   if (pusherServiceController.marketData.isNotEmpty) {
-  //     for (int i = 0; i < pusherServiceController.marketData.length; i++) {
-  //       String currentId = pusherServiceController.marketData[i].id ?? "-1";
-  //       MarketData newMarketData = pusherServiceController.marketData[i];
+  void updateMarketDataBasedOnPusherEvent() async {
+    if (pusherServiceController.marketData.isNotEmpty) {
+      for (int i = 0; i < pusherServiceController.marketData.length; i++) {
+        String currentId = pusherServiceController.marketData[i].id ?? "-1";
+        MarketData newMarketData = pusherServiceController.marketData[i];
 
-  //       MarketSinglePairData? matchingElement = marketPairDataList.firstWhere((element) => element.marketData?.id == currentId, orElse: () => MarketSinglePairData());
-  //       if (matchingElement.id != null) {
-  //         // Update the price if a matching element is found
-  //         matchingElement.marketData?.price = newMarketData.price;
-  //         matchingElement.marketData?.marketCap = newMarketData.marketCap;
-  //         matchingElement.marketData?.percentChange1H = newMarketData.percentChange1H;
-  //         matchingElement.marketData?.htmlClasses?.percentChange1H = newMarketData.htmlClasses?.percentChange1H;
-  //       }
+        MarketSinglePairData? matchingElement = marketPairDataList.firstWhere(
+            (element) => element.marketData?.id == currentId,
+            orElse: () => MarketSinglePairData());
+        if (matchingElement.id != null) {
+          // Update the price if a matching element is found
+          matchingElement.marketData?.price = newMarketData.price;
+          matchingElement.marketData?.marketCap = newMarketData.marketCap;
+          matchingElement.marketData?.percentChange1H =
+              newMarketData.percentChange1H;
+          matchingElement.marketData?.htmlClasses?.percentChange1H =
+              newMarketData.htmlClasses?.percentChange1H;
+        }
 
-  //       if (tradeDetailsMarketData?.id == currentId) {
-  //         if (newMarketData.id != null) {
-  //           tradeDetailsMarketData?.price = newMarketData.price;
-  //           marketPriceTextController.text = newMarketData.price ?? '0';
-  //           tradeDetailsMarketData?.marketCap = newMarketData.marketCap;
-  //           tradeDetailsMarketData?.percentChange1H = newMarketData.percentChange1H;
+        if (tradeDetailsMarketData?.id == currentId) {
+          if (newMarketData.id != null) {
+            tradeDetailsMarketData?.price = newMarketData.price;
+            marketPriceTextController.text = newMarketData.price ?? '0';
+            tradeDetailsMarketData?.marketCap = newMarketData.marketCap;
+            tradeDetailsMarketData?.percentChange1H =
+                newMarketData.percentChange1H;
 
-  //           tradeDetailsMarketData?.htmlClasses?.percentChange1H = newMarketData.htmlClasses?.percentChange1H;
-  //           tradeDetailsMarketData?.percentChange24H = newMarketData.percentChange24H;
-  //           tradeDetailsMarketData?.htmlClasses?.percentChange24H = newMarketData.htmlClasses?.percentChange24H;
-  //         }
-  //       }
-  //     }
-  //     filteredMarketPairDataList = marketPairDataList;
-  //     pusherServiceController.marketData.clear();
-  //     update();
-  //     printx("From Pusher data event");
-  //     await loadTradePageDetailsOrderBookData(symbolID: tradeSymbol);
-  //     await loadTradeHistoryListData(symbolID: tradeSymbol);
-  //   }
-  //   if (pusherServiceController.currentEventName == "order-placed-to-$tradeSymbol") {
-  //     printx("Load OrderBook Data event");
-  //     try {
-  //       printx(pusherServiceController.sideOrderBook?.userId);
-  //       if (pusherServiceController.sideOrderBook?.userId != marketTradeRepo.apiClient.getUserID()) {
-  //         if (pusherServiceController.sideOrderBook?.id != null) {
-  //           if (pusherServiceController.sideOrderBook?.orderSide.toString() == "1") {
-  //             buySideOrderList.insert(0, pusherServiceController.sideOrderBook ?? SideOrderBook());
+            tradeDetailsMarketData?.htmlClasses?.percentChange1H =
+                newMarketData.htmlClasses?.percentChange1H;
+            tradeDetailsMarketData?.percentChange24H =
+                newMarketData.percentChange24H;
+            tradeDetailsMarketData?.htmlClasses?.percentChange24H =
+                newMarketData.htmlClasses?.percentChange24H;
+          }
+        }
+      }
+      filteredMarketPairDataList = marketPairDataList;
+      pusherServiceController.marketData.clear();
+      update();
+      printx("From Pusher data event");
+      await loadTradePageDetailsOrderBookData(symbolID: tradeSymbol);
+      await loadTradeHistoryListData(symbolID: tradeSymbol);
+    }
+    if (pusherServiceController.currentEventName ==
+        "order-placed-to-$tradeSymbol") {
+      printx("Load OrderBook Data event");
+      try {
+        printx(pusherServiceController.sideOrderBook?.userId);
+        if (pusherServiceController.sideOrderBook?.userId !=
+            marketTradeRepo.apiClient.getUserID()) {
+          if (pusherServiceController.sideOrderBook?.id != null) {
+            if (pusherServiceController.sideOrderBook?.orderSide.toString() ==
+                "1") {
+              buySideOrderList.insert(
+                  0, pusherServiceController.sideOrderBook ?? SideOrderBook());
 
-  //             List<SideOrderBook> newBuySideOrder = buySideOrderList..sort((a, b) => double.parse(b.rate ?? '0').compareTo(double.parse(a.rate ?? '0')));
-  //             buySideOrderList = newBuySideOrder.toSet().toList();
-  //             update();
-  //           }
-  //           if (pusherServiceController.sideOrderBook?.orderSide.toString() == "2") {
-  //             sellSideOrder.insert(0, pusherServiceController.sideOrderBook ?? SideOrderBook());
-  //             List<SideOrderBook> newSellSideOrder = sellSideOrder..sort((a, b) => double.parse(b.rate ?? '0').compareTo(double.parse(a.rate ?? '0')));
-  //             sellSideOrder = newSellSideOrder.toSet().toList();
-  //             update();
-  //           }
-  //         }
-  //       } else {
-  //         await loadTradePageDetailsOrderBookData(symbolID: tradeSymbol);
-  //       }
-  //     } catch (e) {
-  //       printx(e.toString());
-  //     }
-  //   }
-  // }
+              List<SideOrderBook> newBuySideOrder = buySideOrderList
+                ..sort((a, b) => double.parse(b.rate ?? '0')
+                    .compareTo(double.parse(a.rate ?? '0')));
+              buySideOrderList = newBuySideOrder.toSet().toList();
+              update();
+            }
+            if (pusherServiceController.sideOrderBook?.orderSide.toString() ==
+                "2") {
+              sellSideOrder.insert(
+                  0, pusherServiceController.sideOrderBook ?? SideOrderBook());
+              List<SideOrderBook> newSellSideOrder = sellSideOrder
+                ..sort((a, b) => double.parse(b.rate ?? '0')
+                    .compareTo(double.parse(a.rate ?? '0')));
+              sellSideOrder = newSellSideOrder.toSet().toList();
+              update();
+            }
+          }
+        } else {
+          await loadTradePageDetailsOrderBookData(symbolID: tradeSymbol);
+        }
+      } catch (e) {
+        printx(e.toString());
+      }
+    }
+  }
 
   //ORDER BOOK
   bool tradeDetailsOrderBookLoading = false;
@@ -238,20 +296,25 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
     update();
 
     try {
-      ResponseModel responseData = await marketTradeRepo.getMarketTradeOrderBookData(marketSymbolID: symbolID);
+      ResponseModel responseData = await marketTradeRepo
+          .getMarketTradeOrderBookData(marketSymbolID: symbolID);
       if (responseData.statusCode == 200) {
-        final marketTradeDetailsModel = marketOrderBookModelFromJson(responseData.responseJson);
+        final marketTradeDetailsModel =
+            marketOrderBookModelFromJson(responseData.responseJson);
 
-        if (marketTradeDetailsModel.status?.toLowerCase() == MyStrings.success) {
+        if (marketTradeDetailsModel.status?.toLowerCase() ==
+            MyStrings.success) {
           marketOrderBookModelData = marketTradeDetailsModel;
 
-          List<SideOrderBook>? tempBuyData = marketTradeDetailsModel.data?.buySideOrders;
+          List<SideOrderBook>? tempBuyData =
+              marketTradeDetailsModel.data?.buySideOrders;
           buySideOrderList.clear();
           if (tempBuyData != null && tempBuyData.isNotEmpty) {
             buySideOrderList.addAll(tempBuyData);
           }
 
-          List<SideOrderBook>? tempSellData = marketTradeDetailsModel.data?.sellSideOrders;
+          List<SideOrderBook>? tempSellData =
+              marketTradeDetailsModel.data?.sellSideOrders;
           sellSideOrder.clear();
           if (tempSellData != null && tempSellData.isNotEmpty) {
             sellSideOrder.addAll(tempSellData);
@@ -282,15 +345,19 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
     update();
 
     try {
-      ResponseModel responseData = await marketTradeRepo.getMarketTradeHistoryData(
+      ResponseModel responseData =
+          await marketTradeRepo.getMarketTradeHistoryData(
         marketSymbolID: symbolID,
       );
       if (responseData.statusCode == 200) {
-        final tradeHistoryResponseModel = tradeHistoryResponseModelFromJson(responseData.responseJson);
-        if (tradeHistoryResponseModel.status?.toLowerCase() == MyStrings.success) {
+        final tradeHistoryResponseModel =
+            tradeHistoryResponseModelFromJson(responseData.responseJson);
+        if (tradeHistoryResponseModel.status?.toLowerCase() ==
+            MyStrings.success) {
           tradeHistoryModelData = tradeHistoryResponseModel;
 
-          List<TradeHistoryData>? tempTradeHistoryData = tradeHistoryResponseModel.data?.trades;
+          List<TradeHistoryData>? tempTradeHistoryData =
+              tradeHistoryResponseModel.data?.trades;
           tradesHistoryList.clear();
           if (tempTradeHistoryData != null && tempTradeHistoryData.isNotEmpty) {
             tradesHistoryList.addAll(tempTradeHistoryData);
@@ -315,7 +382,10 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
   bool openOrderHistoryLoading = true;
   List<OrderListSingleData> orderListData = [];
 
-  loadOrderListDataList({bool hotRefresh = false, bool isBgLoad = false, String symbolID = ''}) async {
+  loadOrderListDataList(
+      {bool hotRefresh = false,
+      bool isBgLoad = false,
+      String symbolID = ''}) async {
     if (hotRefresh) {
       if (isBgLoad == false) {
         orderListData.clear();
@@ -336,16 +406,22 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
 
     update();
     try {
-      ResponseModel responseData = await marketTradeRepo.getMarketTradeOrderOpenHistoryData(page: page, marketSymbolID: symbolID == '' ? tradeSymbol : symbolID);
+      ResponseModel responseData =
+          await marketTradeRepo.getMarketTradeOrderOpenHistoryData(
+              page: page,
+              marketSymbolID: symbolID == '' ? tradeSymbol : symbolID);
       if (responseData.statusCode == 200) {
-        final tradeHistoryResponseModel = orderListResponseModelFromJson(responseData.responseJson);
+        final tradeHistoryResponseModel =
+            orderListResponseModelFromJson(responseData.responseJson);
 
         orderListResponseModelData = tradeHistoryResponseModel;
 
-        if (tradeHistoryResponseModel.status?.toLowerCase() == MyStrings.success) {
+        if (tradeHistoryResponseModel.status?.toLowerCase() ==
+            MyStrings.success) {
           nextPageUrl = tradeHistoryResponseModel.data?.orders?.nextPageUrl;
 
-          List<OrderListSingleData> tempWalletList = tradeHistoryResponseModel.data?.orders?.data ?? [];
+          List<OrderListSingleData> tempWalletList =
+              tradeHistoryResponseModel.data?.orders?.data ?? [];
           if (isBgLoad == true) {
             orderListData.clear();
           }
@@ -369,7 +445,11 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
   }
 
   bool hasNext() {
-    return nextPageUrl != null && nextPageUrl!.isNotEmpty && nextPageUrl != 'null' ? true : false;
+    return nextPageUrl != null &&
+            nextPageUrl!.isNotEmpty &&
+            nextPageUrl != 'null'
+        ? true
+        : false;
   }
 
   //buy
@@ -379,7 +459,9 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
       double buyPriceAmount = double.parse(myBuyPriceAmountTextController.text);
 
       // double marketPrice = double.parse(tradeDetailsMarketData?.price ?? '0');
-      double marketPrice = double.parse(myMarketPriceTextController.text == '' ? '0' : myMarketPriceTextController.text);
+      double marketPrice = double.parse(myMarketPriceTextController.text == ''
+          ? '0'
+          : myMarketPriceTextController.text);
 
       double totalPrice = (buyPriceAmount * marketPrice).toPrecision(4);
 
@@ -399,8 +481,13 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
 
   calculateBuyChargeData() {
     try {
-      double totalPrice = double.parse((myTotalPriceAmountTextController.text == '' ? '0' : myTotalPriceAmountTextController.text)).toPrecision(4);
-      double chargePercent = double.parse(tradeDetailsMarketPair?.percentChargeForBuy ?? '0');
+      double totalPrice = double.parse(
+              (myTotalPriceAmountTextController.text == ''
+                  ? '0'
+                  : myTotalPriceAmountTextController.text))
+          .toPrecision(4);
+      double chargePercent =
+          double.parse(tradeDetailsMarketPair?.percentChargeForBuy ?? '0');
       double chargeAmount = totalPrice * (chargePercent / 100);
       chargeAmountDataBuy = chargeAmount;
       update();
@@ -413,10 +500,13 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
   double chargeAmountDataSell = 0.0;
   calculateSellChargeAndTotalPriceFromAmount() {
     try {
-      double sellPriceAmount = double.parse(mySellPriceAmountTextController.text);
+      double sellPriceAmount =
+          double.parse(mySellPriceAmountTextController.text);
 
       // double marketPrice = double.parse(tradeDetailsMarketData?.price ?? '0');
-      double marketPrice = double.parse(myMarketPriceTextController.text == '' ? '0' : myMarketPriceTextController.text);
+      double marketPrice = double.parse(myMarketPriceTextController.text == ''
+          ? '0'
+          : myMarketPriceTextController.text);
 
       double totalPrice = (sellPriceAmount * marketPrice).toPrecision(4);
 
@@ -435,8 +525,13 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
 
   calculateSellChargeData() {
     try {
-      double totalPrice = double.parse((myTotalPriceAmountTextController.text == '' ? '0' : myTotalPriceAmountTextController.text)).toPrecision(4);
-      double chargePercent = double.parse(tradeDetailsMarketPair?.percentChargeForSell ?? '0');
+      double totalPrice = double.parse(
+              (myTotalPriceAmountTextController.text == ''
+                  ? '0'
+                  : myTotalPriceAmountTextController.text))
+          .toPrecision(4);
+      double chargePercent =
+          double.parse(tradeDetailsMarketPair?.percentChargeForSell ?? '0');
       double chargeAmount = totalPrice * (chargePercent / 100);
       chargeAmountDataSell = chargeAmount;
       update();
@@ -447,12 +542,19 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
 
   calculateBuyChargePriceFromTotalPrice() {
     try {
-      double chargePercent = double.parse(tradeDetailsMarketPair?.percentChargeForBuy ?? '0');
+      double chargePercent =
+          double.parse(tradeDetailsMarketPair?.percentChargeForBuy ?? '0');
 
-      double totalPriceAmount = double.parse(myTotalPriceAmountTextController.text == '' ? '0' : myTotalPriceAmountTextController.text).toPrecision(4);
+      double totalPriceAmount = double.parse(
+              myTotalPriceAmountTextController.text == ''
+                  ? '0'
+                  : myTotalPriceAmountTextController.text)
+          .toPrecision(4);
 
       // double marketPrice = double.parse(tradeDetailsMarketData?.price ?? '0');
-      double marketPrice = double.parse(myMarketPriceTextController.text == '' ? '0' : myMarketPriceTextController.text);
+      double marketPrice = double.parse(myMarketPriceTextController.text == ''
+          ? '0'
+          : myMarketPriceTextController.text);
 
       double totalPrice = totalPriceAmount / marketPrice;
 
@@ -477,12 +579,19 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
   //sell
   calculateSellChargePriceFromTotalPrice() {
     try {
-      double chargePercent = double.parse(tradeDetailsMarketPair?.percentChargeForBuy ?? '0');
+      double chargePercent =
+          double.parse(tradeDetailsMarketPair?.percentChargeForBuy ?? '0');
 
-      double totalPriceAmount = double.parse(myTotalPriceAmountTextController.text == '' ? '0' : myTotalPriceAmountTextController.text).toPrecision(4);
+      double totalPriceAmount = double.parse(
+              myTotalPriceAmountTextController.text == ''
+                  ? '0'
+                  : myTotalPriceAmountTextController.text)
+          .toPrecision(4);
 
       // double marketPrice = double.parse(tradeDetailsMarketData?.price ?? '0');
-      double marketPrice = double.parse(myMarketPriceTextController.text == '' ? '0' : myMarketPriceTextController.text);
+      double marketPrice = double.parse(myMarketPriceTextController.text == ''
+          ? '0'
+          : myMarketPriceTextController.text);
 
       double totalPrice = totalPriceAmount / marketPrice;
 
@@ -509,7 +618,10 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
 
   calculateTotalAmountPercentageBuy() {
     try {
-      double enteredAmount = double.parse(myTotalPriceAmountTextController.text ?? '0.0').toPrecision(4) ?? 0.0;
+      double enteredAmount =
+          double.parse(myTotalPriceAmountTextController.text ?? '0.0')
+                  .toPrecision(4) ??
+              0.0;
 
       double balance = double.parse(marketCurrencyWallet?.balance ?? '0.0');
 
@@ -531,14 +643,22 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
   calculateTotalAmountPercentageSell() {
     try {
       // Parse the entered amount, default to 0.0 if parsing fails
-      double totalAmount = double.parse(myTotalPriceAmountTextController.text ?? '0.0').toPrecision(4) ?? 0.0;
+      double totalAmount =
+          double.parse(myTotalPriceAmountTextController.text ?? '0.0')
+                  .toPrecision(4) ??
+              0.0;
 
       // Parse the balance, default to 0.0 if parsing fails
       double sellWalletBalance = double.parse(coinWallet?.balance ?? '0.0');
       // double sellWalletCurrencyMarketPrice = double.parse(tradeDetailsMarketData?.price ?? '0');
-      double sellWalletCurrencyMarketPrice = double.parse(myMarketPriceTextController.text == '' ? '0' : myMarketPriceTextController.text);
+      double sellWalletCurrencyMarketPrice = double.parse(
+          myMarketPriceTextController.text == ''
+              ? '0'
+              : myMarketPriceTextController.text);
       // Calculate the percentage
-      double percentage = (totalAmount / (sellWalletBalance * sellWalletCurrencyMarketPrice)) * 100;
+      double percentage =
+          (totalAmount / (sellWalletBalance * sellWalletCurrencyMarketPrice)) *
+              100;
 
       // Update a text controller or print the result as needed
       printx('Entered amount is $percentage% of the balance.');
@@ -578,11 +698,16 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
       enterAmountPercentageSell = percentage;
       double sellWalletBalance = double.parse(coinWallet?.balance ?? '0.0');
       // double sellWalletCurrencyMarketPrice = double.parse(tradeDetailsMarketData?.price ?? '0');
-      double sellWalletCurrencyMarketPrice = double.parse(myMarketPriceTextController.text == '' ? '0' : myMarketPriceTextController.text);
+      double sellWalletCurrencyMarketPrice = double.parse(
+          myMarketPriceTextController.text == ''
+              ? '0'
+              : myMarketPriceTextController.text);
 
       double sellPriceAmountInCoin = (percentage / 100) * sellWalletBalance;
 
-      double sellPriceAmount = (sellPriceAmountInCoin * sellWalletCurrencyMarketPrice).toPrecision(4);
+      double sellPriceAmount =
+          (sellPriceAmountInCoin * sellWalletCurrencyMarketPrice)
+              .toPrecision(4);
 
       // Update the buy price text controller
       myTotalPriceAmountTextController.text = '$sellPriceAmount';
@@ -624,7 +749,8 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
                 : "-1",
       );
 
-      AuthorizationResponseModel model = AuthorizationResponseModel.fromJson(jsonDecode(responseData.responseJson));
+      AuthorizationResponseModel model = AuthorizationResponseModel.fromJson(
+          jsonDecode(responseData.responseJson));
 
       if (model.status?.toLowerCase() == MyStrings.success.toLowerCase()) {
         // await loadOrderListDataList(hotRefresh: true, isBgLoad: true, symbolID: symbolID);
@@ -633,9 +759,11 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
           isBgLoad: true,
         );
         // Get.back();
-        CustomSnackBar.success(successList: model.message?.success ?? [MyStrings.requestSuccess]);
+        CustomSnackBar.success(
+            successList: model.message?.success ?? [MyStrings.requestSuccess]);
       } else {
-        CustomSnackBar.error(errorList: model.message?.error ?? [MyStrings.requestFail]);
+        CustomSnackBar.error(
+            errorList: model.message?.error ?? [MyStrings.requestFail]);
       }
     } catch (e) {
       printx(e.toString());
@@ -673,7 +801,8 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
                 : "-1",
       );
 
-      AuthorizationResponseModel model = AuthorizationResponseModel.fromJson(jsonDecode(responseData.responseJson));
+      AuthorizationResponseModel model = AuthorizationResponseModel.fromJson(
+          jsonDecode(responseData.responseJson));
 
       if (model.status?.toLowerCase() == MyStrings.success.toLowerCase()) {
         await initialData(
@@ -681,9 +810,11 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
           isBgLoad: true,
         );
         // Get.back();
-        CustomSnackBar.success(successList: model.message?.success ?? [MyStrings.requestSuccess]);
+        CustomSnackBar.success(
+            successList: model.message?.success ?? [MyStrings.requestSuccess]);
       } else {
-        CustomSnackBar.error(errorList: model.message?.error ?? [MyStrings.requestFail]);
+        CustomSnackBar.error(
+            errorList: model.message?.error ?? [MyStrings.requestFail]);
       }
     } catch (e) {
       printx(e.toString());
@@ -697,7 +828,10 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
   String updateOrderRateOrAmountOrderID = '-1';
   String updateOrderRateOrderType = 'amount'; //amount or rate
 
-  changeOrderUpdateID({String orderID = '', String orderUpdateType = 'amount', String amountValue = '0.0'}) {
+  changeOrderUpdateID(
+      {String orderID = '',
+      String orderUpdateType = 'amount',
+      String amountValue = '0.0'}) {
     updateOrderRateOrAmountOrderID = orderID;
     updateOrderRateOrderType = orderUpdateType;
     amountController.text = amountValue;
@@ -718,21 +852,26 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
         updateValue: amountController.text,
       );
 
-      AuthorizationResponseModel model = AuthorizationResponseModel.fromJson(jsonDecode(responseData.responseJson));
+      AuthorizationResponseModel model = AuthorizationResponseModel.fromJson(
+          jsonDecode(responseData.responseJson));
 
       if (model.status?.toLowerCase() == MyStrings.success.toLowerCase()) {
         if (updateOrderRateOrderType == 'amount') {
-          orderListData.firstWhere((element) => element.id == orderID).amount = amountController.text;
+          orderListData.firstWhere((element) => element.id == orderID).amount =
+              amountController.text;
         }
         if (updateOrderRateOrderType == 'rate') {
-          orderListData.firstWhere((element) => element.id == orderID).rate = amountController.text;
+          orderListData.firstWhere((element) => element.id == orderID).rate =
+              amountController.text;
         }
 
         update();
-        CustomSnackBar.success(successList: model.message?.success ?? [MyStrings.requestSuccess]);
+        CustomSnackBar.success(
+            successList: model.message?.success ?? [MyStrings.requestSuccess]);
         updateOrderRateOrAmountOrderID = "-1";
       } else {
-        CustomSnackBar.error(errorList: model.message?.error ?? [MyStrings.requestFail]);
+        CustomSnackBar.error(
+            errorList: model.message?.error ?? [MyStrings.requestFail]);
       }
       initialData(isBgLoad: true, symbolID: tradeSymbol, orderListLoad: false);
     } catch (e) {
@@ -755,15 +894,18 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
         orderID: orderID,
       );
 
-      AuthorizationResponseModel model = AuthorizationResponseModel.fromJson(jsonDecode(responseData.responseJson));
+      AuthorizationResponseModel model = AuthorizationResponseModel.fromJson(
+          jsonDecode(responseData.responseJson));
 
       if (model.status?.toLowerCase() == MyStrings.success.toLowerCase()) {
         //remove order
         orderListData.removeWhere((element) => element.id == orderID);
 
-        CustomSnackBar.success(successList: model.message?.success ?? [MyStrings.requestSuccess]);
+        CustomSnackBar.success(
+            successList: model.message?.success ?? [MyStrings.requestSuccess]);
       } else {
-        CustomSnackBar.error(errorList: model.message?.error ?? [MyStrings.requestFail]);
+        CustomSnackBar.error(
+            errorList: model.message?.error ?? [MyStrings.requestFail]);
       }
       initialData(isBgLoad: true, symbolID: tradeSymbol, orderListLoad: false);
     } catch (e) {
@@ -785,12 +927,15 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
         symbolID: symbolID == '' ? tradeSymbol : symbolID,
       );
 
-      AuthorizationResponseModel model = AuthorizationResponseModel.fromJson(jsonDecode(responseData.responseJson));
+      AuthorizationResponseModel model = AuthorizationResponseModel.fromJson(
+          jsonDecode(responseData.responseJson));
 
       if (model.status?.toLowerCase() == MyStrings.success.toLowerCase()) {
-        CustomSnackBar.success(successList: model.message?.success ?? [MyStrings.requestSuccess]);
+        CustomSnackBar.success(
+            successList: model.message?.success ?? [MyStrings.requestSuccess]);
       } else {
-        CustomSnackBar.error(errorList: model.message?.error ?? [MyStrings.requestFail]);
+        CustomSnackBar.error(
+            errorList: model.message?.error ?? [MyStrings.requestFail]);
       }
       initialData(isBgLoad: true, symbolID: tradeSymbol, orderListLoad: true);
     } catch (e) {
@@ -814,17 +959,20 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
         symbolID: symbolID,
       );
 
-      AuthorizationResponseModel model = AuthorizationResponseModel.fromJson(jsonDecode(responseData.responseJson));
+      AuthorizationResponseModel model = AuthorizationResponseModel.fromJson(
+          jsonDecode(responseData.responseJson));
 
       if (model.status?.toLowerCase() == MyStrings.success.toLowerCase()) {
-        CustomSnackBar.success(successList: model.message?.success ?? [MyStrings.requestSuccess]);
+        CustomSnackBar.success(
+            successList: model.message?.success ?? [MyStrings.requestSuccess]);
         if (model.remark?.toLowerCase() == "pair_added") {
           marketPairListDataModelData.data?.favoritePairId?.add(itemID);
         } else if (model.remark?.toLowerCase() == "pair_removed") {
           marketPairListDataModelData.data?.favoritePairId?.remove(itemID);
         }
       } else {
-        CustomSnackBar.error(errorList: model.message?.error ?? [MyStrings.requestFail]);
+        CustomSnackBar.error(
+            errorList: model.message?.error ?? [MyStrings.requestFail]);
       }
     } catch (e) {
       printx(e.toString());
@@ -838,13 +986,17 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
 
   //Market pair list under currency tab
   bool isMarketPairTabDataListLoading = true;
-  MarketPairListDataModel marketPairListDataModelData = MarketPairListDataModel();
+  MarketPairListDataModel marketPairListDataModelData =
+      MarketPairListDataModel();
   List<MarketSinglePairData> marketPairDataList = [];
   List<MarketSinglePairData> filteredMarketPairDataList = [];
   int marketPage = 0;
   String? nextPageUrlMarket;
 
-  loadMarketPairDataList({String marketID = '', String search = '', bool hotRefresh = false}) async {
+  loadMarketPairDataList(
+      {String marketID = '',
+      String search = '',
+      bool hotRefresh = false}) async {
     if (hotRefresh) {
       marketPage = 1;
       isMarketPairTabDataListLoading = true;
@@ -864,18 +1016,22 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
     update();
 
     try {
-      ResponseModel responseData = await marketTradeRepo.getMarketPairDataBasedOnMarketID(
+      ResponseModel responseData =
+          await marketTradeRepo.getMarketPairDataBasedOnMarketID(
         marketID: marketID,
         search: search,
         page: marketPage,
       );
       if (responseData.statusCode == 200) {
-        final marketPairListDataModel = marketPairListDataModelFromJson(responseData.responseJson);
+        final marketPairListDataModel =
+            marketPairListDataModelFromJson(responseData.responseJson);
 
         marketPairListDataModelData = marketPairListDataModel;
 
-        if (marketPairListDataModel.status?.toLowerCase() == MyStrings.success) {
-          List<MarketSinglePairData> tempMarketAPairDataList = marketPairListDataModel.data?.pairs?.data ?? [];
+        if (marketPairListDataModel.status?.toLowerCase() ==
+            MyStrings.success) {
+          List<MarketSinglePairData> tempMarketAPairDataList =
+              marketPairListDataModel.data?.pairs?.data ?? [];
           if (hotRefresh) {
             marketPairDataList.clear();
             filteredMarketPairDataList.clear();
@@ -885,8 +1041,11 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
             filteredMarketPairDataList = marketPairDataList;
           }
 
-          if (marketPairListDataModel.data?.pairs?.currentPage != marketPairListDataModel.data?.pairs?.lastPage) {
-            if (marketPage < int.parse((marketPairListDataModel.data?.pairs?.lastPage ?? -1).toString())) {
+          if (marketPairListDataModel.data?.pairs?.currentPage !=
+              marketPairListDataModel.data?.pairs?.lastPage) {
+            if (marketPage <
+                int.parse((marketPairListDataModel.data?.pairs?.lastPage ?? -1)
+                    .toString())) {
               loadMarketPairDataList(marketID: marketID, search: search);
             }
           }
@@ -906,7 +1065,11 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
   }
 
   bool hasNextMarket() {
-    return nextPageUrlMarket != null && nextPageUrlMarket!.isNotEmpty && nextPageUrlMarket != 'null' ? true : false;
+    return nextPageUrlMarket != null &&
+            nextPageUrlMarket!.isNotEmpty &&
+            nextPageUrlMarket != 'null'
+        ? true
+        : false;
   }
 
   //Filtering
@@ -932,13 +1095,21 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
     update();
   }
 
-  void filterMarketPairData({String filterTypeParam = '', bool toggleOrder = false}) {
+  void filterMarketPairData(
+      {String filterTypeParam = '', bool toggleOrder = false}) {
     //Favorite filter
     if (filterTypeParam == 'search') {
       if (searchTextController.text != '') {
         isSearchFilter = true;
         filteredMarketPairDataList = marketPairDataList.where((item) {
-          return (item.coin?.symbol?.toLowerCase().contains(searchTextController.text.toLowerCase()) ?? false) || (item.market?.currency?.symbol?.toLowerCase().contains(searchTextController.text.toLowerCase()) ?? false);
+          return (item.coin?.symbol
+                      ?.toLowerCase()
+                      .contains(searchTextController.text.toLowerCase()) ??
+                  false) ||
+              (item.market?.currency?.symbol
+                      ?.toLowerCase()
+                      .contains(searchTextController.text.toLowerCase()) ??
+                  false);
         }).toList();
       } else {
         isSearchFilter = false;
@@ -951,7 +1122,12 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
       if (isFavFilter == false) {
         isFavFilter = true;
 
-        filteredMarketPairDataList = filteredMarketPairDataList.where((item) => marketPairListDataModelData.data?.favoritePairId?.contains(item.id?.toString()) ?? false).toList();
+        filteredMarketPairDataList = filteredMarketPairDataList
+            .where((item) =>
+                marketPairListDataModelData.data?.favoritePairId
+                    ?.contains(item.id?.toString()) ??
+                false)
+            .toList();
       } else {
         isFavFilter = false;
         filteredMarketPairDataList = marketPairDataList.toList();
@@ -968,11 +1144,15 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
         }
         filteredMarketPairDataList = filteredMarketPairDataList.toList()
           ..sort((a, b) {
-            double priceA = double.tryParse(a.marketData?.price ?? '0.0') ?? 0.0;
-            double priceB = double.tryParse(b.marketData?.price ?? '0.0') ?? 0.0;
+            double priceA =
+                double.tryParse(a.marketData?.price ?? '0.0') ?? 0.0;
+            double priceB =
+                double.tryParse(b.marketData?.price ?? '0.0') ?? 0.0;
 
             // Compare prices based on order
-            return !isPriceAsc ? priceA.compareTo(priceB) : priceB.compareTo(priceA);
+            return !isPriceAsc
+                ? priceA.compareTo(priceB)
+                : priceB.compareTo(priceA);
           });
       } else {
         isPriceFilter = false;
@@ -989,11 +1169,15 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
         }
         filteredMarketPairDataList = filteredMarketPairDataList.toList()
           ..sort((a, b) {
-            double priceA = double.tryParse(a.marketData?.percentChange1H ?? '0.0') ?? 0.0;
-            double priceB = double.tryParse(b.marketData?.percentChange1H ?? '0.0') ?? 0.0;
+            double priceA =
+                double.tryParse(a.marketData?.percentChange1H ?? '0.0') ?? 0.0;
+            double priceB =
+                double.tryParse(b.marketData?.percentChange1H ?? '0.0') ?? 0.0;
 
             // Compare prices based on order
-            return !is1hAsc ? priceA.compareTo(priceB) : priceB.compareTo(priceA);
+            return !is1hAsc
+                ? priceA.compareTo(priceB)
+                : priceB.compareTo(priceA);
           });
       } else {
         is1hFilter = false;
@@ -1010,11 +1194,15 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
         }
         filteredMarketPairDataList = filteredMarketPairDataList.toList()
           ..sort((a, b) {
-            double priceA = double.tryParse(a.marketData?.marketCap ?? '0.0') ?? 0.0;
-            double priceB = double.tryParse(b.marketData?.marketCap ?? '0.0') ?? 0.0;
+            double priceA =
+                double.tryParse(a.marketData?.marketCap ?? '0.0') ?? 0.0;
+            double priceB =
+                double.tryParse(b.marketData?.marketCap ?? '0.0') ?? 0.0;
 
             // Compare prices based on order
-            return !isVolAsc ? priceA.compareTo(priceB) : priceB.compareTo(priceA);
+            return !isVolAsc
+                ? priceA.compareTo(priceB)
+                : priceB.compareTo(priceA);
           });
       } else {
         isVolFilter = false;
@@ -1026,7 +1214,9 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
 
   bool checkItemIsFavorite({String itemID = '-1'}) {
     try {
-      return marketPairListDataModelData.data?.favoritePairId?.contains(itemID.toString()) ?? false;
+      return marketPairListDataModelData.data?.favoritePairId
+              ?.contains(itemID.toString()) ??
+          false;
     } catch (e) {
       return false;
     }
@@ -1040,22 +1230,40 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
 
   //Long Press Counter
   Timer? incOrDecTimer;
-  increaseOrDecreaseMyMarketPriceCounter({bool isIncrease = false, bool isLongPress = false}) {
+  increaseOrDecreaseMyMarketPriceCounter(
+      {bool isIncrease = false, bool isLongPress = false}) {
     try {
       if (isLongPress == true) {
-        incOrDecTimer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
+        incOrDecTimer =
+            Timer.periodic(const Duration(milliseconds: 50), (timer) {
           if (isIncrease) {
-            myMarketPriceTextController.text = ((double.parse(myMarketPriceTextController.text) + 0.01).clamp(0.00, double.infinity).toPrecision(2)).toString();
+            myMarketPriceTextController.text =
+                ((double.parse(myMarketPriceTextController.text) + 0.01)
+                        .clamp(0.00, double.infinity)
+                        .toPrecision(2))
+                    .toString();
           } else {
-            myMarketPriceTextController.text = ((double.parse(myMarketPriceTextController.text) - 0.01).clamp(0.00, double.infinity).toPrecision(2)).toString();
+            myMarketPriceTextController.text =
+                ((double.parse(myMarketPriceTextController.text) - 0.01)
+                        .clamp(0.00, double.infinity)
+                        .toPrecision(2))
+                    .toString();
           }
           calculateBuyChargeAndTotalPriceFromAmount();
         });
       } else {
         if (isIncrease) {
-          myMarketPriceTextController.text = ((double.parse(myMarketPriceTextController.text) + 0.01).clamp(0.00, double.infinity).toPrecision(2)).toString();
+          myMarketPriceTextController.text =
+              ((double.parse(myMarketPriceTextController.text) + 0.01)
+                      .clamp(0.00, double.infinity)
+                      .toPrecision(2))
+                  .toString();
         } else {
-          myMarketPriceTextController.text = ((double.parse(myMarketPriceTextController.text) - 0.01).clamp(0.00, double.infinity).toPrecision(2)).toString();
+          myMarketPriceTextController.text =
+              ((double.parse(myMarketPriceTextController.text) - 0.01)
+                      .clamp(0.00, double.infinity)
+                      .toPrecision(2))
+                  .toString();
         }
         calculateBuyChargeAndTotalPriceFromAmount();
       }
@@ -1066,22 +1274,40 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
     update();
   }
 
-  increaseOrDecreaseBuyAmountCounter({bool isIncrease = false, bool isLongPress = false}) {
+  increaseOrDecreaseBuyAmountCounter(
+      {bool isIncrease = false, bool isLongPress = false}) {
     try {
       if (isLongPress == true) {
-        incOrDecTimer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
+        incOrDecTimer =
+            Timer.periodic(const Duration(milliseconds: 50), (timer) {
           if (isIncrease) {
-            myBuyPriceAmountTextController.text = ((double.parse(myBuyPriceAmountTextController.text) + 0.01).clamp(0.00, double.infinity).toPrecision(2)).toString();
+            myBuyPriceAmountTextController.text =
+                ((double.parse(myBuyPriceAmountTextController.text) + 0.01)
+                        .clamp(0.00, double.infinity)
+                        .toPrecision(2))
+                    .toString();
           } else {
-            myBuyPriceAmountTextController.text = ((double.parse(myBuyPriceAmountTextController.text) - 0.01).clamp(0.00, double.infinity).toPrecision(2)).toString();
+            myBuyPriceAmountTextController.text =
+                ((double.parse(myBuyPriceAmountTextController.text) - 0.01)
+                        .clamp(0.00, double.infinity)
+                        .toPrecision(2))
+                    .toString();
           }
           calculateBuyChargeAndTotalPriceFromAmount();
         });
       } else {
         if (isIncrease) {
-          myBuyPriceAmountTextController.text = ((double.parse(myBuyPriceAmountTextController.text) + 0.01).clamp(0.00, double.infinity).toPrecision(2)).toString();
+          myBuyPriceAmountTextController.text =
+              ((double.parse(myBuyPriceAmountTextController.text) + 0.01)
+                      .clamp(0.00, double.infinity)
+                      .toPrecision(2))
+                  .toString();
         } else {
-          myBuyPriceAmountTextController.text = ((double.parse(myBuyPriceAmountTextController.text) - 0.01).clamp(0.00, double.infinity).toPrecision(2)).toString();
+          myBuyPriceAmountTextController.text =
+              ((double.parse(myBuyPriceAmountTextController.text) - 0.01)
+                      .clamp(0.00, double.infinity)
+                      .toPrecision(2))
+                  .toString();
         }
         calculateBuyChargeAndTotalPriceFromAmount();
       }
@@ -1092,22 +1318,40 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
     update();
   }
 
-  increaseOrDecreaseSellAmountCounter({bool isIncrease = false, bool isLongPress = false}) {
+  increaseOrDecreaseSellAmountCounter(
+      {bool isIncrease = false, bool isLongPress = false}) {
     try {
       if (isLongPress == true) {
-        incOrDecTimer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
+        incOrDecTimer =
+            Timer.periodic(const Duration(milliseconds: 50), (timer) {
           if (isIncrease) {
-            mySellPriceAmountTextController.text = ((double.parse(mySellPriceAmountTextController.text) + 0.01).clamp(0.00, double.infinity).toPrecision(2)).toString();
+            mySellPriceAmountTextController.text =
+                ((double.parse(mySellPriceAmountTextController.text) + 0.01)
+                        .clamp(0.00, double.infinity)
+                        .toPrecision(2))
+                    .toString();
           } else {
-            mySellPriceAmountTextController.text = ((double.parse(mySellPriceAmountTextController.text) - 0.01).clamp(0.00, double.infinity).toPrecision(2)).toString();
+            mySellPriceAmountTextController.text =
+                ((double.parse(mySellPriceAmountTextController.text) - 0.01)
+                        .clamp(0.00, double.infinity)
+                        .toPrecision(2))
+                    .toString();
           }
           calculateSellChargeAndTotalPriceFromAmount();
         });
       } else {
         if (isIncrease) {
-          mySellPriceAmountTextController.text = ((double.parse(mySellPriceAmountTextController.text) + 0.01).clamp(0.00, double.infinity).toPrecision(2)).toString();
+          mySellPriceAmountTextController.text =
+              ((double.parse(mySellPriceAmountTextController.text) + 0.01)
+                      .clamp(0.00, double.infinity)
+                      .toPrecision(2))
+                  .toString();
         } else {
-          mySellPriceAmountTextController.text = ((double.parse(mySellPriceAmountTextController.text) - 0.01).clamp(0.00, double.infinity).toPrecision(2)).toString();
+          mySellPriceAmountTextController.text =
+              ((double.parse(mySellPriceAmountTextController.text) - 0.01)
+                      .clamp(0.00, double.infinity)
+                      .toPrecision(2))
+                  .toString();
         }
         calculateSellChargeAndTotalPriceFromAmount();
       }
@@ -1129,12 +1373,16 @@ class TradePageController extends GetxController with GetTickerProviderStateMixi
   changeSelectedOrderType(int value) {
     selectedOrderType = value;
     if (selectedOrderType == 0) {
-      myMarketPriceTextController.text = StringConverter.formatNumber((tradeDetailsMarketData?.price ?? '0.0').toString(), precision: marketTradeRepo.apiClient.getDecimalAfterNumber());
+      myMarketPriceTextController.text = StringConverter.formatNumber(
+          (tradeDetailsMarketData?.price ?? '0.0').toString(),
+          precision: marketTradeRepo.apiClient.getDecimalAfterNumber());
     }
     update();
   }
 
   bool checkUserIsLoggedInOrNot() {
-    return marketTradeRepo.apiClient.sharedPreferences.getBool(SharedPreferenceHelper.rememberMeKey) ?? false;
+    return marketTradeRepo.apiClient.sharedPreferences
+            .getBool(SharedPreferenceHelper.rememberMeKey) ??
+        false;
   }
 }

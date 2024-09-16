@@ -24,10 +24,17 @@ class SplashController extends GetxController {
 
   gotoNextPage() async {
     await loadLanguage();
-    bool isRemember = repo.apiClient.sharedPreferences.getBool(SharedPreferenceHelper.rememberMeKey) ?? false;
-    bool isFirstTime = repo.apiClient.sharedPreferences.getBool(SharedPreferenceHelper.firstTimeOnAppKey) ?? true; // we need to check it bcz for first time we will redirect to sign up page
-    bool isOnboardEnable = repo.apiClient.sharedPreferences.getBool(SharedPreferenceHelper.onBoardIsOnKey) ?? true;
-    bool fingerEnable = repo.apiClient.getFingerPrintStatus(); // if finger enable then user should redirect to login page and able to login by fingerprint else user will redirect to home page if he/she is already logined
+    bool isRemember = repo.apiClient.sharedPreferences
+            .getBool(SharedPreferenceHelper.rememberMeKey) ??
+        false;
+    bool isFirstTime = repo.apiClient.sharedPreferences
+            .getBool(SharedPreferenceHelper.firstTimeOnAppKey) ??
+        false; // we need to check it bcz for first time we will redirect to sign up page
+    bool isOnboardEnable = repo.apiClient.sharedPreferences
+            .getBool(SharedPreferenceHelper.onBoardIsOnKey) ??
+        false;
+    bool fingerEnable = repo.apiClient
+        .getFingerPrintStatus(); // if finger enable then user should redirect to login page and able to login by fingerprint else user will redirect to home page if he/she is already logined
     noInternet = false;
     update();
 
@@ -37,12 +44,15 @@ class SplashController extends GetxController {
 
   bool noInternet = false;
 
-  void getGSData(bool isRemember, bool isFirstTime, bool isOnboardEnable, bool fingerEnable) async {
+  void getGSData(bool isRemember, bool isFirstTime, bool isOnboardEnable,
+      bool fingerEnable) async {
     try {
       ResponseModel response = await repo.getGeneralSetting();
 
       if (response.statusCode == 200) {
-        GeneralSettingResponseModel model = GeneralSettingResponseModel.fromJson(jsonDecode(response.responseJson));
+        GeneralSettingResponseModel model =
+            GeneralSettingResponseModel.fromJson(
+                jsonDecode(response.responseJson));
         if (model.status?.toLowerCase() == MyStrings.success) {
           repo.apiClient.storeGeneralSetting(model);
         } else {
@@ -68,7 +78,9 @@ class SplashController extends GetxController {
         if (isRemember) {
           if (fingerEnable) {
             Future.delayed(const Duration(seconds: 1), () {
-              Get.offAndToNamed(RouteHelper.authenticationScreen, arguments: true); // true means we will redirect to authentication page login tab
+              Get.offAndToNamed(RouteHelper.authenticationScreen,
+                  arguments:
+                      true); // true means we will redirect to authentication page login tab
             });
           } else {
             Future.delayed(const Duration(seconds: 1), () {
@@ -83,24 +95,33 @@ class SplashController extends GetxController {
           } else {
             bool isShouldOpenLoginTab = isFirstTime ? false : true;
             Future.delayed(const Duration(seconds: 1), () {
-              Get.offAndToNamed(RouteHelper.authenticationScreen, arguments: isShouldOpenLoginTab);
+              Get.offAndToNamed(RouteHelper.authenticationScreen,
+                  arguments: isShouldOpenLoginTab);
             });
           }
         }
       }
     } catch (e) {
       Future.delayed(const Duration(seconds: 1), () {
-        Get.offAndToNamed(RouteHelper.authenticationScreen, arguments: true); // true means we will redirect to authentication page login tab
+        Get.offAndToNamed(RouteHelper.authenticationScreen,
+            arguments:
+                true); // true means we will redirect to authentication page login tab
       });
     }
   }
 
   Future<bool> initSharedData() {
-    if (!repo.apiClient.sharedPreferences.containsKey(SharedPreferenceHelper.countryCode)) {
-      return repo.apiClient.sharedPreferences.setString(SharedPreferenceHelper.countryCode, MyStrings.myLanguages[0].countryCode);
+    if (!repo.apiClient.sharedPreferences
+        .containsKey(SharedPreferenceHelper.countryCode)) {
+      return repo.apiClient.sharedPreferences.setString(
+          SharedPreferenceHelper.countryCode,
+          MyStrings.myLanguages[0].countryCode);
     }
-    if (!repo.apiClient.sharedPreferences.containsKey(SharedPreferenceHelper.languageCode)) {
-      return repo.apiClient.sharedPreferences.setString(SharedPreferenceHelper.languageCode, MyStrings.myLanguages[0].languageCode);
+    if (!repo.apiClient.sharedPreferences
+        .containsKey(SharedPreferenceHelper.languageCode)) {
+      return repo.apiClient.sharedPreferences.setString(
+          SharedPreferenceHelper.languageCode,
+          MyStrings.myLanguages[0].languageCode);
     }
     return Future.value(true);
   }
@@ -114,15 +135,20 @@ class SplashController extends GetxController {
         Map<String, Map<String, String>> language = {};
         saveLanguageList(response.responseJson);
         var resJson = jsonDecode(response.responseJson);
-        await repo.apiClient.sharedPreferences.setString(SharedPreferenceHelper.languageListKey, response.responseJson);
-        var langKeyList = resJson['data']['file'].toString() == '[]' ? {} : resJson['data']['file'];
+        await repo.apiClient.sharedPreferences.setString(
+            SharedPreferenceHelper.languageListKey, response.responseJson);
+        var langKeyList = resJson['data']['file'].toString() == '[]'
+            ? {}
+            : resJson['data']['file'];
         Map<String, String> json = {};
         if (langKeyList is Map<String, dynamic>) {
           langKeyList.forEach((key, value) {
             json[key] = value.toString();
           });
         }
-        language['${localizationController.locale.languageCode}_${localizationController.locale.countryCode}'] = json;
+        language[
+                '${localizationController.locale.languageCode}_${localizationController.locale.countryCode}'] =
+            json;
         Get.addTranslations(Messages(languages: language).keys);
       } else {
         CustomSnackBar.error(errorList: [response.message]);
@@ -133,7 +159,8 @@ class SplashController extends GetxController {
   }
 
   void saveLanguageList(String languageJson) async {
-    await repo.apiClient.sharedPreferences.setString(SharedPreferenceHelper.languageListKey, languageJson);
+    await repo.apiClient.sharedPreferences
+        .setString(SharedPreferenceHelper.languageListKey, languageJson);
     return;
   }
 
@@ -147,7 +174,8 @@ class SplashController extends GetxController {
     try {
       ResponseModel responseModel = await repo.loadOnboardData();
       if (responseModel.statusCode == 200) {
-        OnBoardResponseModel model = onBoardsFromJson(responseModel.responseJson);
+        OnBoardResponseModel model =
+            onBoardsFromJson(responseModel.responseJson);
         if (model.status == MyStrings.success) {
           List<OnBoard>? tempListData = model.data?.onBoards;
           onboardImagePath = model.data?.imagePath ?? '';

@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:vinance/core/utils/dimensions.dart';
 import 'package:vinance/core/utils/my_color.dart';
@@ -42,8 +44,7 @@ class ConnectMetamaskLoginBottomSheet extends StatelessWidget {
                 ),
                 verticalSpace(Dimensions.space20),
                 LoadingBorderIndicator(
-                  animate: metaLoginController.w3mService.onSessionEventEvent ==
-                      null,
+                  animate: metaLoginController.isLoading,
                   borderRadius: 20,
                   strokeWidth: 3,
                   color: MyColor.pendingColor,
@@ -118,7 +119,7 @@ class ConnectMetamaskLoginBottomSheet extends StatelessWidget {
                               ),
                               press: () async {
                                 var address =
-                                    "${metaLoginController.w3mService.session?.sessionService.name.toLowerCase()}";
+                                    "${metaLoginController.w3mService.session?.getAccounts()?[0]}";
                                 if (address.toString() != 'null') {
                                   await metaLoginController
                                       .getSignatureCodeFromMetamask(
@@ -135,9 +136,7 @@ class ConnectMetamaskLoginBottomSheet extends StatelessWidget {
                   ),
                   verticalSpace(Dimensions.space10),
                 ] else ...[
-                  if (metaLoginController.isInitializing == false &&
-                      metaLoginController.w3mService.onSessionEventEvent !=
-                          null) ...[
+                  if (metaLoginController.isInitializing == false) ...[
                     verticalSpace(Dimensions.space10),
                     Container(
                       padding: const EdgeInsetsDirectional.symmetric(

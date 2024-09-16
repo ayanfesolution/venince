@@ -51,40 +51,66 @@ class LoginController extends GetxController {
   }
 
   void checkAndGotoNextStep(LoginResponseModel responseModel) async {
-    bool needEmailVerification = responseModel.data?.user?.ev == "1" ? false : true;
-    bool needSmsVerification = responseModel.data?.user?.sv == '1' ? false : true;
+    bool needEmailVerification =
+        responseModel.data?.user?.ev == "1" ? false : true;
+    bool needSmsVerification =
+        responseModel.data?.user?.sv == '1' ? false : true;
     bool isTwoFactorEnable = responseModel.data?.user?.tv == '1' ? false : true;
 
-    await loginRepo.apiClient.sharedPreferences.setBool(SharedPreferenceHelper.rememberMeKey, true); // always will be true
+    await loginRepo.apiClient.sharedPreferences.setBool(
+        SharedPreferenceHelper.rememberMeKey, true); // always will be true
 
-    await loginRepo.apiClient.sharedPreferences.setString(SharedPreferenceHelper.userIdKey, responseModel.data?.user?.id.toString() ?? '-1');
-    await loginRepo.apiClient.sharedPreferences.setString(SharedPreferenceHelper.accessTokenKey, responseModel.data?.accessToken ?? '');
-    await loginRepo.apiClient.sharedPreferences.setString(SharedPreferenceHelper.accessTokenType, responseModel.data?.tokenType ?? '');
-    await loginRepo.apiClient.sharedPreferences.setString(SharedPreferenceHelper.userEmailKey, responseModel.data?.user?.email ?? '');
-    await loginRepo.apiClient.sharedPreferences.setString(SharedPreferenceHelper.userPhoneNumberKey, responseModel.data?.user?.mobile ?? '');
-    await loginRepo.apiClient.sharedPreferences.setString(SharedPreferenceHelper.userNameKey, responseModel.data?.user?.username ?? '');
+    await loginRepo.apiClient.sharedPreferences.setString(
+        SharedPreferenceHelper.userIdKey,
+        responseModel.data?.user?.id.toString() ?? '-1');
+    await loginRepo.apiClient.sharedPreferences.setString(
+        SharedPreferenceHelper.accessTokenKey,
+        responseModel.data?.accessToken ?? '');
+    await loginRepo.apiClient.sharedPreferences.setString(
+        SharedPreferenceHelper.accessTokenType,
+        responseModel.data?.tokenType ?? '');
+    await loginRepo.apiClient.sharedPreferences.setString(
+        SharedPreferenceHelper.userEmailKey,
+        responseModel.data?.user?.email ?? '');
+    await loginRepo.apiClient.sharedPreferences.setString(
+        SharedPreferenceHelper.userPhoneNumberKey,
+        responseModel.data?.user?.mobile ?? '');
+    await loginRepo.apiClient.sharedPreferences.setString(
+        SharedPreferenceHelper.userNameKey,
+        responseModel.data?.user?.username ?? '');
 
     await loginRepo.sendUserToken();
 
-    bool isProfileCompleteEnable = responseModel.data?.user?.profileComplete == '0' ? true : false;
-    if (needSmsVerification == false && needEmailVerification == false && isTwoFactorEnable == false) {
+    bool isProfileCompleteEnable =
+        responseModel.data?.user?.profileComplete == '0' ? true : false;
+    if (needSmsVerification == false &&
+        needEmailVerification == false &&
+        isTwoFactorEnable == false) {
       if (isProfileCompleteEnable) {
         Get.offAndToNamed(RouteHelper.profileCompleteScreen);
       } else {
-        await loginRepo.apiClient.sharedPreferences.setBool(SharedPreferenceHelper.firstTimeOnAppKey, false);
-        clearTextField();
+        await loginRepo.apiClient.sharedPreferences
+            .setBool(SharedPreferenceHelper.firstTimeOnAppKey, false);
+        //   clearTextField();
         Get.offAndToNamed(RouteHelper.dashboardScreen);
       }
-    } else if (needSmsVerification == true && needEmailVerification == true && isTwoFactorEnable == true) {
-      Get.offAndToNamed(RouteHelper.emailVerificationScreen, arguments: [true, isProfileCompleteEnable, isTwoFactorEnable]);
+    } else if (needSmsVerification == true &&
+        needEmailVerification == true &&
+        isTwoFactorEnable == true) {
+      Get.offAndToNamed(RouteHelper.emailVerificationScreen,
+          arguments: [true, isProfileCompleteEnable, isTwoFactorEnable]);
     } else if (needSmsVerification == true && needEmailVerification == true) {
-      Get.offAndToNamed(RouteHelper.emailVerificationScreen, arguments: [true, isProfileCompleteEnable, isTwoFactorEnable]);
+      Get.offAndToNamed(RouteHelper.emailVerificationScreen,
+          arguments: [true, isProfileCompleteEnable, isTwoFactorEnable]);
     } else if (needSmsVerification) {
-      Get.offAndToNamed(RouteHelper.smsVerificationScreen, arguments: [isProfileCompleteEnable, isTwoFactorEnable]);
+      Get.offAndToNamed(RouteHelper.smsVerificationScreen,
+          arguments: [isProfileCompleteEnable, isTwoFactorEnable]);
     } else if (needEmailVerification) {
-      Get.offAndToNamed(RouteHelper.emailVerificationScreen, arguments: [false, isProfileCompleteEnable, isTwoFactorEnable]);
+      Get.offAndToNamed(RouteHelper.emailVerificationScreen,
+          arguments: [false, isProfileCompleteEnable, isTwoFactorEnable]);
     } else if (isTwoFactorEnable) {
-      Get.offAndToNamed(RouteHelper.twoFactorScreen, arguments: isProfileCompleteEnable);
+      Get.offAndToNamed(RouteHelper.twoFactorScreen,
+          arguments: isProfileCompleteEnable);
     }
   }
 
@@ -93,14 +119,19 @@ class LoginController extends GetxController {
     isSubmitLoading = true;
     update();
 
-    ResponseModel model = await loginRepo.loginUser(emailController.text.toString(), passwordController.text.toString());
+    ResponseModel model = await loginRepo.loginUser(
+        emailController.text.toString(), passwordController.text.toString());
 
     if (model.statusCode == 200) {
-      LoginResponseModel loginModel = LoginResponseModel.fromJson(jsonDecode(model.responseJson));
-      if (loginModel.status.toString().toLowerCase() == MyStrings.success.toLowerCase()) {
+      LoginResponseModel loginModel =
+          LoginResponseModel.fromJson(jsonDecode(model.responseJson));
+      if (loginModel.status.toString().toLowerCase() ==
+          MyStrings.success.toLowerCase()) {
         checkAndGotoNextStep(loginModel);
       } else {
-        CustomSnackBar.error(errorList: loginModel.message?.error ?? [MyStrings.loginFailedTryAgain]);
+        CustomSnackBar.error(
+            errorList:
+                loginModel.message?.error ?? [MyStrings.loginFailedTryAgain]);
       }
     } else {
       CustomSnackBar.error(errorList: [model.message]);
@@ -143,7 +174,8 @@ class LoginController extends GetxController {
       if (authenticated == true) {
         isBioLoading = true;
         update();
-        await loginRepo.apiClient.sharedPreferences.setBool(SharedPreferenceHelper.rememberMeKey, true);
+        await loginRepo.apiClient.sharedPreferences
+            .setBool(SharedPreferenceHelper.rememberMeKey, true);
         Get.offAllNamed(RouteHelper.dashboardScreen);
       }
     } on PlatformException catch (e) {
@@ -172,7 +204,10 @@ class LoginController extends GetxController {
     try {
       await bioLocalAuth.getAvailableBiometrics().then((value) {
         for (var element in value) {
-          if ((element == BiometricType.fingerprint || element == BiometricType.weak || element == BiometricType.strong) && t == true) {
+          if ((element == BiometricType.fingerprint ||
+                  element == BiometricType.weak ||
+                  element == BiometricType.strong) &&
+              t == true) {
             canCheckBiometricsAvailable = true;
             update();
           } else {
@@ -226,9 +261,11 @@ class LoginController extends GetxController {
         update();
         return;
       }
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
-      await socialLoginUser(provider: 'google', accessToken: googleAuth.accessToken ?? '');
+      await socialLoginUser(
+          provider: 'google', accessToken: googleAuth.accessToken ?? '');
     } catch (e) {
       debugPrint(e.toString());
 
@@ -244,12 +281,18 @@ class LoginController extends GetxController {
       isLinkedin = true;
       update();
 
-      SocialiteCredentials linkedinCredential = loginRepo.apiClient.getSocialCredentialsConfigData();
-      String linkedinCredentialRedirectUrl = "${loginRepo.apiClient.getSocialCredentialsRedirectUrl()}/linkedin";
+      SocialiteCredentials linkedinCredential =
+          loginRepo.apiClient.getSocialCredentialsConfigData();
+      String linkedinCredentialRedirectUrl =
+          "${loginRepo.apiClient.getSocialCredentialsRedirectUrl()}/linkedin";
 
       SignInWithLinkedIn.signIn(
         context,
-        config: LinkedInConfig(clientId: linkedinCredential.linkedin?.clientId ?? '', clientSecret: linkedinCredential.linkedin?.clientSecret ?? '', scope: ['openid', 'profile', 'email'], redirectUrl: "$linkedinCredentialRedirectUrl/linkedin"),
+        config: LinkedInConfig(
+            clientId: linkedinCredential.linkedin?.clientId ?? '',
+            clientSecret: linkedinCredential.linkedin?.clientSecret ?? '',
+            scope: ['openid', 'profile', 'email'],
+            redirectUrl: "$linkedinCredentialRedirectUrl/linkedin"),
         onGetAuthToken: (data) {
           printx('Auth token data: ${data.toJson()}');
         },
@@ -257,7 +300,8 @@ class LoginController extends GetxController {
           printx('${token.idToken}-');
           printx('LinkedIn User: ${user.toJson()}');
 
-          await socialLoginUser(provider: 'linkedin', accessToken: token.accessToken ?? '');
+          await socialLoginUser(
+              provider: 'linkedin', accessToken: token.accessToken ?? '');
         },
         onSignInError: (error) {
           printx('Error on sign in: $error');
@@ -286,15 +330,19 @@ class LoginController extends GetxController {
         provider: provider,
       );
       if (responseModel.statusCode == 200) {
-        LoginResponseModel loginModel = LoginResponseModel.fromJson(jsonDecode(responseModel.responseJson));
-        if (loginModel.status.toString().toLowerCase() == MyStrings.success.toLowerCase()) {
+        LoginResponseModel loginModel =
+            LoginResponseModel.fromJson(jsonDecode(responseModel.responseJson));
+        if (loginModel.status.toString().toLowerCase() ==
+            MyStrings.success.toLowerCase()) {
           remember = true;
           update();
           checkAndGotoNextStep(loginModel);
         } else {
           isSocialSubmitLoading = false;
           update();
-          CustomSnackBar.error(errorList: loginModel.message?.error ?? [MyStrings.loginFailedTryAgain.tr]);
+          CustomSnackBar.error(
+              errorList: loginModel.message?.error ??
+                  [MyStrings.loginFailedTryAgain.tr]);
         }
       } else {
         isSocialSubmitLoading = false;
@@ -312,7 +360,9 @@ class LoginController extends GetxController {
   }
 
   bool checkUserAccessTokenSaved() {
-    String token = loginRepo.apiClient.sharedPreferences.getString(SharedPreferenceHelper.accessTokenKey) ?? '';
+    String token = loginRepo.apiClient.sharedPreferences
+            .getString(SharedPreferenceHelper.accessTokenKey) ??
+        '';
 
     return !((token == '' || token == 'null'));
   }

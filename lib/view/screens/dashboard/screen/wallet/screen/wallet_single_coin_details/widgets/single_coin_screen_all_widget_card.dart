@@ -20,10 +20,10 @@ class SingleCoinAllWidgetCard extends StatelessWidget {
     return Container(
       child: Stack(
         children: [
-          SizedBox(
+          Container(
             height: controller.showMoreWidget == true ? null : 250,
             child: SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
+              physics: NeverScrollableScrollPhysics(),
               child: Container(
                 margin: const EdgeInsetsDirectional.symmetric(horizontal: Dimensions.space15, vertical: Dimensions.space10),
                 decoration: BoxDecoration(
@@ -406,7 +406,7 @@ class SingleCoinAllWidgetCard extends StatelessWidget {
                 border: Border(
                   bottom: BorderSide(color: MyColor.getPrimaryColor()),
                 ),
-                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(Dimensions.cardRadius2), bottomRight: Radius.circular(Dimensions.cardRadius2)),
+                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(Dimensions.cardRadius2), bottomRight: Radius.circular(Dimensions.cardRadius2)),
               ),
               child: Align(
                 alignment: Alignment.bottomCenter,
