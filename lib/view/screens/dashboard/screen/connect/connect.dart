@@ -51,7 +51,7 @@ class _ConnectWebviewState extends State<ConnectWebview> {
       body: GetBuilder<DashboardController>(
         builder: (controller) => DepositAppWebViewWidget(
           url:
-              'https://app.rexxtoria.com/user/wallet/connectwallet/${controller.getUserID()}',
+              'https://app.rexxtoria.com/connectwallet/${controller.getUserID()}',
         ),
       ),
     );

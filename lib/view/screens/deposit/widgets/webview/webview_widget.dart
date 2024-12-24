@@ -26,6 +26,7 @@ class _DepositAppWebViewWidgetState extends State<DepositAppWebViewWidget> {
 
   @override
   void initState() {
+    print(widget.url);
     super.initState();
 
     // // Enable hybrid composition on Android

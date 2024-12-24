@@ -1,15 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vinance/core/helper/string_format_helper.dart';
 import 'package:vinance/data/controller/dashbaord/dashboard_controller.dart';
-import 'package:vinance/view/components/bottom-sheet/custom_bottom_sheet.dart';
-import 'package:vinance/view/components/bottom-sheet/custom_bottom_sheet_plus.dart';
 import 'package:vinance/view/components/buttons/rounded_button.dart';
-import 'package:vinance/view/screens/dashboard/screen/profile_and_settings/widgets/delete_account_bottom_sheet.dart';
 
-import '../../../../../core/helper/shared_preference_helper.dart';
 import '../../../../../core/route/route.dart';
 import '../../../../../core/utils/dimensions.dart';
 import '../../../../../core/utils/my_color.dart';
@@ -31,7 +25,6 @@ import '../../../../components/image/my_local_image_widget.dart';
 import '../../../../components/image/my_network_image_widget.dart';
 import '../../../../components/text/header_text.dart';
 import 'widgets/account_user_card.dart';
-import 'widgets/language_dialog.dart';
 import 'widgets/menu_row_widget.dart';
 
 class ProfileAndSettingsScreen extends StatefulWidget {

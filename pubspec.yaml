@@ -33,9 +33,9 @@ dependencies:
   flutter_local_notifications: ^17.0.0
   flutter_rating_bar: ^4.0.1
   flutter_spinkit: ^5.2.0
-  flutter_sticky_header: ^0.6.5
+  flutter_sticky_header: ^0.7.0
   flutter_svg: ^2.0.4
-  flutter_widget_from_html: ^0.14.11
+  flutter_widget_from_html: ^0.15.3
   flutter_xlider: ^3.5.0
   get: ^4.6.6
   google_sign_in: ^6.2.1

@@ -1,6 +1,6 @@
 class UrlContainer {
   // static const String domainUrl = 'http://url8.viserlab.com/vinance_v5';
-  static const String domainUrl = 'https://app.rexxtoria.com';
+  static const String domainUrl = 'https://Vinnanex.com';
 
   static const String baseUrl = '$domainUrl/api/';
 
@@ -12,8 +12,10 @@ class UrlContainer {
   static const String registrationEndPoint = 'register';
   static const String loginEndPoint = 'login';
   static const String socialLoginEndPoint = 'social-login';
-  static const String metamaskGetMessageEndPoint = 'web3/metamask-login/message';
-  static const String metamaskMessageVerifyEndPoint = 'web3/metamask-login/verify';
+  static const String metamaskGetMessageEndPoint =
+      'web3/metamask-login/message';
+  static const String metamaskMessageVerifyEndPoint =
+      'web3/metamask-login/verify';
 
   static const String logoutUrl = 'logout';
   static const String forgetPasswordEndPoint = 'password/email';
@@ -94,7 +96,8 @@ class UrlContainer {
   static const String walletEndPoint = "wallet";
   static const String walletListEndPoint = "wallet/list";
   static const String walletTransferToUserEndPoint = "wallet/transfer";
-  static const String walletTransferToWalletEndPoint = "wallet/transfer/to/wallet";
+  static const String walletTransferToWalletEndPoint =
+      "wallet/transfer/to/wallet";
   static const String pinValidate = "validate/password";
   //Crypto list
   static const String cryptoListEndPoint = "crypto-list";
@@ -116,7 +119,8 @@ class UrlContainer {
   static const String accountDisable = 'delete-account';
 
   //Url image
-  static const String countryFlagImageLink = 'https://flagpedia.net/data/flags/h24/{countryCode}.webp';
+  static const String countryFlagImageLink =
+      'https://flagpedia.net/data/flags/h24/{countryCode}.webp';
   static const String withdraw = 'assets/images/verify/withdraw';
   static const String supportImagePath = '$domainUrl/assets/support/';
 }

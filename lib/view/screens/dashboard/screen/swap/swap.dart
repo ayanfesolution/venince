@@ -52,7 +52,7 @@ class _SwapWebviewState extends State<SwapWebview> {
       body: GetBuilder<DashboardController>(
         builder: (controller) => DepositAppWebViewWidget(
           url:
-              'https://app.rexxtoria.com/user/wallet/swap/${controller.getUserID()}',
+              'https://app.rexxtoria.com/swap/${controller.getUserID()}',
         ),
       ),
     );

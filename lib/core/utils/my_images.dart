@@ -1,7 +1,7 @@
 class MyImages {
   //LOGO
-  static const String appLogoDark = "assets/images/logo/logo_dark.jpeg";
-  static const String appLogoLight = "assets/images/logo/logo_light.jpeg";
+  static const String appLogoDark = "assets/images/logo/logo_dark.png";
+  static const String appLogoLight = "assets/images/logo/logo_light.png";
 
   //BACKGROUND
 
